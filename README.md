@@ -1,68 +1,36 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# COP4331-Large-Project
+**UCF - Fall 2020**
 
-## Available Scripts
+## **Project Pitch**
+It would be cumbersome for users to continue to rely on exhaustive google searches and handwritten cookbooks, only to find that they have to make an extra trip to the grocery store to get what the recipe requires. To address these challenges, we are developing **Seppi**, a web application that is also supported on Android.
 
-In the project directory, you can run:
+Cooking has become a popular hobby throughout the COVID-19 pandemic. As the world becomes more remote under the enforcement of "stay at home" orders, more people have used the kitchen to pass time and bring comfort in their homes, using the ingredients that they have on hand. This comes with the challenge of finding unique recipes.
 
-### `npm start`
+**Seppi** takes into account all of the vegetables, spices, and other cooking material in your pantry, and offers available suggestions for unique recipes that you are able to make.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Seppi** is designed to be meal planner and a food-focused online social networking service. **Seppi** will achieve this by:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+1. Maintaining a inventory of ingredients to access anytime and anywhere
+2. Discovering unique recipes based on the ingredients you have available
+3. Finding new recipes from a community of like minded cooks
 
-### `npm test`
+While all of this information can be already accessed through Google Search, **Seppi** strives to aggregate recipe recommendations and a community in a place that is easy to access. 
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+During this uncertain time, cooking is one way to bring order to our lives. Whether you are a cooking enthusiast or only have enough time to throw together lunch, Seppi's goal is to provide access to new recipes and a connection to a community of other like-minded cooks.
 
-### `npm run build`
+## **Team Members**
+* Rami Jurdi ([@Rami-J][rami])
+* Shelby Menown ([@SMFlorida][shelby])
+* Daren Hirsch ([@darenh][daren])
+* Shaneal Findley ([@sfindley899][shaneal])
+* Phong Nguyen ([@Impossibrue][phong])
+* Alexander Longo ([@AlexanderLongo][alex])
+* Mitch Lehman ([@mitchman502][mitchell])
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[rami]: https://github.com/Rami-J
+[shelby]: https://github.com/SMFlorida
+[daren]: https://github.com/darenh
+[shaneal]: https://github.com/sfindley899
+[phong]: https://github.com/Impossibrue
+[alex]: https://github.com/AlexanderLongo
+[mitchell]: https://github.com/mitchman502
