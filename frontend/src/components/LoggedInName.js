@@ -3,7 +3,7 @@ import React from 'react';
 function LoggedInName()
 {
 
-    var user={}
+    //var user={}
 
     const doLogout = event => 
     {

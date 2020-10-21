@@ -27,6 +27,8 @@ function CardUI()
     var userId = ud.id;
     var firstName = ud.firstName;
     var lastName = ud.lastName;
+    console.log(firstName);
+    console.log(lastName);
 	
     const addCard = async event => 
     {
@@ -39,6 +41,8 @@ function CardUI()
         {
             const response = fetch(buildPath('api/addcard'),
             {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+
+            console.log(response);
 
             setMessage('Card has been added');
         }
