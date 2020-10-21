@@ -1,23 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-//const mongoose = require('mongoose');
+var admin = require("firebase-admin");
 
 require('dotenv').config();
+var serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://cop4331-group14.firebaseio.com"
+});
+
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-
-/*const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
-);
-const connection = mongoose.connection;
-connection.once('open', () => {
-	console.log("MongoDB database connection established successfully");
-})*/
 
 app.use((req, res, next) =>
 {
