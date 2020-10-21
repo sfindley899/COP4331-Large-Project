@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
 require('dotenv').config();
 
 const firebaseAdminSdk = require('firebase-admin'),
@@ -10,14 +9,21 @@ const firebaseAdminSdk = require('firebase-admin'),
       JSON.parse(Buffer.from(process.env.GOOGLE_CONFIG_BASE64_ENCODED_STRING, 'base64').toString('ascii')))
 });
 
-
-const app = express();
 const port = process.env.PORT || 5000;
-
+const app = express();
+app.set('port', (process.env.PORT || 5000));
 
 app.use(cors());
 app.use(express.json());
 
+if (process.env.NODE_ENV === 'production')
+{
+	app.use(express.static('frontend/build'));
+
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+	});
+}
 
 app.get('/', (req, res) => {
 	res.send("server running")

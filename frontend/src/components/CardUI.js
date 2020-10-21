@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 function CardUI()
 {
-
-
-  const app_name = 'cop4331-8'
+  const app_name = 'seppi'
   function buildPath(route)
   {
       if (process.env.NODE_ENV === 'production') 
