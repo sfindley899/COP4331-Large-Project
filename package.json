@@ -5,9 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"start": "nodemon server.js"
+		"start": "nodemon server.js",
+		"heroku-postbuild": "npm install && npm run build"
 	},
 	"keywords": [],
 	"author": "",
@@ -17,6 +16,7 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.0.0",
 		"express": "^4.16.4",
+		"firebase-admin": "^9.2.0",
 		"mongoose": "^5.5.7"
 	}
 }
