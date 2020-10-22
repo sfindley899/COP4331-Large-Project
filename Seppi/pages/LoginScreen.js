@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import AppButton from '../components/AppButton';
@@ -8,14 +8,18 @@ import AppTextInput from '../components/AppTextInput';
 const LoginScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-			<Text>This is the login page!</Text>
-			<View style={styles.loginContainer} >
-				<AppTextInput placeholder='Email' />
-				<AppTextInput secureTextEntry={true} placeholder='Password' />
-				<AppButton 
-					title="Go back" 
-					onPress={() => navigation.navigate('Login/Register')} />
-			</View>
+			<Text style={styles.text}>Log In</Text>
+			<AppTextInput placeholder='Email' />
+			<AppTextInput secureTextEntry={true} placeholder='Password' />
+			<Text onPress={() => {console.log("test")}} style={styles.textForgotPassword}>Forgot Password?</Text>
+			<AppButton
+				title="Log In"
+				// TODO: make API call to login on button press
+				//onPress={}
+			/>
+			<AppButton 
+				title="Back" 
+				onPress={() => navigation.navigate('Login/Register')} />
 		</View>
 	);
 }
@@ -23,11 +27,23 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#EFA25C',
 	},
-	loginContainer: {
-		top: 10,
+	text: {
+		width: 190,
+		textAlign: 'left',
+		color: '#FFFFFF',
+		fontFamily: "Righteous",
+		fontSize: 30,
+		lineHeight: 60,
+	},
+	textForgotPassword: {
+		width: 190,
+		textAlign: 'left',
+		color: '#FFFFFF',
+		fontFamily: "Righteous",
 	},
 })
 

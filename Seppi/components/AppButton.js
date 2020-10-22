@@ -3,7 +3,7 @@ import { View, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 TouchableOpacity.defaultProps = { activeOpacity: 0.8 };
 
-const AppButton = ({ onPress, title }) => (
+const AppButton = ({ onPress, title}) => (
   <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
     <Text style={styles.appButtonText}>{title}</Text>
   </TouchableOpacity>
@@ -17,8 +17,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     marginVertical: 10,
-    paddingVertical: 15,
-    paddingHorizontal: 12
+    padding: 12,
   },
   appButtonText: {
     fontFamily: 'Righteous',

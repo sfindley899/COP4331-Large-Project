@@ -9,7 +9,8 @@ const AppTextInput = ({ secureTextEntry, placeholder }) => {
 
 const styles = StyleSheet.create({
 	appTextInput: {
-		backgroundColor: '#FEDB4180',
+		backgroundColor: '#FEDB41',
+		opacity: 0.5,
 		borderRadius: 104,
 		height: 40,
 		width: 200,
