@@ -1,3 +1,16 @@
 language: node_js
 node_js:
   - 12.19.0
+
+env:
+  - secure: "b9n3SzE3aBA5DoagXprJh1ySZ+1LMVM3kbHxoIqYXshGoa+SEx39G6s5v9daZBLozttpMCSlmNhXSw+xEiafu55r01GOTynjeRBDvE/pFnXp1VawLDJoGLfMLER5w+3/vs59DOCggoawi1mE2FCfhqm/2hNMc9oeCm3rjKAaaM9+HkdRK7jcRncYmxnV2LgJK22HWzue0KL1H96esLVhRfqNhF3zcicKpGtzzTwPMZ9ejfJjaWt67Eh1Ep8TRklrrNECafTYub7eN0zlynlMkHPhT7p5XuTmvKyYvuL2a+XDccD7FuAtr3wByiNmxvFT9WVZ39kswKti58xpICpdN+WXuIU9QJ1S3sIS+M01Fwv0ansJTkKQU4rcx+ybvn9Z5AbhmJ6RzNy0dsBURUWpsM0MWYuo+yBfHQ7Vbb4QatAJHEtjtn20dMoz3roFkIms2oeq/bKhPBPD5/ul1BbqAqT4g3dpYhvEa1T06Q4AelIwMsMJwYayj13xCatSoq1Bxvbspzehie4KuqtguK5BcV1QmwuP4uoyB27y9hr35xqC2sERQOGJnr0VZuxwLPlV675u7tKnCO+NcYDZahadlaImYwpQl7eqfNDaMj87TXSjj2yYrFCZvlUeQ5JdrDMWZ06R9kujnPds5hKR6TotV8W+UEzZsTSGDOVgARlcWqM="
+
+matrix:
+  fast_finish: true
+
+sudo: false
+
+after_success:
+  - "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/cdown/travis-automerge/master/travis-automerge"
+  - "chmod a+x /tmp/travis-automerge"
+  - "BRANCHES_TO_MERGE_REGEX='develop' BRANCH_TO_MERGE_INTO=main GITHUB_REPO=sfindley899/COP4331-Large-Project /tmp/travis-automerge"
