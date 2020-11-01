@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
 			<AppButton
 				title="Log In"
 				// TODO: make API call to login on button press
-				//onPress={}
+				onPress={() => navigation.navigate('Home')}
 			/>
 			<AppButton 
 				title="Back" 
