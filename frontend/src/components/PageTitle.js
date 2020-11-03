@@ -3,7 +3,10 @@ import React from 'react';
 function PageTitle()
 {
    return(
-     <h1 id="title">COP 4331 MERN Stack Demo</h1>
+     <div id = "title">
+     <h3>Seppi - Grocery List and Recipe Finder</h3>
+     <h1 id="title2">Find a Recipe</h1>
+     </div>
    );
 };
 
