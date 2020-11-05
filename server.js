@@ -4,6 +4,7 @@ const swagger = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const cors = require('cors');
 
+
 require('dotenv').config();
 
 // Firebase-admin
@@ -54,7 +55,6 @@ app.post('/register', (req, res) => {
         firebase.auth().onAuthStateChanged(function(user) {
             if(!res.headersSent)
             {
-
           if (user) {
 
             console.log("signed in");
