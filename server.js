@@ -111,7 +111,7 @@ app.post('/register', (req, res) => {
                    console.log(error);
                  });
                       // sends email not verified status
-                      return res.status(400).send("email not verified");
+                      return res.status(401).send("email not verified");
                   }
                   // sends 200 when email is verified.
                   else if(user != null) {
