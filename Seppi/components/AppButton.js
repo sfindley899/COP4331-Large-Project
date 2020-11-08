@@ -3,9 +3,9 @@ import { View, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 TouchableOpacity.defaultProps = { activeOpacity: 0.8 };
 
-const AppButton = ({ onPress, title}) => (
-  <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
-    <Text style={styles.appButtonText}>{title}</Text>
+const AppButton = (props) => (
+  <TouchableOpacity onPress={props.onPress} style={styles.appButtonContainer}>
+    <Text style={styles.appButtonText}>{props.title}</Text>
   </TouchableOpacity>
 );
 

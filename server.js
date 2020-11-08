@@ -82,7 +82,6 @@ app.post('/register', (req, res) => {
                           return res.status(401).send("email not verified");
 
                  }).catch(function(error) {
-                   // An error happened.
                    // this probably happens from too many requests to send email verification
                    return res.status(400).send(error);
                  });
@@ -95,7 +94,6 @@ app.post('/register', (req, res) => {
                   }
                   // user not signed in
                 } else {
-                  // No user is signed in.
                     return res.status(400).send("No user");
                 }
           }

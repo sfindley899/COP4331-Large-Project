@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 function Login()
 {
-
     const app_name = 'seppi'
     function buildPath(route)
     {
