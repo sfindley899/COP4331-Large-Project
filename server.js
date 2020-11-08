@@ -219,6 +219,18 @@ router.route('/register')
 router.route('/login')
   .post();
 
+router.route('/userInfo')
+    .post();
+
+router.route('/changeEmail')
+     .post();
+
+router.route('/signout')
+    .post();
+
+router.route('/resetPassword')
+    .post();
+
 app.listen(port, () => {
 		console.log(`Server is running on port: ${port}`);
 });
