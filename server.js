@@ -144,19 +144,26 @@ app.post('/changeEmail', (req, res) => {
     var emailx = req.body.email;
 
     // cant change to empty email
-     user.updateEmail(emailx).then(function() {
-         user.sendEmailVerification().then(function() {
-      // Email sent.
-      return res.status(200).send("email updated and email request sent");
-    }).catch(function(error) {
-      // An error happened.
-      return res.status(400).send(error);
-    });
-    }).catch(function(error) {
-        // An error happened.
-    console.log(error);
-    return res.status(400).send(error);
-});
+    if (emailx != null && user != null)
+    {
+        user.updateEmail(emailx).then(function() {
+            user.sendEmailVerification().then(function() {
+         // Email sent.
+         return res.status(200).send("email updated and email request sent");
+       }).catch(function(error) {
+         // An error happened.
+         return res.status(400).send(error);
+       });
+       }).catch(function(error) {
+           // An error happened.
+       console.log(error);
+       return res.status(400).send(error);
+   });
+    }
+    else {
+        return res.status(400).send("no user");
+    }
+
 
 });
 
