@@ -1,21 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const swagger = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const cors = require('cors');
 
 require('dotenv').config();
 
+// Firebase-admin
 const firebaseAdminSdk = require('firebase-admin'),
     firebaseAdminApp = firebaseAdminSdk.initializeApp({credential: firebaseAdminSdk.credential.cert(
       JSON.parse(Buffer.from(process.env.GOOGLE_CONFIG_BASE64_ENCODED_STRING, 'base64').toString('ascii')))
 });
+
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
 const firebase = require('firebase/app'),
     firebase2 = firebase.initializeApp(JSON.parse(Buffer.from(process.env.GOOGLE_CONFIG_BASE64_ENCODED_STRING, 'base64').toString('ascii')))
-
-
-
-
-
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
@@ -27,13 +26,19 @@ require("firebase/firestore");
 require("firebase/auth");
 const db = firebaseAdminSdk.firestore();
 const port = process.env.PORT || 5000;
+var router = express.Router();
 const app = express();
 app.set('port', (process.env.PORT || 5000));
 
 app.use(cors());
 app.use(express.json());
-const userCollection = 'users';
 
+// Rest API requirements
+app.use(bodyParser.urlencoded({
+	extended: true
+  }));
+  app.use(bodyParser.json());
+  
 
 app.get('/user', (req, res) => {
 	res.send("Helloo")
@@ -85,7 +90,6 @@ app.post('/register', (req, res) => {
         y = error.message;
         return res.status(400).send("email already exists");
     }
-    // ...
   });
 
 
@@ -171,6 +175,17 @@ app.use((req, res, next) =>
     );
     next();
 });
+
+// Swagger Hub Init
+app.use('/swagger', swagger.serve, swagger.setup(swaggerDocument));
+app.use('/backend', router);
+
+
+router.route('/register')
+  .post();
+
+router.route('/login')
+  .post();
 
 app.listen(port, () => {
 		console.log(`Server is running on port: ${port}`);
