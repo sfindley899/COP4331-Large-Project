@@ -1,0 +1,122 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Seppi App SwaggerHub",
+		"description": "Seppi Server APIs",
+		"license": {
+		"name": "GPL",
+		"url": "https://opensource.org/licenses/gpl-license"
+	  }
+	},
+	"host": "localhost:5000",
+	"basePath": "",
+	"tags": [
+	  {
+		"name": "Users",
+		"description": "API for users in the system"
+	  }
+	],
+	"schemes": [
+	  "http"
+	],
+	"consumes": [
+	  "application/json"
+	],
+	"produces": [
+	  "application/json"
+	],
+	"definitions": {
+	  "User": {
+		"required": [
+		  "email",
+		  "password"
+		],
+		"properties": {
+		  "email": {
+			"type": "string",
+			"uniqueItems": true,
+			"example": "user@example.com"
+		  },
+		  "password": {
+			"type": "string",
+			"uniqueItems": false,
+			"example": "password",
+			"format": "password"
+		  }
+		}
+	  }
+	},
+	"paths": {
+		"/register": {
+		  "post": {
+			"tags": [
+			  "Users"
+			],
+			"description": "Create new user in system",
+			"parameters": [
+			  {
+				"name": "user",
+				"in": "body",
+				"description": "User that we want to create",
+				"schema": {
+				  "$ref": "#/definitions/User"
+				}
+			  }
+			],
+			"produces": [
+			  "application/json"
+			],
+			"responses": {
+				"200": 
+				{
+					"description": "New User Is Created"
+				},
+				"400": 
+				{
+					"description": "Bad Request"
+				},
+				"500": 
+				{
+					"description": "Internal Server Error"
+				}
+				}
+			}
+		},
+		"/login": {
+			"post": {
+			  "tags": [
+				"Users"
+			  ],
+			  "description": "Log in user to system",
+			  "parameters": [
+				{
+				  "name": "user",
+				  "in": "body",
+				  "description": "User that we want to sign in",
+				  "schema": {
+					"$ref": "#/definitions/User"
+				  }
+				}
+			  ],
+			  "produces": [
+				"application/json"
+			  ],
+			  "responses": {
+				  "200": 
+				  {
+					  "description": "New User Is Created"
+				  },
+				  "401": 
+				  {
+					  "description": "Email not Authenticated"
+				  },
+				  "500": 
+				  {
+					  "description": "Internal Server Error"
+				  }
+				  }
+			  }
+		  }
+	}
+}
