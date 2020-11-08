@@ -18,8 +18,7 @@
 		"dotenv": "^8.0.0",
 		"express": "^4.16.4",
 		"firebase": "^8.0.0",
-		"firebase-admin": "^9.3.0",
-		"mongoose": "^5.5.7"
+		"firebase-admin": "^9.3.0"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.6"
