@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({
 	extended: true
   }));
   app.use(bodyParser.json());
-  
+
 
 app.get('/user', (req, res) => {
 	res.send("Helloo")
@@ -150,6 +150,25 @@ app.post('/register', (req, res) => {
  }
 
   });
+
+
+
+  app.post('/resetPassword', (req, res) => {
+      var auth = firebase.auth();
+
+    var emailAddress = req.body.email;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+        return res.status(200).send("email ver sent");
+        // Email sent.
+  }).catch(function(error) {
+      return res.status(400).send(error);
+
+  })
+
+
+  });
+
 if (process.env.NODE_ENV === 'production')
 {
 	app.use(express.static('frontend/build'));
