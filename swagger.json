@@ -45,6 +45,42 @@
 			"format": "password"
 		  }
 		}
+    },
+    "Register": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true,
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "password",
+          "format": "password"
+      },
+      "name": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "John"
+      }
+      }
+  },
+      "Email": {
+		"required": [
+		  "email"
+		],
+		"properties": {
+		  "email": {
+			"type": "string",
+			"uniqueItems": true,
+			"example": "user@example.com"
+		  }
+		}
 	  }
 	},
 	"paths": {
@@ -60,7 +96,7 @@
 				"in": "body",
 				"description": "User that we want to create",
 				"schema": {
-				  "$ref": "#/definitions/User"
+				  "$ref": "#/definitions/Register"
 				}
 			  }
 			],
@@ -68,15 +104,15 @@
 			  "application/json"
 			],
 			"responses": {
-				"200": 
+				"200":
 				{
 					"description": "New User Is Created"
 				},
-				"400": 
+				"400":
 				{
 					"description": "Bad Request"
 				},
-				"500": 
+				"500":
 				{
 					"description": "Internal Server Error"
 				}
@@ -103,20 +139,113 @@
 				"application/json"
 			  ],
 			  "responses": {
-				  "200": 
+				  "200":
 				  {
 					  "description": "New User Is Created"
 				  },
-				  "401": 
+				  "401":
 				  {
 					  "description": "Email not Authenticated"
 				  },
-				  "500": 
+				  "500":
 				  {
 					  "description": "Internal Server Error"
 				  }
 				  }
 			  }
-		  }
+		  },
+          "/resetPassword": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "resets user password",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "User's email we want to change the password of",
+  				  "schema": {
+  					"$ref": "#/definitions/Email"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Password reset email sent"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/changeEmail": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "User's email we want to change for the old one",
+  				  "schema": {
+  					"$ref": "#/definitions/Email"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Email changed need to verify"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/userInfo": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  }
 	}
 }
