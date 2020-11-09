@@ -38,118 +38,156 @@ app.use(bodyParser.urlencoded({
 	extended: true
   }));
   app.use(bodyParser.json());
-  
+
 
 app.get('/user', (req, res) => {
 	res.send("Helloo")
 })
 
 app.post('/register', (req, res) => {
-    // create user
-    firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password).then(function() {
 
-          // ...
-
-         // goes in when state is changed.
-        firebase.auth().onAuthStateChanged(function(user) {
-            if(!res.headersSent)
-            {
-
-          if (user) {
-
-            console.log("signed in");
-            emailVerified = user.emailVerified;
-            console.log(emailVerified)
-            // sends email verification
-            user.sendEmailVerification().then(function() {
-         // Email sent.
-         console.log("sent");
-         if(!res.headersSent)
-         {
-             return res.status(200).send("email verification sent");
-         }
-         // catches errors for email ver
-       }).catch(function(error) {
-         // An error happened.
-         console.log(error);
-       });
-            return;
-          } else {
-            // No user is signed in.
-          }
-       }
-       });
-       // catches problems with creating user.
-    }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log(error.message);
-    if (error.message != null)
-    {
-        y = error.message;
-        return res.status(400).send("email already exists");
-    }
+  res.setHeader('Content-Type', 'application/json');
+  firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+  .then(function () {
+    user = firebase.auth().currentUser;
+    user.sendEmailVerification();
+  })
+  .then(function () {
+    // updates profile will add more when needed. req.body.name
+    user.updateProfile({
+      displayName: req.body.name
+    });
+    return res.status(200).send(JSON.stringify({response:"email verification sent"}));
+  })
+  .catch(function(error) {
+    return res.status(400).send(JSON.stringify({response:error.message}));
   });
 
 
  });
   app.post('/login', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
       if(!res.headersSent) {
       // signs in
       firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(function() {
           if(!res.headersSent) {
-              firebase.auth().onAuthStateChanged(function(user) {
+              var user = firebase.auth().currentUser;
                 if (user) {
                   // User is signed in.
-                  console.log("signed in");
                   // checks if email is verified
                   if (user.emailVerified == false)
                   {
                       console.log("email not verified resending email");
+
                       user.sendEmailVerification().then(function() {
-                   // Email sent.
-                   console.log("sent");
+                          return res.status(401).send(JSON.stringify({response:"email not verified"}));
+
                  }).catch(function(error) {
                    // An error happened.
-                   console.log(error);
+                   // this probably happens from too many requests to send email verification
+                   return res.status(400).send(JSON.stringify({response:error}));
                  });
-                      // sends email not verified status
-                      return res.status(401).send("email not verified");
+
                   }
                   // sends 200 when email is verified.
                   else if(user != null) {
-                      console.log("emailVerified");
-                      // sends token to get UID back later.
-                      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-                          // Send token to your backend via HTTPS
-                          // ...
-                return res.status(200).send({token: idToken});
-                    }).catch(function(error) {
-                    // Handle error
-                    });
 
+                      return res.status(200).send(JSON.stringify({response:"Successfully signed in"}));
                   }
                   // user not signed in
                 } else {
                   // No user is signed in.
-
+                    return res.status(400).send(JSON.stringify({response:"No User"}));
                 }
-             });
           }
           // catches when sign in has problems.
       }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(error.message);
-        // ...
-        return res.status(400).send("no user");
-
+        return res.status(400).send(JSON.stringify({response:error.message}));
      });
  }
 
   });
+
+
+  app.post('/resetPassword', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      var auth = firebase.auth();
+
+    var emailAddress = req.body.email;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+        return res.status(200).send(JSON.stringify({response:"email ver sent"}));
+        // Email sent.
+  }).catch(function(error) {
+      return res.status(400).send(JSON.stringify({response:error}));
+
+  })
+
+
+});
+
+  app.post('/signout', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        return res.status(200).send(JSON.stringify({response:"successfully signed out"}));
+      }).catch(function(error) {
+        // An error happened.
+        return res.status(400).send(JSON.stringify({response:error}));
+      });
+});
+
+
+
+app.post('/changeEmail', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var user = firebase.auth().currentUser;
+    var emailx = req.body.email;
+
+    // cant change to empty email
+    if (emailx != null && user != null)
+    {
+        user.updateEmail(emailx).then(function() {
+            user.sendEmailVerification().then(function() {
+         // Email sent.
+         return res.status(200).send(JSON.stringify({response:"email updated and email request sent"}));
+       }).catch(function(error) {
+         // An error happened.
+         return res.status(400).send(JSON.stringify({response:error}));
+       });
+       }).catch(function(error) {
+           // An error happened.
+       console.log(error);
+       return res.status(400).send(JSON.stringify({response:error}));
+   });
+    }
+    else {
+
+        return res.status(400).send(JSON.stringify({response:"no user"}));
+    }
+
+
+});
+
+app.post('/userInfo', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+      firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+          console.log(user.displayName);
+          // eventually an array if needed
+          return res.status(200).send(JSON.stringify({response:user.displayName}));
+        // User is signed in.
+      } else {
+          return res.status(400).send(JSON.stringify({response:"Not logged in"}));
+        // No user is signed in.
+      }
+    });
+
+});
+
 if (process.env.NODE_ENV === 'production')
 {
 	app.use(express.static('frontend/build'));
@@ -186,6 +224,18 @@ router.route('/register')
 
 router.route('/login')
   .post();
+
+router.route('/userInfo')
+    .post();
+
+router.route('/changeEmail')
+     .post();
+
+router.route('/signout')
+    .post();
+
+router.route('/resetPassword')
+    .post();
 
 app.listen(port, () => {
 		console.log(`Server is running on port: ${port}`);
