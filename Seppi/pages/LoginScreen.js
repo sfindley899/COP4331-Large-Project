@@ -18,6 +18,7 @@ const LoginScreen = ({ navigation }) => {
 		// Email regular expression
 		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+
 		// Validate input data
 		if (!validInput(email) || !re.test(String(email).toLowerCase())) {
 			setLoginResult('Please input a valid email.');
@@ -84,7 +85,9 @@ const LoginScreen = ({ navigation }) => {
 			<Text style={styles.text}>Log In</Text>
 			<AppTextInput value={email} onChangeText={email => setEmail(email)} placeholder='Email' />
 			<AppTextInput value={password} onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
-			<Text onPress={() => {console.log("test")}} style={styles.textForgotPassword}>Forgot Password?</Text>
+			<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
+				<Text style={styles.textForgotPassword}>Forgot Password?</Text>
+			</TouchableOpacity>
 			<AppButton
 				title="Log In"
 				onPress={logIn}
