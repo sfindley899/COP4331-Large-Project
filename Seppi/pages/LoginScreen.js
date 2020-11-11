@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import {sha256} from 'react-native-sha256';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
 import { buildPath, validInput, storeData, getData } from '../utils';
+import { AuthContext, UserContext } from '../context';
 
 const LoginScreen = ({ navigation }) => {
-	const [email, setEmail] = useState('');
+	const { signIn } = useContext(AuthContext);
+	const [state, setState] = useContext(UserContext);
+
 	const [password, setPassword] = useState('');
 	const [loginResult, setLoginResult] = useState('');
 
@@ -18,9 +20,8 @@ const LoginScreen = ({ navigation }) => {
 		// Email regular expression
 		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
 		// Validate input data
-		if (!validInput(email) || !re.test(String(email).toLowerCase())) {
+		if (!validInput(state.email) || !re.test(String(state.email).toLowerCase())) {
 			setLoginResult('Please input a valid email.');
 			return;
 		}
@@ -39,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					email: email,
+					email: state.email,
 					password: hash
 				})
 			})
@@ -47,17 +48,21 @@ const LoginScreen = ({ navigation }) => {
 
 			// 200 is OK response, continue handling user data.
 			let status = await response.status;
+			console.log('status: ' + status);
 			if (status === 200) {
 				let json = JSON.parse(await response.text());
 
 				// Async storage of user's session token from the server response.
-				await storeData('@token', json.token);
+				//await storeData('@token', json.token);
 				//console.log(await getData('@token'));
 
+				// Set the user's email and display name from the response.
+				console.log('resp name: ' + json.name + 'resp email: ' + json.email);
+				setState(state => ({ ...state, name: json.name, email: json.email }));
+
 				setLoginResult('');
-				setEmail('')
 				setPassword('');
-				navigation.navigate('Home');
+				signIn();
 				return;
 			}
 			// Tell the user the email has been registered already.
@@ -83,8 +88,8 @@ const LoginScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.text}>Log In</Text>
-			<AppTextInput value={email} onChangeText={email => setEmail(email)} placeholder='Email' />
-			<AppTextInput value={password} onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
+			<AppTextInput value={state.email} onChangeText={email => setState(state => ({...state, email: email }))} placeholder='Email' />
+			<AppTextInput value={state.password} onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
 			<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
 				<Text style={styles.textForgotPassword}>Forgot Password?</Text>
 			</TouchableOpacity>
