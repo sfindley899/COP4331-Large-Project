@@ -20,6 +20,7 @@ const LoginScreen = ({ navigation }) => {
 		// Email regular expression
 		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+
 		// Validate input data
 		if (!validInput(state.email) || !re.test(String(state.email).toLowerCase())) {
 			setLoginResult('Please input a valid email.');

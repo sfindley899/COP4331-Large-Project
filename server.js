@@ -92,7 +92,10 @@ app.post('/register', (req, res) => {
                   // sends 200 when email is verified.
                   else if(user != null) {
 
-                      return res.status(200).send(JSON.stringify({response:"Successfully signed in"}));
+                      return res.status(200).send({
+                        name: user.displayName,
+                        email: user.email,
+                      });
                   }
                   // user not signed in
                 } else {
