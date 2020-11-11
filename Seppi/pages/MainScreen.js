@@ -6,7 +6,7 @@ import AppButton from '../components/AppButton';
 const MainScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-		    <Image source={require('../images/app-icon.png')} />
+		    <Image source={require('../images/seppi_icon.png')} />
 		    <Text style={styles.text}>Seppi</Text>
 			<View style={styles.buttons}>
 				<AppButton 
