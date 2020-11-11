@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import {sha256} from 'react-native-sha256';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
@@ -43,56 +42,46 @@ const RegisterScreen = ({ navigation }) => {
 			return;
 		}
 
-		// Hash the password using SHA
-		sha256(password).then(async (hash) => {
-			//setPassword(hash);
-			//setConfirmPassword(hash);
-
-			// Submit the fetch request
-			const response = await fetch(buildPath('register'), {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					name: state.name,
-					email: state.email,
-					password: hash
-				})
+		// Submit the fetch request
+		const response = await fetch(buildPath('register'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: state.name,
+				email: state.email,
+				password: password
 			})
-			.catch((error) => console.error(error));
+		})
+		.catch((error) => console.error(error));
 
-			// 200 is OK response, continue handling user data.
-			let status = await response.status;
-			if (status === 200) {
-				//let json = JSON.parse(await response.text());
+		// 200 is OK response, continue handling user data.
+		let status = await response.status;
+		if (status === 200) {
+			//let json = JSON.parse(await response.text());
 
-				// TODO: persistent storage of user's settings/preferences/non-sensitive data from the database
-				//setName(name);
-				//setEmail(email);
-				console.log('registered name: ' + state.name + ' email: ' + state.email);
-				setSignUpResult('Account successfully registered.');
-				signUp();
-				return;
-			}
-			// Tell the user the email has been registered already.
-			else if (status === 400) {
-				setSignUpResult('This email is already registered.');
-				return;
-			}
-			else {
-				setSignUpResult('Failed to create account due to internal server error.');
-				return;
-			}
-
-		}).catch(error => {
-			console.error(error);
-		});
+			// TODO: persistent storage of user's settings/preferences/non-sensitive data from the database
+			//setName(name);
+			//setEmail(email);
+			console.log('registered name: ' + state.name + ' email: ' + state.email);
+			setSignUpResult('Account successfully registered.');
+			signUp();
+			return;
+		}
+		// Tell the user the email has been registered already.
+		else if (status === 400) {
+			setSignUpResult('This email is already registered.');
+			return;
+		}
+		else {
+			setSignUpResult('Failed to create account due to internal server error.');
+			return;
+		}
 
 		//setPassword('');
 		//setConfirmPassword('');
-		//console.log(name, email, password, confirmPassword);
 	};
 
 	return (

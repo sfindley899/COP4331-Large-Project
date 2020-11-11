@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native';
-import {sha256} from 'react-native-sha256';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
@@ -31,59 +30,52 @@ const LoginScreen = ({ navigation }) => {
 			return;
 		}
 
-		// Hash the password using SHA
-		sha256(password).then(async (hash) => {
-			// Submit the fetch request
-			const response = await fetch(buildPath('login'), {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					email: state.email,
-					password: hash
-				})
+		// Submit the fetch request
+		const response = await fetch(buildPath('login'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: state.email,
+				password: password
 			})
-			.catch((error) => console.error(error));
+		})
+		.catch((error) => console.error(error));
 
-			// 200 is OK response, continue handling user data.
-			let status = await response.status;
-			console.log('status: ' + status);
-			if (status === 200) {
-				let json = JSON.parse(await response.text());
+		// 200 is OK response, continue handling user data.
+		let status = await response.status;
+		console.log('status: ' + status);
+		if (status === 200) {
+			let json = JSON.parse(await response.text());
 
-				// Async storage of user's session token from the server response.
-				//await storeData('@token', json.token);
-				//console.log(await getData('@token'));
+			// Async storage of user's session token from the server response.
+			//await storeData('@token', json.token);
+			//console.log(await getData('@token'));
 
-				// Set the user's email and display name from the response.
-				console.log('resp name: ' + json.name + 'resp email: ' + json.email);
-				setState(state => ({ ...state, name: json.name, email: json.email }));
+			// Set the user's email and display name from the response.
+			console.log('resp name: ' + json.name + 'resp email: ' + json.email);
+			setState(state => ({ ...state, name: json.name, email: json.email }));
 
-				setLoginResult('');
-				setPassword('');
-				signIn();
-				return;
-			}
-			// Tell the user the email has been registered already.
-			else if (status === 400) {
-				setLoginResult('Email/Password combination is incorrect.');
-				return;
-			}
-			else if (status === 401) {
-				setLoginResult('Email not verified, please check your email.');
-				return;
-			}
-			else {
-				setLoginResult('Failed to login to account due to internal server error.');
-				return;
-			}
-
-		}).catch(error => {
-			console.error(error);
-		});
-
+			setLoginResult('');
+			setPassword('');
+			signIn();
+			return;
+		}
+		// Tell the user the email has been registered already.
+		else if (status === 400) {
+			setLoginResult('Email/Password combination is incorrect.');
+			return;
+		}
+		else if (status === 401) {
+			setLoginResult('Email not verified, please check your email.');
+			return;
+		}
+		else {
+			setLoginResult('Failed to login to account due to internal server error.');
+			return;
+		}
 	};
 
 	return (
