@@ -59,7 +59,7 @@ const RegisterScreen = ({ navigation }) => {
 			//let json = JSON.parse(await response.text());
 
 			console.log('registered name: ' + state.name + ' email: ' + state.email);
-			setSignUpResult('Account successfully registered.');
+			setSignUpResult('Account successfully registered, please check your inbox to verify your email.');
 			signUp();
 			return;
 		}

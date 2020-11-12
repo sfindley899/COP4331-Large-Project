@@ -79,7 +79,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Profile"
-                            onPress={() => {props.navigation.navigate('Profile')}}
+                            onPress={() => {console.log('profile')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -90,7 +90,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Bookmarks"
-                            onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                            onPress={() => {console.log('bookmarks')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -101,7 +101,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Settings"
-                            onPress={() => {props.navigation.navigate('SettingsScreen')}}
+                            onPress={() => {console.log('settings')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -112,15 +112,15 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Support"
-                            onPress={() => {props.navigation.navigate('SupportScreen')}}
+                            onPress={() => {console.log('support')}}
                         />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
-                        <TouchableRipple onPress={() => {toggleTheme()}}>
+                        <TouchableRipple onPress={() => {console.log('preferences test')}}>
                             <View style={styles.preference}>
                                 <Text>Dark Theme</Text>
                                 <View pointerEvents="none">
-                                    <Switch value={paperTheme.dark}/>
+                                    <Switch value={false} />
                                 </View>
                             </View>
                         </TouchableRipple>
