@@ -7,7 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 
-import { AuthContext, UserConsumer, UserContext, UserProvider } from './context';
+import { AuthContext, UserProvider } from './context';
 import { DrawerContent } from './DrawerContent';
 
 // Import screen components

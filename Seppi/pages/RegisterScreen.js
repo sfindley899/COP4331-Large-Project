@@ -9,10 +9,6 @@ import { AuthContext, UserContext } from '../context';
 const RegisterScreen = ({ navigation }) => {
 	const { signUp } = React.useContext(AuthContext);
 	const [state, setState] = useContext(UserContext);
-	//const { name, email, setEmail, setName } = React.useContext(UserInfoContext);
-
-	//const [name, setName] = useState('');
-	//const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [signUpResult, setSignUpResult] = useState('');
@@ -62,9 +58,6 @@ const RegisterScreen = ({ navigation }) => {
 		if (status === 200) {
 			//let json = JSON.parse(await response.text());
 
-			// TODO: persistent storage of user's settings/preferences/non-sensitive data from the database
-			//setName(name);
-			//setEmail(email);
 			console.log('registered name: ' + state.name + ' email: ' + state.email);
 			setSignUpResult('Account successfully registered.');
 			signUp();
@@ -80,15 +73,13 @@ const RegisterScreen = ({ navigation }) => {
 			return;
 		}
 
-		//setPassword('');
-		//setConfirmPassword('');
 	};
 
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
 				<Text style={styles.text}>Sign Up</Text>
-				<AppTextInput onChangeText={name => setState(state => ({ ...state, name: name }))} placeholder="John Doe" />
-				<AppTextInput onChangeText={email => setState(state => ({ ...state, email: email }))} placeholder="Email" />
+				<AppTextInput value={state.name} onChangeText={name => setState(state => ({ ...state, name: name }))} placeholder="John Doe" />
+				<AppTextInput value={state.email} onChangeText={email => setState(state => ({ ...state, email: email }))} placeholder="Email" />
 				<AppTextInput onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder="Password" />
 				<AppTextInput onChangeText={confirmPassword => setConfirmPassword(confirmPassword)} secureTextEntry={true} placeholder="Confirm Password" />
 				<AppButton

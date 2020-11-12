@@ -85,7 +85,7 @@ app.post('/register', (req, res) => {
                  }).catch(function(error) {
                    // An error happened.
                    // this probably happens from too many requests to send email verification
-                   return res.status(400).send(JSON.stringify({response:error}));
+                   return res.status(401).send(JSON.stringify({response:error}));
                  });
 
                   }

@@ -57,6 +57,7 @@ const LoginScreen = ({ navigation }) => {
 			// Set the user's email and display name from the response.
 			console.log('resp name: ' + json.name + 'resp email: ' + json.email);
 			setState(state => ({ ...state, name: json.name, email: json.email }));
+			//storeData('state', JSON.stringify(state));
 
 			setLoginResult('');
 			setPassword('');
@@ -82,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
 		<View style={styles.container}>
 			<Text style={styles.text}>Log In</Text>
 			<AppTextInput value={state.email} onChangeText={email => setState(state => ({...state, email: email }))} placeholder='Email' />
-			<AppTextInput value={state.password} onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
+			<AppTextInput onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
 			<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
 				<Text style={styles.textForgotPassword}>Forgot Password?</Text>
 			</TouchableOpacity>
