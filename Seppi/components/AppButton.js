@@ -12,7 +12,7 @@ const AppButton = (props) => (
 const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 8,
-    backgroundColor: "#FEDB41",
+    backgroundColor: "#F7C64C",
     borderRadius: 20,
     width: 200,
     height: 50,

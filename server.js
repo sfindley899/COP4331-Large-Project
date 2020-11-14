@@ -85,14 +85,17 @@ app.post('/register', (req, res) => {
                  }).catch(function(error) {
                    // An error happened.
                    // this probably happens from too many requests to send email verification
-                   return res.status(400).send(JSON.stringify({response:error}));
+                   return res.status(401).send(JSON.stringify({response:error}));
                  });
 
                   }
                   // sends 200 when email is verified.
                   else if(user != null) {
 
-                      return res.status(200).send(JSON.stringify({response:"Successfully signed in"}));
+                      return res.status(200).send({
+                        name: user.displayName,
+                        email: user.email,
+                      });
                   }
                   // user not signed in
                 } else {
