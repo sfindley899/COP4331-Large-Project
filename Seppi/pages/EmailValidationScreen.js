@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { openInbox } from 'react-native-email-link';
 import { UserContext } from '../context';
@@ -8,12 +8,33 @@ import AppButton from '../components/AppButton';
 
 const EmailValidationScreen = ({ navigation }) => {
   const [state, setState] = useContext(UserContext);
+  const [resendEmailResult, setResendEmailResult] = useState('');
   
   const resendEmail = async event => {	
 
 	  const response = await fetch(buildPath('resendEmailVerification'), {
+		method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: state.email,
+			})
+	  }).catch((error) => console.log(error));
 
-	  });
+	  let status = await response.status;
+
+	  if (status === 200)
+	  {
+		  setResendEmailResult('Email verification resent to ' + state.email);
+		  return;
+	  }
+	  else
+	  {
+		  setResendEmailResult('Could not resend email verification due to internal server error.');
+		  return;
+	  }
   };
 
 	return (
@@ -41,6 +62,8 @@ const EmailValidationScreen = ({ navigation }) => {
 		<TouchableOpacity activeOpacity={0.5} onPress={resendEmail} >
 		  <Text style={styles.textButtons}>Resend Email</Text>
 		</TouchableOpacity>
+
+		<Text style={styles.resendResult}>{resendEmailResult}</Text>
 		</View>
 	);
 }
@@ -75,6 +98,15 @@ const styles = StyleSheet.create({
 	color: '#000000',
 		fontSize: 16,
 	lineHeight: 24,
+	fontWeight: 'bold',
+  },
+  resendResult: {
+	textAlign: 'center',
+	width: 310,
+	color: '#000000',
+	fontSize: 16,
+	lineHeight: 24,
+	paddingVertical: 10,
 	fontWeight: 'bold',
   },
 })
