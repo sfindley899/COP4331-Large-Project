@@ -55,7 +55,6 @@ const LoginScreen = ({ navigation }) => {
 			//console.log(await getData('@token'));
 
 			// Set the user's email and display name from the response.
-			console.log('resp name: ' + json.name + 'resp email: ' + json.email);
 			setState(state => ({ ...state, name: json.name, email: json.email }));
 			//storeData('state', JSON.stringify(state));
 
@@ -96,11 +95,11 @@ const LoginScreen = ({ navigation }) => {
 					placeholder='Password'
 					autoCapitalize="none"
 				/>
-				<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
+				<TouchableOpacity activeOpacity={0.5} onPress={() => {navigation.navigate('Forgot Password')}} >
 					<Text style={styles.textForgotPassword}>Forgot Password?</Text>
 				</TouchableOpacity>
 				<AppButton
-					title="Log In"
+					title="Sign In"
 					buttonColor="#FA730B"
 					textColor="#FFFFFF"
 					onPress={logIn}
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
 		resizeMode: 'contain',
 	},
 	loginResult: {
-		width: 190,
+		width: 310,
 		textAlign: 'center',
 		color: '#000000',
 		fontFamily: "Righteous",

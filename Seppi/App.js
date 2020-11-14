@@ -13,7 +13,9 @@ import { DrawerContent } from './DrawerContent';
 // Import screen components
 import MainScreen from './pages/MainScreen';
 import LoginScreen from './pages/LoginScreen';
+import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import RegisterScreen from './pages/RegisterScreen';
+import EmailValidationScreen from './pages/EmailValidationScreen';
 import HomeScreen from './pages/HomeScreen';
 import SplashScreen from './pages/SplashScreen';
 
@@ -26,7 +28,9 @@ const AuthStackScreen = () => (
 	<AuthStack.Navigator>
 		<AuthStack.Screen name="Login/Register" component={MainScreen} />
 		<AuthStack.Screen name="Login" component={LoginScreen} />
+		<AuthStack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
 		<AuthStack.Screen name="Register" component={RegisterScreen} />
+		<AuthStack.Screen name="Email Validation" component={EmailValidationScreen} />
 	</AuthStack.Navigator>
 );
 
@@ -93,9 +97,13 @@ function getHeaderTitle(route) {
 		case 'Home':
 			return 'My Home';
 		case 'Login':
-			return 'Login';
+			return 'Sign In';
 		case 'Register':
-			return 'Register';
+			return 'Create Account';
+		case 'Forgot Password':
+			return 'Reset Password';
+		case 'Email Validation':
+			return 'Validate Your Email';
 	}
 }
 

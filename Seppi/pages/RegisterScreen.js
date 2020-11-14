@@ -59,8 +59,9 @@ const RegisterScreen = ({ navigation }) => {
 			//let json = JSON.parse(await response.text());
 
 			console.log('registered name: ' + state.name + ' email: ' + state.email);
-			setSignUpResult('Account successfully registered, please check your inbox to verify your email.');
+			//setSignUpResult('Account successfully registered, please check your inbox to verify your email.');
 			signUp();
+			navigation.navigate('Email Validation');
 			return;
 		}
 		// Tell the user the email has been registered already.
@@ -100,7 +101,7 @@ const RegisterScreen = ({ navigation }) => {
 					autoCapitalize="none"
 					placeholder="Confirm Password" />
 				<AppButton
-					title="Sign Up"
+					title="Create Account"
 					buttonColor="#FA730B"
 					textColor="#FFFFFF"
 					onPress={register}
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
 		lineHeight: 60,
 	},
 	signUpResultText: {
-		width: 190,
+		width: 310,
 		textAlign: 'center',
 		color: '#000000',
 		fontFamily: "Righteous",

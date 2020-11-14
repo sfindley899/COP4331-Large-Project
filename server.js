@@ -175,6 +175,26 @@ app.post('/changeEmail', (req, res) => {
 
 });
 
+app.post('/resendEmailVerification', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  var user = firebase.auth().currentUser;
+
+  if (user != null)
+  {
+    user.sendEmailVerification().then(function() {
+      // Email sent.
+      return res.status(200).send(JSON.stringify({response: "resent email verification"}));
+    }).catch(function(error) {
+      // An error happened.
+      return res.status(400).send(JSON.stringify({response:error}));
+    });
+  }
+  else
+  {
+    return res.status(400).send(JSON.stringify({response:"no user"}));
+  }
+});
+
 app.post('/userInfo', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
       firebase.auth().onAuthStateChanged(function(user) {
