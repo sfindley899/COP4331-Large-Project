@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
-import { buildPath, validInput, storeData, getData } from '../utils';
+import { deviceWidth, deviceHeight, buildPath, validInput, storeData, getData } from '../utils';
 import { AuthContext, UserContext } from '../context';
 
 const LoginScreen = ({ navigation }) => {
@@ -80,45 +80,81 @@ const LoginScreen = ({ navigation }) => {
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.text}>Log In</Text>
-			<AppTextInput value={state.email} onChangeText={email => setState(state => ({...state, email: email }))} placeholder='Email' />
-			<AppTextInput onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder='Password' />
-			<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
-				<Text style={styles.textForgotPassword}>Forgot Password?</Text>
-			</TouchableOpacity>
-			<AppButton
-				title="Log In"
-				onPress={logIn}
-			/>
-			<AppButton 
-				title="Back" 
-				onPress={() => navigation.navigate('Login/Register')} />
-			<Text style={StyleSheet.compose(styles.textForgotPassword, {textAlign: 'center'})}>{loginResult}</Text>
-		</View>
+		<ScrollView>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+				<Image style={styles.image} source={require('../images/app-icon.png')} />
+				<Text style={styles.text}>Sign In</Text>
+				<AppTextInput 
+					value={state.email} 
+					onChangeText={email => setState(state => ({...state, email: email }))} 
+					placeholder='Email' 
+					autoCapitalize="none"
+					/>
+				<AppTextInput
+					onChangeText={password => setPassword(password)} 
+					secureTextEntry={true} 
+					placeholder='Password'
+					autoCapitalize="none"
+				/>
+				<TouchableOpacity activeOpacity={0.5} onPress={() => {console.log("test")}} >
+					<Text style={styles.textForgotPassword}>Forgot Password?</Text>
+				</TouchableOpacity>
+				<AppButton
+					title="Log In"
+					buttonColor="#FA730B"
+					textColor="#FFFFFF"
+					onPress={logIn}
+				/>
+				<AppButton 
+					title="Back" 
+					buttonColor="#FFFFFF"
+					textColor="#000000"
+					onPress={() => navigation.navigate('Login/Register')} />
+				<Text style={StyleSheet.compose(styles.loginResult, {textAlign: 'center'})}>{loginResult}</Text>
+			</KeyboardAvoidingView>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: deviceWidth,
+		height: deviceHeight,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#EFA25C',
+		backgroundColor: '#EEC96F',
 	},
 	text: {
 		width: 190,
-		textAlign: 'left',
-		color: '#FFFFFF',
-		fontFamily: "Righteous",
+		textAlign: 'center',
+		color: '#000000',
+		fontFamily: "Inter",
+		fontWeight: 'bold',
 		fontSize: 30,
 		lineHeight: 60,
 	},
 	textForgotPassword: {
 		width: 190,
-		textAlign: 'left',
-		color: '#FFFFFF',
+		textAlign: 'center',
+		color: '#000000',
+		textDecorationLine: 'underline',
 		fontFamily: "Righteous",
+		fontWeight: '700',
+		fontSize: 16,
+		marginVertical: 10,
+	},
+	image: {
+		resizeMode: 'contain',
+	},
+	loginResult: {
+		width: 190,
+		textAlign: 'center',
+		color: '#000000',
+		fontFamily: "Righteous",
+		fontWeight: '700',
+		fontSize: 16,
+		marginVertical: 10,
 	},
 })
 
