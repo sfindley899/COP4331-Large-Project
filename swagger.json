@@ -46,10 +46,53 @@
 		  }
 		}
     },
+    "pref": {
+      "required": [
+        "allergies",
+        "diet"
+      ],
+      "properties": {
+        "allergies": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "Nuts"
+        },
+        "diet": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "Healthy"
+        }
+      }
+  },
+  "ingred": {
+    "required": [
+      "Ingredient",
+      "Amount",
+      "Expiration"
+    ],
+    "properties": {
+      "Ingredient": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "Milk"
+      },
+      "Amount": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "3"
+      },
+      "Expiration": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "7/15/2011"
+      }
+    }
+},
     "Register": {
       "required": [
         "email",
-        "password"
+        "password",
+        "name"
       ],
       "properties": {
         "email": {
@@ -81,7 +124,19 @@
 			"example": "user@example.com"
 		  }
 		}
-	  }
+    },
+    "searchRecipe": {
+      "required": [
+        "search"
+      ],
+      "properties": {
+        "search": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "chicken"
+        }
+      }
+    }
 	},
 	"paths": {
 		"/register": {
@@ -216,12 +271,167 @@
   				  }
   			  }
   		  },
+          "/searchRecipe": {
+  			"post": {
+  			  "tags": [
+  				"Recipe"
+  			  ],
+  			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "search",
+  				  "in": "body",
+  				  "description": "User's email we want to change for the old one",
+  				  "schema": {
+  					"$ref": "#/definitions/searchRecipe"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Email changed need to verify"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
           "/userInfo": {
   			"post": {
   			  "tags": [
   				"Users"
   			  ],
   			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/userSet": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/pref"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/addIngredient": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/ingred"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/getIngredients": {
+           "post": {
+             "tags": [
+               "Users"
+             ],
+             "description": "Sets user Allergies",
+             "parameters": [
+               {
+                 "name": "user",
+                 "in": "body",
+                 "description": "When user is signed in call this to get info",
+                 "schema": {
+
+                 }
+               }
+             ],
+             "produces": [
+               "application/json"
+             ],
+             "responses": {
+                 "200":
+                 {
+                     "description": "Went through"
+                 },
+                 "400":
+                 {
+                     "description": "Internal Server Error"
+                 }
+                 }
+             }
+         },
+          "/getUser": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
   			  "parameters": [
   				{
   				  "name": "user",
