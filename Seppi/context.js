@@ -9,7 +9,8 @@ const UserContext = React.createContext([{}, () => {}]);
 const UserProvider = (props) => {
   const [state, setState] = useState({
 	  name: '',
-	  email: '',
+    email: '',
+    currentTab: 'recipes',
 
 	  // TODO: add more user specific info later
   });

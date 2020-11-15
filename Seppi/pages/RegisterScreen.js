@@ -78,43 +78,43 @@ const RegisterScreen = ({ navigation }) => {
 
 	return (
 		<ScrollView>
-		<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
-				<Image style={styles.image} source={require('../images/app-icon.png')} />
-				<Text style={styles.text}>Create Account</Text>
-				<AppTextInput 
-					value={state.name} 
-					onChangeText={name => setState(state => ({ ...state, name: name }))} 
-					placeholder="Your Name" />
-				<AppTextInput 
-					value={state.email} 
-					autoCapitalize="none"
-					onChangeText={email => setState(state => ({ ...state, email: email }))} 
-					placeholder="Email" />
-				<AppTextInput 
-					onChangeText={password => setPassword(password)} 
-					secureTextEntry={true} 
-					autoCapitalize="none"
-					placeholder="Password" />
-				<AppTextInput 
-					onChangeText={confirmPassword => setConfirmPassword(confirmPassword)} 
-					secureTextEntry={true} 
-					autoCapitalize="none"
-					placeholder="Confirm Password" />
-				<AppButton
-					title="Create Account"
-					buttonColor="#FA730B"
-					textColor="#FFFFFF"
-					onPress={register}
-				/>
-				<AppButton 
-					title="Back"
-					buttonColor="#FFFFFF"
-					textColor="#000000"
-					onPress={() => navigation.navigate('Login/Register')}
-				/>
-				<Text style={styles.signUpResultText}>{signUpResult}</Text>
-				
-		</KeyboardAvoidingView>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+					<Image style={styles.image} source={require('../images/app-icon.png')} />
+					<Text style={styles.text}>Create Account</Text>
+					<AppTextInput 
+						value={state.name} 
+						onChangeText={name => setState(state => ({ ...state, name: name }))} 
+						placeholder="Your Name" />
+					<AppTextInput 
+						value={state.email} 
+						autoCapitalize="none"
+						onChangeText={email => setState(state => ({ ...state, email: email }))} 
+						placeholder="Email" />
+					<AppTextInput 
+						onChangeText={password => setPassword(password)} 
+						secureTextEntry={true} 
+						autoCapitalize="none"
+						placeholder="Password" />
+					<AppTextInput 
+						onChangeText={confirmPassword => setConfirmPassword(confirmPassword)} 
+						secureTextEntry={true} 
+						autoCapitalize="none"
+						placeholder="Confirm Password" />
+					<AppButton
+						title="Create Account"
+						buttonColor="#FA730B"
+						textColor="#FFFFFF"
+						onPress={register}
+					/>
+					<AppButton 
+						title="Back"
+						buttonColor="#FFFFFF"
+						textColor="#000000"
+						onPress={() => navigation.navigate('Login/Register')}
+					/>
+					<Text style={styles.signUpResultText}>{signUpResult}</Text>
+					
+			</KeyboardAvoidingView>
 		</ScrollView>
 	);
 }

@@ -16,12 +16,12 @@ import LoginScreen from './pages/LoginScreen';
 import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import EmailValidationScreen from './pages/EmailValidationScreen';
-import HomeScreen from './pages/HomeScreen';
+import RecipeSearchScreen from './pages/RecipeSearchScreen';
 import SplashScreen from './pages/SplashScreen';
 
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
-const HomeStack = createStackNavigator();
+const RecipeStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const AuthStackScreen = () => (
@@ -34,8 +34,8 @@ const AuthStackScreen = () => (
 	</AuthStack.Navigator>
 );
 
-const HomeStackScreen = ({ navigation, route }) => (
-	<HomeStack.Navigator 
+const RecipeStackScreen = ({ navigation, route }) => (
+	<RecipeStack.Navigator 
 		screenOptions={{
 			headerTitle: getHeaderTitle(route),
 			headerLeft: () => (
@@ -51,13 +51,13 @@ const HomeStackScreen = ({ navigation, route }) => (
 			),
 		}}
 	>
-		<HomeStack.Screen name="Home" component={HomeScreen} />
-	</HomeStack.Navigator>
+		<RecipeStack.Screen name="Recipe Search" component={RecipeSearchScreen} />
+	</RecipeStack.Navigator>
 );
 
 const DrawerScreen = () => (
 	<Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} >
-		<Drawer.Screen name="Home" component={HomeStackScreen} />
+		<Drawer.Screen name="Recipe Search" component={RecipeStackScreen} />
 	</Drawer.Navigator>
 );
 
@@ -65,7 +65,7 @@ const RootStackScreen = ({ userToken }) => {
 		return (
 		<RootStack.Navigator screenOptions={({ route }) => ({headerTitle: getHeaderTitle(route)})}>
 			{userToken ? (
-				<RootStack.Screen name="My Home" component={DrawerScreen}
+				<RootStack.Screen name="Recipe Search" component={DrawerScreen}
 					options={({ navigation, route }) => ({
 						headerTitle: getHeaderTitle(route),
 						headerLeft: () => (
@@ -94,8 +94,8 @@ function getHeaderTitle(route) {
 	const routeName = getFocusedRouteNameFromRoute(route) ?? 'Login/Register';
   
 	switch (routeName) {
-		case 'Home':
-			return 'My Home';
+		case 'Recipe Search':
+			return 'Recipe Search';
 		case 'Login':
 			return 'Sign In';
 		case 'Register':
