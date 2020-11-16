@@ -3,14 +3,17 @@ import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 import { deviceWidth, deviceHeight } from '../utils';
 import { UserContext } from '../context';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Toolbar = () => {
 	const [state, setState] = useContext(UserContext);
+	const navigation = useNavigation();
+	const route = useRoute();
 
 	return (
 		<View style={styles.bottomBar}>
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.recipeIconContainer, (state.currentTab === 'recipes') ? {
+					style={StyleSheet.compose(styles.recipeIconContainer, (route.name === 'Recipe Search') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -19,14 +22,14 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'recipes' }));
-						console.log(state.currentTab);
+						navigation.navigate('Recipe Search');
 					}}
 				>
 					<Image style={styles.toolbarImage} source={require('../images/toolbar/recipe-icon.png')} />
 				</TouchableOpacity>
 
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.pantryIconContainer, (state.currentTab === 'pantry') ? {
+					style={StyleSheet.compose(styles.pantryIconContainer, (route.name === 'Pantry') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -42,7 +45,7 @@ const Toolbar = () => {
 				</TouchableOpacity>
 
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.listsIconContainer, (state.currentTab === 'lists') ? {
+					style={StyleSheet.compose(styles.listsIconContainer, (route.name === 'Grocery Lists') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -58,7 +61,7 @@ const Toolbar = () => {
 				</TouchableOpacity>
 
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.profileIconContainer, (state.currentTab === 'profile') ? {
+					style={StyleSheet.compose(styles.profileIconContainer, (route.name === 'Profile') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -67,7 +70,7 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'profile' }));
-						console.log(state.currentTab);
+						navigation.navigate('Profile');
 					}}
 				>
 					<Image style={styles.toolbarImage} source={require('../images/toolbar/profile-icon.png')} />

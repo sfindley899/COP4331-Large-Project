@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
-import { buildPath } from '../utils';
+import { deviceWidth, deviceHeight, buildPath } from '../utils';
 
 const ForgotPasswordScreen = ({ navigation }) => {
 	const [text, setText] = React.useState('');
@@ -40,43 +40,47 @@ const ForgotPasswordScreen = ({ navigation }) => {
 	};
 	
 	return (
-		<View style={styles.container}>
-			<Image style={styles.image} source={require('../images/app-icon.png')} />
-			<Text style={styles.textLarge}>Reset Password</Text>
-			<Text style={styles.textSmall} >Enter the email address associated with your <Text style={{color: '#FA730B'}} >Seppi</Text> account.</Text>
+		<ScrollView>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+				<Image style={styles.image} source={require('../images/app-icon.png')} />
+				<Text style={styles.textLarge}>Reset Password</Text>
+				<Text style={styles.textSmall} >Enter the email address associated with your <Text style={{color: '#FA730B'}} >Seppi</Text> account.</Text>
 
-			<AppTextInput 
-					style = {styles.TextInputStyleClass}
-					placeholder = "Enter Your Email"
-					autoCapitalize = "none"
-					onChangeText={text => setText(text)}
-			/>
+				<AppTextInput 
+						style = {styles.TextInputStyleClass}
+						placeholder = "Enter Your Email"
+						autoCapitalize = "none"
+						onChangeText={text => setText(text)}
+				/>
 
-			<AppButton 
-				style={styles.buttons}
-				buttonColor='#FA730B'
-				textColor="#FFFFFF"
-				title="Send Reset Link"
-				onPress={resetPassword}
-				//onPress={() => navigation.navigate('Reset Password')} //Navigation is only here for testing purposes! Users should be able to reach this with an email link ONLY
-				//TODO: Let user know if the email exists in the system
-				//TODO: Let user know if am email is sent
-			/>
-			<AppButton
-					style={styles.textButtons}
-					buttonColor="#FFFFFF"
-					textColor="#000000"
-					title="Back"
-					onPress={() => navigation.navigate('Login')} >
-			</AppButton>
-			<Text style={styles.resetResult}>{resetResult}</Text>
-		</View>
+				<AppButton 
+					style={styles.buttons}
+					buttonColor='#FA730B'
+					textColor="#FFFFFF"
+					title="Send Reset Link"
+					onPress={resetPassword}
+					//onPress={() => navigation.navigate('Reset Password')} //Navigation is only here for testing purposes! Users should be able to reach this with an email link ONLY
+					//TODO: Let user know if the email exists in the system
+					//TODO: Let user know if am email is sent
+				/>
+				<AppButton
+						style={styles.textButtons}
+						buttonColor="#FFFFFF"
+						textColor="#000000"
+						title="Back"
+						onPress={() => navigation.navigate('Login')} >
+				</AppButton>
+				<Text style={styles.resetResult}>{resetResult}</Text>
+			</KeyboardAvoidingView>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: deviceWidth,
+		height: deviceHeight,
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',

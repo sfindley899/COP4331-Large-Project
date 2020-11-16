@@ -17,11 +17,13 @@ import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import EmailValidationScreen from './pages/EmailValidationScreen';
 import RecipeSearchScreen from './pages/RecipeSearchScreen';
+import ProfileScreen from './pages/ProfileScreen';
 import SplashScreen from './pages/SplashScreen';
 
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const RecipeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const AuthStackScreen = () => (
@@ -55,9 +57,31 @@ const RecipeStackScreen = ({ navigation, route }) => (
 	</RecipeStack.Navigator>
 );
 
+const ProfileStackScreen = ({ navigation, route }) => (
+	<RecipeStack.Navigator 
+		screenOptions={{
+			headerTitle: getHeaderTitle(route),
+			headerLeft: () => (
+				<TouchableOpacity
+					activeOpacity={0.15}
+					onPress={() => navigation.dispatch(navigation.toggleDrawer())}
+				>
+					<Icon
+						iconStyle={{marginLeft: 20}}
+						name='menu'
+					/>
+				</TouchableOpacity>
+			),
+		}}
+	>
+		<RecipeStack.Screen name="Profile" component={ProfileScreen} />
+	</RecipeStack.Navigator>
+);
+
 const DrawerScreen = () => (
 	<Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} >
 		<Drawer.Screen name="Recipe Search" component={RecipeStackScreen} />
+		<Drawer.Screen name="Profile" component={ProfileStackScreen} />
 	</Drawer.Navigator>
 );
 
@@ -96,6 +120,8 @@ function getHeaderTitle(route) {
 	switch (routeName) {
 		case 'Recipe Search':
 			return 'Recipe Search';
+		case 'Profile':
+			return 'Account';
 		case 'Login':
 			return 'Sign In';
 		case 'Register':
