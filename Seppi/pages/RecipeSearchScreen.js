@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, FlatLis
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 
-import { deviceWidth, deviceHeight } from '../utils';
+import { buildPath, deviceWidth, deviceHeight } from '../utils';
 import Toolbar from '../components/Toolbar';
 import SearchResult from '../components/SearchResult';
 
@@ -15,8 +15,18 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [filterVisible, setFilterVisible] = useState(false);
 
 	const searchRecipe = async () => {
-		const query = '';
-		const response = await fetch(query);
+		const query = searchText;
+		const response = await fetch(buildPath('searchRecipe'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				search: searchText,
+			})
+		})
+		.catch((error) => console.error(error));
 
 		let json = JSON.parse(await response.text());
 

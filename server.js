@@ -57,7 +57,7 @@ app.post('/register', (req, res) => {
     user.updateProfile({
       displayName: req.body.name
     });
-    return res.status(200).send(JSON.stringify({response:"email verification sent"}));
+    return res.status(200).send(JSON.stringify({response:"Register successful email verification sent to " + req.body.email}));
   })
   .catch(function(error) {
     return res.status(400).send(JSON.stringify({response:error.message}));
@@ -193,6 +193,29 @@ app.post('/resendEmailVerification', (req, res) => {
   {
     return res.status(400).send(JSON.stringify({response:"no user"}));
   }
+
+});
+
+app.post('/searchRecipe', (req, res) => {
+    var apikey = process.env.RECIPE_API_KEY
+    var app_id = process.env.RECIPE_APP_ID
+    var url = 'https://api.edamam.com/search?q=' + req.body.search + '&app_id='
+    url += app_id
+    url += "&app_key="
+    url += apikey
+    const https = require('https');
+    var x = "";
+    https.get(url, (_res) => {
+      _res.on('data', (d) => {
+        x += d
+      });
+      _res.on("end", function () {
+            return res.send(x);
+        });
+
+    }).on('error', (e) => {
+      console.error(e);
+    });
 });
 
 app.post('/userInfo', (req, res) => {
@@ -211,6 +234,36 @@ app.post('/userInfo', (req, res) => {
 
 });
 
+<<<<<<< HEAD
+=======
+app.get('/test', (req, res) => {
+    var apikey = process.env.RECIPE_SEARCH_KEY
+    var app_id = process.env.RECIPE_SEARCH
+    var url = 'https://api.edamam.com/search?q=meat&app_id='
+    url += app_id
+    url += "&app_key="
+    url += apikey
+    const https = require('https');
+console.log(url);
+var x = "";
+https.get(url, (res) => {
+  console.log('statusCode:', res.statusCode);
+  console.log('headers:', res.headers);
+
+  res.on('data', (d) => {
+    x += d
+  });
+  res.on("end", function () {
+        console.log(x);
+    });
+
+}).on('error', (e) => {
+  console.error(e);
+});
+console.log(x);
+ });
+
+>>>>>>> 7aaa8547e0436a5f700daa2b4b876e8facdcbeec
 if (process.env.NODE_ENV === 'production')
 {
 	app.use(express.static('frontend/build'));

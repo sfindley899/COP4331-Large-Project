@@ -19,7 +19,9 @@
 		"express": "^4.16.4",
 		"firebase": "^8.0.1",
 		"firebase-admin": "^9.3.0",
-		"swagger-ui-express": "^4.1.4"
+		"https": "^1.0.0",
+		"swagger-ui-express": "^4.1.4",
+		"xmlhttprequest": "^1.8.0"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.6"
