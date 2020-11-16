@@ -234,36 +234,6 @@ app.post('/userInfo', (req, res) => {
 
 });
 
-<<<<<<< HEAD
-=======
-app.get('/test', (req, res) => {
-    var apikey = process.env.RECIPE_SEARCH_KEY
-    var app_id = process.env.RECIPE_SEARCH
-    var url = 'https://api.edamam.com/search?q=meat&app_id='
-    url += app_id
-    url += "&app_key="
-    url += apikey
-    const https = require('https');
-console.log(url);
-var x = "";
-https.get(url, (res) => {
-  console.log('statusCode:', res.statusCode);
-  console.log('headers:', res.headers);
-
-  res.on('data', (d) => {
-    x += d
-  });
-  res.on("end", function () {
-        console.log(x);
-    });
-
-}).on('error', (e) => {
-  console.error(e);
-});
-console.log(x);
- });
-
->>>>>>> 7aaa8547e0436a5f700daa2b4b876e8facdcbeec
 if (process.env.NODE_ENV === 'production')
 {
 	app.use(express.static('frontend/build'));
