@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import { SearchBar } from 'react-native-elements';
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, FlatList, SafeAreaView, TouchableHighlight } from 'react-native';
+
+import { 
+	View,
+	Text, 
+	StyleSheet, 
+	TouchableOpacity, 
+	KeyboardAvoidingView, 
+	FlatList, 
+	SafeAreaView, 
+	TouchableHighlight,
+	Image,
+	ScrollView
+} from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 
@@ -13,6 +26,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [onAllResultsTab, setOnAllResultsTab] = useState(true);
 	const [searchData, setSearchData] = useState([]);
 	const [filterVisible, setFilterVisible] = useState(false);
+	const [recipeVisible, setRecipeVisible] = useState(false);
+	const [currentItem, setCurrentItem] = useState({recipe : {}});
 
 	const searchRecipe = async () => {
 		const query = searchText;
@@ -88,11 +103,42 @@ const RecipeSearchScreen = ({ navigation }) => {
 		);
 	};
 
+	const RecipeOverlay = () => {
+		return (
+			<View>
+				<Modal style={styles.recipeOverlayContainer} isVisible={recipeVisible}>
+					<ScrollView>
+						<View style={styles.recipeLabelImageContainer}>
+							<Image style={styles.recipeOverlayImage} source={{uri: currentItem.recipe.image}} />
+							<Text style={styles.recipeOverlayLabel}>{currentItem.recipe.label}</Text>
+							
+						</View>
+
+						<View style={styles.recipeIngredientsContainer}>
+							<Text style={styles.ingredientLine}>Ingredients:</Text>
+							{currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{index + 1}. {item}</Text>)}
+						</View>
+					</ScrollView>
+					
+					<View style={styles.recipeOverlayBottomButtons}>
+						<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={() => setRecipeVisible(!recipeVisible)}>
+								<Text style={styles.filterCancelText}>BACK</Text>
+						</TouchableOpacity>
+
+						<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={() => console.log('test')}>
+							<Text style={styles.filterApplyText}>Favorite</Text>
+						</TouchableOpacity>
+					</View>
+				</Modal>
+			</View>
+		);
+	};
+
 	const renderSearchResult = ({ item, index }) => (
 		<TouchableHighlight
 			activeOpacity={0.6}
 			underlayColor="#f9c35e"
-			onPress={() => alert('Pressed!')}
+			onPress={() => {setCurrentItem(item); setRecipeVisible(!recipeVisible);}}
 		>
 			<SearchResult 
 				tags={getTags(item)} 
@@ -207,6 +253,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 			</SafeAreaView>
 
 			<FilterOverlay />
+
+			<RecipeOverlay />
 			
 			<Toolbar />
 		</KeyboardAvoidingView>
@@ -283,8 +331,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		borderBottomColor: 'gray',
-		borderBottomWidth: 2,
+		marginTop: 'auto',
+		borderTopColor: 'gray',
+		borderTopWidth: 2,
 	},
 	filterApplyContainer: {
 		backgroundColor: '#FA730B',
@@ -319,6 +368,47 @@ const styles = StyleSheet.create({
 	},
 	applyResetContainer: {
 		flexDirection: 'row',
+	},
+	recipeOverlayContainer: {
+		flex: 1, 
+		flexDirection: 'column',
+		backgroundColor: '#FFFFFF',
+	},
+	recipeOverlayImage: {
+		width: 300,
+		height: 300,
+		resizeMode: 'contain',
+		marginVertical: 10,
+		borderRadius: 10,
+	},
+	recipeOverlayLabel: {
+		fontSize: 24,
+		textAlign: 'center',
+		lineHeight: 24,
+		paddingBottom: 15,
+	},
+	recipeIngredientsContainer: {
+		backgroundColor: '#eaede8',
+		borderWidth: 2,
+		borderColor: 'gray',
+		marginBottom: 15,
+	},
+	recipeLabelImageContainer: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},	
+	ingredientLine: {
+		fontSize: 16,
+		padding: 10,
+		width: '90%',
+	},
+	recipeOverlayBottomButtons: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		backgroundColor: '#F3F3F3',
+		borderTopColor: 'gray',
+		borderTopWidth: 2,
 	},
 });
 

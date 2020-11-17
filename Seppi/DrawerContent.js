@@ -35,25 +35,12 @@ export function DrawerContent(props) {
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row',marginTop: 15}}>
                             <Avatar.Image 
-                                source={{
-                                    uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
-                                }}
+                                source={require('./images/default-avatar.jpg')}
                                 size={50}
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
                                 <Title style={styles.title}>{state.name}</Title>
                                 <Caption style={styles.caption}>{state.email}</Caption>
-                            </View>
-                        </View>
-
-                        <View style={styles.row}>
-                            <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>80</Paragraph>
-                                <Caption style={styles.caption}>Following</Caption>
-                            </View>
-                            <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>100</Paragraph>
-                                <Caption style={styles.caption}>Followers</Caption>
                             </View>
                         </View>
                     </View>
