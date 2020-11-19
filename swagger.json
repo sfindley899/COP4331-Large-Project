@@ -49,7 +49,8 @@
     "Register": {
       "required": [
         "email",
-        "password"
+        "password",
+        "name"
       ],
       "properties": {
         "email": {
@@ -81,7 +82,19 @@
 			"example": "user@example.com"
 		  }
 		}
-	  }
+    },
+    "searchRecipe": {
+      "required": [
+        "search"
+      ],
+      "properties": {
+        "search": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "chicken"
+        }
+      }
+    }
 	},
 	"paths": {
 		"/register": {
@@ -198,6 +211,37 @@
   				  "description": "User's email we want to change for the old one",
   				  "schema": {
   					"$ref": "#/definitions/Email"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Email changed need to verify"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/searchRecipe": {
+  			"post": {
+  			  "tags": [
+  				"Recipe"
+  			  ],
+  			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "search",
+  				  "in": "body",
+  				  "description": "User's email we want to change for the old one",
+  				  "schema": {
+  					"$ref": "#/definitions/searchRecipe"
   				  }
   				}
   			  ],
