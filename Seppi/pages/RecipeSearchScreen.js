@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { SearchBar } from 'react-native-elements';
 
 import { 
@@ -11,15 +11,19 @@ import {
 	SafeAreaView, 
 	TouchableHighlight,
 	Image,
-	ScrollView
+	ScrollView,
+	Button
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 
 import { buildPath, deviceWidth, deviceHeight } from '../utils';
+import { UserContext } from '../context';
 import Toolbar from '../components/Toolbar';
 import SearchResult from '../components/SearchResult';
+import FilterButton from '../components/FilterButton';
+import FilterCheckBox from '../components/FilterCheckBox';
 
 const RecipeSearchScreen = ({ navigation }) => {
 	const [searchText, setSearchText] = useState('');
@@ -28,6 +32,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [filterVisible, setFilterVisible] = useState(false);
 	const [recipeVisible, setRecipeVisible] = useState(false);
 	const [currentItem, setCurrentItem] = useState({recipe : {}});
+
+	const [state, setState] = useContext(UserContext);
 
 	const searchRecipe = async () => {
 		const query = searchText;
@@ -71,7 +77,104 @@ const RecipeSearchScreen = ({ navigation }) => {
 	};
 
 	const toggleFilterVisible = () => {
-		setFilterVisible(!filterVisible);
+		if (state.filterStack.length === 0)
+		{
+			setFilterVisible(!filterVisible);
+			return;
+		}
+		
+		// Pop the current overlay off the stack.
+		state.filterStack.pop();
+		setState(state => ({ ...state, filterStack: state.filterStack}));
+	};
+
+	const renderFilterScrollView = () => {
+		let lastIndex = state.filterStack.length - 1;
+		if (state.filterStack.length === 0)
+		{
+			return (
+				<ScrollView>
+					<FilterButton title="Meal & Course" />
+					<FilterButton title="Dish Type" />
+					<FilterButton title="Health & Diet" />
+					<FilterButton title="Cuisine" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Meal & Course")
+		{
+			return (
+				<ScrollView>
+					<FilterCheckBox title="Lunch" />
+					<FilterCheckBox title="Dinner" />
+					<FilterCheckBox title="Breakfast" />
+					<FilterCheckBox title="Snack" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Dish Type")
+		{
+			return (
+				<ScrollView>
+					<FilterCheckBox title="Alcohol-cocktail" />
+					<FilterCheckBox title="Biscuits and cookies" />
+					<FilterCheckBox title="Bread" />
+					<FilterCheckBox title="Cereals" />
+					<FilterCheckBox title="Condiments and sauces" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Health & Diet")
+		{
+			return (
+				<ScrollView>
+					<FilterButton title="Diet" />
+					<FilterButton title="Health" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Health")
+		{
+			return (
+				<ScrollView>
+					<FilterCheckBox title="Alcohol-free" />
+					<FilterCheckBox title="Immune-Supportive" />
+					<FilterCheckBox title="Celery-free" />
+					<FilterCheckBox title="Crustacean-free" />
+					<FilterCheckBox title="Dairy" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Diet")
+		{
+			return (
+				<ScrollView>
+					<FilterCheckBox title="Balanced" />
+					<FilterCheckBox title="High-Fiber" />
+					<FilterCheckBox title="High-Protein" />
+					<FilterCheckBox title="Low-Carb" />
+					<FilterCheckBox title="Low-Fat" />
+				</ScrollView>
+			);
+		}
+		else if (state.filterStack[lastIndex] === "Cuisine")
+		{
+			return (
+				<ScrollView>
+					<FilterCheckBox title="American" />
+					<FilterCheckBox title="Asian" />
+					<FilterCheckBox title="British" />
+					<FilterCheckBox title="Caribbean" />
+					<FilterCheckBox title="Central Europe" />
+				</ScrollView>
+			);
+		}
+		else
+		{
+			return (
+				<Text>Test</Text>
+			);
+		}
 	};
 
 	const FilterOverlay = () => {
@@ -81,7 +184,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 					<View style={styles.filterContainer}>
 						<View style={styles.filterTopBar}>
 							<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={toggleFilterVisible}>
-								<Text style={styles.filterCancelText}>CANCEL</Text>
+								<Text style={styles.filterCancelText}>BACK</Text>
 							</TouchableOpacity>
 
 							<View style={styles.applyResetContainer}>
@@ -93,10 +196,9 @@ const RecipeSearchScreen = ({ navigation }) => {
 									<Text style={styles.filterApplyText}>Apply</Text>
 								</TouchableOpacity>
 							</View>
-
 						</View>
 
-
+						{renderFilterScrollView()}
 					</View>
 				</Modal>
 			</View>
@@ -116,7 +218,10 @@ const RecipeSearchScreen = ({ navigation }) => {
 
 						<View style={styles.recipeIngredientsContainer}>
 							<Text style={styles.ingredientLine}>Ingredients:</Text>
-							{currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{index + 1}. {item}</Text>)}
+							
+							{(currentItem.recipe.ingredientLines !== undefined) ? 
+							currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{index + 1}. {item}</Text>) :
+							<View></View> }
 						</View>
 					</ScrollView>
 					
@@ -244,12 +349,16 @@ const RecipeSearchScreen = ({ navigation }) => {
 			</View>
 
 			<SafeAreaView>
-				<FlatList 
-					style={{width: '100%', marginBottom: 200}}
-					data={searchData}
-					renderItem={renderSearchResult}
-					keyExtractor={(item) => item.recipe.uri}
-				/>
+				{onAllResultsTab ? (
+					<FlatList 
+						style={{width: '100%', marginBottom: 200}}
+						data={searchData}
+						renderItem={renderSearchResult}
+						keyExtractor={(item) => item.recipe.uri}
+					/> 
+				) : (
+					<Text>Favorites Tab</Text>
+				)}
 			</SafeAreaView>
 
 			<FilterOverlay />
@@ -331,9 +440,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 'auto',
-		borderTopColor: 'gray',
-		borderTopWidth: 2,
+		borderBottomColor: 'gray',
+		borderBottomWidth: 2,
 	},
 	filterApplyContainer: {
 		backgroundColor: '#FA730B',

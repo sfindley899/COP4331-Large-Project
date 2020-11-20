@@ -10,7 +10,7 @@ const UserProvider = (props) => {
   const [state, setState] = useState({
 	  name: '',
     email: '',
-    currentTab: 'recipes',
+    filterStack: [],
 
 	  // TODO: add more user specific info later
   });
