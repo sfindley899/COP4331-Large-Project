@@ -1,6 +1,5 @@
 import React from 'react';
 import PageTitle from './PageTitle';
-import SkyLight from 'react-skylight';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
