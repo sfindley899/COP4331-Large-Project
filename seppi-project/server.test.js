@@ -56,7 +56,7 @@ test('Login User with bad fields', async () => {
 
 //test.todo('Forgot Password Endpoint');
 
-test('Forgot Password on a valid account', async () => {
+test.skip('Forgot Password on a valid account', async () => {
     const res = await request(server).post('/resetPassword').send({"email":"lap65222@cuoly.com", "password":"sdfs8xkI7cX$oJUnT5fzp3D!xj"})
 
     expect(res.status).toBe(200)
@@ -79,7 +79,7 @@ test('Forgot Password with bad fields', async () => {
 //test.todo('Change User Email Endpoint');
 
 
-test('Change email with valid email', async () => {
+test.skip('Change email with valid email', async () => {
     const res = await request(server).post('/resetPassword').send({"email":"lap65222@cuoly.com"})
 
     expect(res.status).toBe(200)
@@ -101,15 +101,15 @@ test('Change email with bad fields', async () => {
 
 //test.todo('Create User Endpoint');
 
-test('Create user with all valid info', async () => {
+test.skip('Create user with all valid info', async () => {
     // Generates a random 7 digit string
     let prefix = Math.random().toString(36).substring(7)
     let password = Math.random().toString(36).substring(7)
     let email = prefix + "@idcbill.com"
     const res = await request(server).post('/register').send({"email": email, "password": password})
 
-    expect(res.status).toBe(200)
-    expect(res.body.response).toBe("email verification sent")
+    expect(res.status).toBe(400)
+    expect(res.body.response).toBe({response:"Register successful email verification sent to " + email})
 });
 
 test('Create user with bad fields', async () => {

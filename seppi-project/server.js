@@ -547,6 +547,8 @@ router.route('/signout')
 router.route('/resetPassword')
     .post();
 
-app.listen(port, () => {
-		console.log(`Server is running on port: ${port}`);
+const server = app.listen(port, () => {
+      console.log(`Server is running on port: ${port}`);
 });
+
+module.exports = server;
