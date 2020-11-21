@@ -56,12 +56,8 @@ const RegisterScreen = ({ navigation }) => {
 		// 200 is OK response, continue handling user data.
 		let status = await response.status;
 		if (status === 200) {
-			//let json = JSON.parse(await response.text());
-
-			console.log('registered name: ' + state.name + ' email: ' + state.email);
-			//setSignUpResult('Account successfully registered, please check your inbox to verify your email.');
 			signUp();
-			navigation.navigate('Email Validation');
+			navigation.navigate('Email Validation', { data : { backgroundColor: '#EEC96F' } });
 			return;
 		}
 		// Tell the user the email has been registered already.

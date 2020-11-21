@@ -95,7 +95,7 @@ const LoginScreen = ({ navigation }) => {
 					placeholder='Password'
 					autoCapitalize="none"
 				/>
-				<TouchableOpacity activeOpacity={0.5} onPress={() => {navigation.navigate('Forgot Password')}} >
+				<TouchableOpacity activeOpacity={0.5} onPress={() => {navigation.navigate('Forgot Password', { data : {backgroundColor: '#EEC96F'} })}} >
 					<Text style={styles.textForgotPassword}>Forgot Password?</Text>
 				</TouchableOpacity>
 				<AppButton

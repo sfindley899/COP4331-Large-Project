@@ -5,9 +5,10 @@ import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
 import { deviceWidth, deviceHeight, buildPath } from '../utils';
 
-const ForgotPasswordScreen = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation, route }) => {
 	const [text, setText] = React.useState('');
 	const [resetResult, setResetResult] = React.useState('');
+	const { backgroundColor } = route.params.data;
 
 	const resetPassword = async event => {
 		event.preventDefault();
@@ -41,13 +42,13 @@ const ForgotPasswordScreen = ({ navigation }) => {
 	
 	return (
 		<ScrollView>
-			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={StyleSheet.compose(styles.container, {backgroundColor: backgroundColor})}>
 				<Image style={styles.image} source={require('../images/app-icon.png')} />
 				<Text style={styles.textLarge}>Reset Password</Text>
 				<Text style={styles.textSmall} >Enter the email address associated with your <Text style={{color: '#FA730B'}} >Seppi</Text> account.</Text>
 
 				<AppTextInput 
-						style = {styles.TextInputStyleClass}
+						style = {styles.inputText}
 						placeholder = "Enter Your Email"
 						autoCapitalize = "none"
 						onChangeText={text => setText(text)}
@@ -59,16 +60,13 @@ const ForgotPasswordScreen = ({ navigation }) => {
 					textColor="#FFFFFF"
 					title="Send Reset Link"
 					onPress={resetPassword}
-					//onPress={() => navigation.navigate('Reset Password')} //Navigation is only here for testing purposes! Users should be able to reach this with an email link ONLY
-					//TODO: Let user know if the email exists in the system
-					//TODO: Let user know if am email is sent
 				/>
 				<AppButton
 						style={styles.textButtons}
 						buttonColor="#FFFFFF"
 						textColor="#000000"
 						title="Back"
-						onPress={() => navigation.navigate('Login')} >
+						onPress={() => navigation.goBack()} >
 				</AppButton>
 				<Text style={styles.resetResult}>{resetResult}</Text>
 			</KeyboardAvoidingView>
@@ -132,6 +130,10 @@ const styles = StyleSheet.create({
 		fontWeight: '700',
 		fontSize: 16,
 		marginVertical: 10,
+	},
+	inputText: {
+		borderColor: 'gray',
+		borderWidth: 2,
 	},
 })
 

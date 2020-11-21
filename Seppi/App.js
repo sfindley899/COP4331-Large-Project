@@ -11,6 +11,7 @@ import { AuthContext, UserProvider } from './context';
 import { DrawerContent } from './DrawerContent';
 
 // Import screen components
+import SplashScreen from './pages/SplashScreen';
 import MainScreen from './pages/MainScreen';
 import LoginScreen from './pages/LoginScreen';
 import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
@@ -18,7 +19,8 @@ import RegisterScreen from './pages/RegisterScreen';
 import EmailValidationScreen from './pages/EmailValidationScreen';
 import RecipeSearchScreen from './pages/RecipeSearchScreen';
 import ProfileScreen from './pages/ProfileScreen';
-import SplashScreen from './pages/SplashScreen';
+import ChangeUsernameScreen from './pages/ChangeUsernameScreen';
+import ChangeEmailScreen from './pages/ChangeEmailScreen';
 
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -58,7 +60,7 @@ const RecipeStackScreen = ({ navigation, route }) => (
 );
 
 const ProfileStackScreen = ({ navigation, route }) => (
-	<RecipeStack.Navigator 
+	<ProfileStack.Navigator 
 		screenOptions={{
 			headerTitle: getHeaderTitle(route),
 			headerLeft: () => (
@@ -74,8 +76,12 @@ const ProfileStackScreen = ({ navigation, route }) => (
 			),
 		}}
 	>
-		<RecipeStack.Screen name="Profile" component={ProfileScreen} />
-	</RecipeStack.Navigator>
+		<ProfileStack.Screen name="Profile" component={ProfileScreen} />
+		<ProfileStack.Screen name="Change Username" component={ChangeUsernameScreen} />
+		<ProfileStack.Screen name="Change Email" component={ChangeEmailScreen} />
+		<ProfileStack.Screen name="Validate Email" component={EmailValidationScreen} />
+		<ProfileStack.Screen name="Reset Password" component={ForgotPasswordScreen} />
+	</ProfileStack.Navigator>
 );
 
 const DrawerScreen = () => (

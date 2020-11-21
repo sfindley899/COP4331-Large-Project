@@ -5,7 +5,7 @@ const ProfileButton = (props) => {
 
 	return (
 		<TouchableOpacity style={styles.container} activeOpacity={0.5} onPress={props.onPress}>
-			<Image style={styles.icon} source={props.icon} />
+			<Image style={StyleSheet.compose(styles.icon, props.iconStyles)} source={props.icon} />
 
 			<View style={StyleSheet.compose(styles.labelContainer, props.labelContainerStyles)}>
 				<Text style={styles.topLabel}>{props.topLabel}</Text>

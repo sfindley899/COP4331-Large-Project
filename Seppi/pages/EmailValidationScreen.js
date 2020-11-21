@@ -6,9 +6,10 @@ import { buildPath } from '../utils';
 
 import AppButton from '../components/AppButton';
 
-const EmailValidationScreen = ({ navigation }) => {
+const EmailValidationScreen = ({ navigation, route }) => {
   const [state, setState] = useContext(UserContext);
   const [resendEmailResult, setResendEmailResult] = useState('');
+  const { backgroundColor } = route.params.data;
   
   const resendEmail = async event => {	
 
@@ -38,7 +39,7 @@ const EmailValidationScreen = ({ navigation }) => {
   };
 
 	return (
-		<View style={styles.container}>
+		<View style={StyleSheet.compose(styles.container, {backgroundColor: backgroundColor})}>
 		<Image 
 		style={{width: 250, height: 200}}
 		source={require('../images/seppi_icon.png')}/>
@@ -55,8 +56,8 @@ const EmailValidationScreen = ({ navigation }) => {
 		<AppButton
 		  buttonColor = '#FFFFFF'
 		  textColor="#000000"
-		  title="Back to Log In" 
-		  onPress={() => {navigation.navigate('Login')}}
+		  title="Back" 
+		  onPress={() => {navigation.goBack()}}
 		/>
 
 		<TouchableOpacity activeOpacity={0.5} onPress={resendEmail} >

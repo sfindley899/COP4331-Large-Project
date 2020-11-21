@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 
 import Toolbar from '../components/Toolbar';
 import { UserContext } from '../context';
-import { deviceWidth, deviceHeight, buildPath } from '../utils';
+import { deviceWidth, deviceHeight } from '../utils';
 import ProfileButton from '../components/ProfileButton';
 import { AuthContext } from '../context';
 
@@ -16,7 +16,7 @@ const icons = {
 
 const ProfileScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
-	const { signOut } = React.useContext(AuthContext);
+	const { signOut } = useContext(AuthContext);
 
 	return (
 		<View style={styles.container}>
@@ -31,12 +31,15 @@ const ProfileScreen = ({ navigation }) => {
 						icon={icons.nameIcon}
 						topLabel="Change Display Name"
 						bottomLabel="Update your display name. This will not affect your login." 
+						onPress={() => navigation.navigate('Change Username')}
 					/>
 
 					<ProfileButton 
 						icon={icons.emailIcon}
 						topLabel="Change Email Address"
+						iconStyles={{alignItems: 'center'}}
 						bottomLabel="Change the email address associated with your account." 
+						onPress={() => navigation.navigate('Change Email')}
 					/>
 
 					<ProfileButton 
@@ -44,6 +47,7 @@ const ProfileScreen = ({ navigation }) => {
 						topLabel="Change Password"
 						bottomLabel="Change your password, effective immediately." 
 						labelContainerStyles={{borderBottomColor: '#FFFFFF', borderBottomWidth: 0}}
+						onPress={() => navigation.navigate('Reset Password', {data : { backgroundColor: '#EDEEF1' } })}
 					/>
 				</View>
 
@@ -58,7 +62,7 @@ const ProfileScreen = ({ navigation }) => {
 				</View>
 			</ScrollView>
 
-			<Toolbar />
+			<Toolbar />		
 		</View>
 	);
 };
@@ -96,7 +100,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: deviceHeight * 0.4,
 		marginVertical: 30,
-
 	},
 	buttonGroup: {
 		width: deviceWidth,

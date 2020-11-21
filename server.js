@@ -156,7 +156,7 @@ app.post('/changeEmail', (req, res) => {
         user.updateEmail(emailx).then(function() {
             user.sendEmailVerification().then(function() {
          // Email sent.
-         return res.status(200).send(JSON.stringify({response:"email updated and email request sent"}));
+         return res.status(200).send(JSON.stringify({email:user.emailAddress}));
        }).catch(function(error) {
          // An error happened.
          return res.status(400).send(JSON.stringify({response:error}));
@@ -231,7 +231,26 @@ app.post('/userInfo', (req, res) => {
         // No user is signed in.
       }
     });
+});
 
+app.post('/changeDisplayName', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      user.updateProfile({
+        displayName: req.body.name,
+      }).then(function() {
+        // Profile updated successfully!
+        return res.status(200).send({name: user.displayName});
+      })
+      .catch(function(error) {
+        return res.status(400).send(JSON.stringify({response:error}));
+      });
+    }
+    else {
+      return res.status(400).send({response: "User not logged in."});
+    }
+  });
 });
 
 if (process.env.NODE_ENV === 'production')
