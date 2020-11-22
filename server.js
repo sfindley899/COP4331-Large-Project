@@ -100,14 +100,16 @@ app.post('/register', (req, res) => {
                  }).catch(function(error) {
                    // An error happened.
                    // this probably happens from too many requests to send email verification
-                   return res.status(400).send(JSON.stringify({response:error}));
+                   return res.status(401).send(JSON.stringify({response:error}));
                  });
 
                   }
                   // sends 200 when email is verified.
                   else if(user != null) {
-
-                      return res.status(200).send(JSON.stringify({response:"Successfully signed in"}));
+                      return res.status(200).send({
+                        name: user.displayName,
+                        email: user.email,
+                      });
                   }
                   // user not signed in
                 } else {
@@ -126,7 +128,6 @@ app.post('/register', (req, res) => {
 
   });
 
-
   app.post('/resetPassword', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       var auth = firebase.auth();
@@ -140,8 +141,6 @@ app.post('/register', (req, res) => {
       return res.status(400).send(JSON.stringify({response:error}));
 
   })
-
-
 });
 
   app.post('/signout', (req, res) => {
@@ -154,8 +153,6 @@ app.post('/register', (req, res) => {
         return res.status(400).send(JSON.stringify({response:error}));
       });
 });
-
-
 
 app.post('/changeEmail', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
@@ -376,29 +373,6 @@ app.post('/changeDisplayName', (req, res) => {
   });
 });
 
-app.post('/searchRecipe', (req, res) => {
-    var apikey = process.env.RECIPE_SEARCH_KEY
-    var app_id = process.env.RECIPE_SEARCH
-    var url = 'https://api.edamam.com/search?q=' + req.body.search + '&app_id='
-    url += app_id
-    url += "&app_key="
-    url += apikey
-    const https = require('https');
-console.log(url);
-var x = "";
-https.get(url, (_res) => {
-  _res.on('data', (d) => {
-    x += d
-  });
-  _res.on("end", function () {
-        return res.send(x);
-    });
-
-}).on('error', (e) => {
-  console.error(e);
-});
-});
-
 app.post('/userInfo', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
       firebase.auth().onAuthStateChanged(function(user) {
@@ -414,33 +388,6 @@ app.post('/userInfo', (req, res) => {
     });
 
 });
-
-app.get('/test', (req, res) => {
-    var apikey = process.env.RECIPE_SEARCH_KEY
-    var app_id = process.env.RECIPE_SEARCH
-    var url = 'https://api.edamam.com/search?q=meat&app_id='
-    url += app_id
-    url += "&app_key="
-    url += apikey
-    const https = require('https');
-console.log(url);
-var x = "";
-https.get(url, (res) => {
-  console.log('statusCode:', res.statusCode);
-  console.log('headers:', res.headers);
-
-  res.on('data', (d) => {
-    x += d
-  });
-  res.on("end", function () {
-        console.log(x);
-    });
-
-}).on('error', (e) => {
-  console.error(e);
-});
-console.log(x);
- });
 
 if (process.env.NODE_ENV === 'production')
 {
