@@ -100,8 +100,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
 
 	const searchRecipe = async () => {
-		console.log(searchText, filterText);
-
 		const response = await fetch(buildPath('searchRecipe'), {
 			method: 'POST',
 			headers: {
@@ -117,12 +115,12 @@ const RecipeSearchScreen = ({ navigation }) => {
 
 		let json = JSON.parse(await response.text());
 
-		console.log(json.q);
 		setSearchData(json.hits);
 	};
 
 	function getTags(item) {
 		let tags = '';
+
 		let healthLabelsLen = item.recipe.healthLabels.length;
 		let dietLabelsLen = item.recipe.dietLabels.length;
 
@@ -258,7 +256,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 			}
 		}
 
-		console.log(filterText);
 		setFilterVisible(!filterVisible);
 		setState(state => ({ ...state, filterStack: []}));
 	};
@@ -645,7 +642,14 @@ const RecipeSearchScreen = ({ navigation }) => {
 	};
 
 	const addFavorite = async () => {
-		currentItem.recipe['bookmarked'] = true;
+		currentItem.bookmarked = true;
+		for (let i = 0; i < searchData.length; ++i) {
+			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+				searchData[i].bookmarked = true;
+				setSearchData(state => searchData);
+				break;
+			}
+		}
 
 		const response = await fetch(buildPath('addFavorite'), {
 			method: 'POST',
@@ -653,9 +657,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({
-				recipe: currentItem.recipe
-			})
+			body: JSON.stringify(currentItem)
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
@@ -673,9 +675,44 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}
 	};
 
-	// TODO 
-	const unfavorite = async () => {
+	const removeFavorite = async () => {
+		// Update search data state.
+		currentItem.bookmarked = false;
+		for (let i = 0; i < searchData.length; ++i) {
+			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+				searchData[i].bookmarked = false;
+				setSearchData(state => searchData);
+				break;
+			}
+		}
 
+		const response = await fetch(buildPath('removeFavorite'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				uri: currentItem.recipe.uri
+			})
+		}).catch((error) => console.error(error));
+
+		let status = await response.status;
+		console.log(status);
+
+		if (status === 200)
+		{
+			console.log('removed favorite');
+			let json = JSON.parse(await response.text());
+			setFavoritesData(json.favorites);
+			setRecipeVisible(!recipeVisible);
+			return;
+		}
+		else
+		{
+			console.log('failed to remove favorite');
+			return;
+		}
 	};
 
 	const RecipeOverlay = () => {
@@ -703,8 +740,16 @@ const RecipeSearchScreen = ({ navigation }) => {
 								<Text style={styles.filterCancelText}>BACK</Text>
 						</TouchableOpacity>
 
-						<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={addFavorite}>
-							{currentItem.recipe.bookmarked ? (
+						<TouchableOpacity 
+							activeOpacity={0.5} 
+							style={styles.filterApplyContainer} 
+							onPress={() => {
+								currentItem.bookmarked ? 
+								removeFavorite() : addFavorite();
+								setRecipeVisible(!recipeVisible);
+							}}
+						>
+							{currentItem.bookmarked ? (
 								<Text style={styles.filterApplyText}>Unfavorite</Text>
 							 ) : (
 								 <Text style={styles.filterApplyText}>Favorite</Text>
@@ -716,20 +761,23 @@ const RecipeSearchScreen = ({ navigation }) => {
 		);
 	};
 
-	const renderSearchResult = ({ item, index }) => (
-		<TouchableHighlight
-			activeOpacity={0.6}
-			underlayColor="#f9c35e"
-			onPress={() => {setCurrentItem(item); setRecipeVisible(!recipeVisible);}}
-		>
-			<SearchResult 
-				tags={getTags(item)} 
-				ingredients={item.recipe.ingredientLines} 
-				image={item.recipe.image} 
-				title={item.recipe.label} 
-			/>
-		</TouchableHighlight>
-	);
+	const renderSearchResult = ({ item, index }) => {
+		return (
+			<TouchableHighlight
+				activeOpacity={0.6}
+				underlayColor="#f9c35e"
+				onPress={() => {setCurrentItem(item); setRecipeVisible(!recipeVisible);}}
+			>
+				<SearchResult 
+					bookmarked={item.bookmarked}
+					tags={getTags(item)} 
+					ingredients={item.recipe.ingredientLines} 
+					image={item.recipe.image} 
+					title={item.recipe.label} 
+				/>
+			</TouchableHighlight>
+		);
+	};
 
 	const SearchIcons = () => {
 		return (

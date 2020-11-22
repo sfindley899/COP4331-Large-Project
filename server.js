@@ -215,12 +215,11 @@ app.post('/addFavorite', async (req, res) => {
     {
       let origString = req.body.recipe.uri; 
       let replacementString = '_S'; 
-      let uri =  origString.replace(/\//g, replacementString); 
-      console.log(uri);
+      let uri =  origString.replace(/\//g, replacementString);
 
       // Add the recipe JSON object to user's favorites list.
       let userRef = db.collection('users').doc(user.uid);
-      await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body.recipe);
+      await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body);
 
       // Return the newly added favorite JSON.
       const recipeRef = userRef.collection('BookmarkedRecipes').doc(uri);
@@ -240,6 +239,34 @@ app.post('/addFavorite', async (req, res) => {
     }
 });
 
+app.post('/removeFavorite', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var user = firebase.auth().currentUser;
+
+    if (user !== null) {
+      let origString = req.body.uri; 
+      let replacementString = '_S'; 
+      let uri =  origString.replace(/\//g, replacementString);
+
+      let userRef = db.collection('users').doc(user.uid);
+
+      const favoritesRef = userRef.collection('BookmarkedRecipes');
+      await favoritesRef.doc(uri).delete();
+
+      // Return the new favorite docs as a response.
+      const favoritesDocs = await favoritesRef.get();
+      let docs = [];
+      favoritesDocs.forEach(doc => {
+        docs.push(doc.data());
+      });
+
+      return res.status(200).send({favorites : docs});
+    }
+    else {
+      return res.status(400).send({response: 'No user'});
+    }
+});
+
 app.post('/getFavorites', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
@@ -251,7 +278,7 @@ app.post('/getFavorites', async (req, res) => {
       const favoritesDocs = await favoritesRef.get();
       let docs = [];
       favoritesDocs.forEach(doc => {
-        docs.push({recipe: doc.data()});
+        docs.push(doc.data());
       });
 
       return res.status(200).send({favorites : docs});
@@ -261,7 +288,24 @@ app.post('/getFavorites', async (req, res) => {
     }
 });
 
-app.post('/searchRecipe', (req, res) => {
+app.post('/searchRecipe', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: 'No User'});
+    }
+
+    let userRef = db.collection('users').doc(user.uid);
+    const favoritesRef = userRef.collection('BookmarkedRecipes');
+    const favoritesDocs = await favoritesRef.get();
+
+    // Add the favorited URI's to a set.
+    let docSet = new Set();
+    favoritesDocs.forEach(doc => {
+      docSet.add(doc.data().recipe.uri);
+    });
+
     var apikey = process.env.RECIPE_API_KEY
     var app_id = process.env.RECIPE_APP_ID
     var url = 'https://api.edamam.com/search?q=' + req.body.search;
@@ -277,10 +321,18 @@ app.post('/searchRecipe', (req, res) => {
     var x = "";
     https.get(url, (_res) => {
       _res.on('data', (d) => {
-        x += d
+        x += d;
       });
       _res.on("end", function () {
-            return res.send(x);
+            // Process the search data and figure out which recipes are bookmarked by the user.
+            let data = JSON.parse(x);
+            for (let i = 0; i < data.hits.length; ++i) {
+              if (docSet.has(data.hits[i].recipe.uri)) {
+                data.hits[i].bookmarked = true;
+              }
+            }
+
+            return res.status(200).send(data);
         });
 
     }).on('error', (e) => {

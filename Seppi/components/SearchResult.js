@@ -3,12 +3,24 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { deviceWidth, deviceHeight } from '../utils';
 
 const SearchResult = (props) => {
+	const renderStarImage = () => {
+		if (props.bookmarked) {
+			return (
+				<View style={styles.favoritedContainer}>
+					<Image source={require('../images/recipe/star-icon.png')} />
+					<Text style={styles.favoritedText}>Favorited</Text>
+				</View>
+			);
+		};
+	};
+
 	return (
 		<View style={styles.container}>
 			<Image style={styles.image} source={{uri: props.image}} />
 
 			<View style={styles.labelContainer}>
 				<Text style={styles.labelText}>{props.title}</Text>
+				{renderStarImage()}
 
 				<View style={styles.tagContainer}>
 					<Image style={styles.tagIcon} source={require('../images/recipe/tag-icon.png')} />
@@ -28,8 +40,8 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 2,
 	},
 	labelContainer: {
+		flex: 1,
 		flexDirection: 'column',
-
 	},
 	tagContainer: {
 		flexDirection: 'row',
@@ -48,7 +60,7 @@ const styles = StyleSheet.create({
 		width: deviceWidth - 150,
 	},
 	labelText: {
-		width: deviceWidth - 90,
+		width: deviceWidth - 100,
 		fontFamily: 'Roboto',
 		fontSize: 22,
 		lineHeight: 28,
@@ -62,6 +74,14 @@ const styles = StyleSheet.create({
 		margin: 10,
 		borderRadius: 20,
 	},
+	favoritedContainer: {
+		flexDirection: 'row',
+	},	
+	favoritedText: {
+		textAlignVertical: 'top',
+		lineHeight: 24,
+		paddingLeft: 5,
+	}
 });
 
 export default SearchResult;
