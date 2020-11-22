@@ -1,18 +1,10 @@
-const express = require("express");
-const path = require("path");
+const express = require('express');
 const bodyParser = require('body-parser');
 const swagger = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const cors = require('cors');
 
 require('dotenv').config();
-const app = express();
-
-app.use(express.static(path.join(__dirname, "build")));
-
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
 
 // Firebase-admin
 const firebaseAdminSdk = require('firebase-admin'),
@@ -35,6 +27,7 @@ require("firebase/auth");
 const db = firebaseAdminSdk.firestore();
 const port = process.env.PORT || 5000;
 var router = express.Router();
+const app = express();
 app.set('port', (process.env.PORT || 5000));
 
 app.use(cors());
