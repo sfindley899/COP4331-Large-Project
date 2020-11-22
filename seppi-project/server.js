@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const swagger = require('swagger-ui-express');
@@ -391,11 +392,12 @@ app.post('/userInfo', (req, res) => {
 
 if (process.env.NODE_ENV === 'production')
 {
-	app.use(express.static('frontend/build'));
+  app.use(express.static(__dirname));
+  app.use(express.static(path.join(__dirname, "build")));
 
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-	});
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 }
 
 app.get('/', (req, res) => {
