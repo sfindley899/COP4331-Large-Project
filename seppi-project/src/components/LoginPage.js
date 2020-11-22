@@ -119,7 +119,7 @@ const handleRegChange = event => {
       <div className="subBody">
         <div>
           <div className="Suggestions" style={{ color: 'white' }}>
-            Suggested Recipes TEST
+            Suggested Recipes
               </div>
         </div>
       </div>
