@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const swagger = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const cors = require('cors');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -260,11 +261,9 @@ console.log(x);
 
 if (process.env.NODE_ENV === 'production')
 {
-	app.use(express.static('frontend/build'));
-
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-	});
+	app.use(express.static(path.join(__dirname, 'build')));
+  app.use(express.static(path.join(__dirname, 'src')));
+  app.use(express.static(path.join(__dirname, "public")));
 }
 
 app.get('/', (req, res) => {
