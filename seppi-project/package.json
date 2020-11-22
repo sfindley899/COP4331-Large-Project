@@ -23,7 +23,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-skylight": "^0.5.1",
-    "react-toastify": "^6.0.8",
+    "react-toastify": "^6.1.0",
     "swagger-ui-express": "^4.1.5",
     "typeface-roboto": "^1.1.13"
   },
