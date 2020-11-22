@@ -4,12 +4,11 @@ import { CheckBox } from 'react-native-elements'
 import { UserContext } from '../context';
 
 const FilterCheckBox = (props) => {
-	const [checked, setChecked] = useState(false);
 	const [state, setState] = useContext(UserContext);
 
 	return (
-		<TouchableOpacity style={styles.container} onPress={() => setChecked(!checked)}>
-			<CheckBox style={styles.icon} checked={checked} onPress={() => setChecked(!checked)} />
+		<TouchableOpacity style={styles.container} onPress={props.onPress}>
+			<CheckBox style={styles.icon} checked={props.isChecked} onPress={props.onPress} />
 			<Text style={styles.text}>{props.title}</Text>
 		</TouchableOpacity>
 	);

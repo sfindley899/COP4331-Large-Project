@@ -11,8 +11,6 @@ const UserProvider = (props) => {
 	  name: '',
     email: '',
     filterStack: [],
-
-	  // TODO: add more user specific info later
   });
  
   return (

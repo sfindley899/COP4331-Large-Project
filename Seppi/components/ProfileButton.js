@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 		fontFamily: 'Inter',
 		fontSize: 12,
-		lineHeight: 20,
 		color: '#9e969d',
 	},
 });

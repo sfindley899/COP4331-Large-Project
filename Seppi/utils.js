@@ -43,7 +43,8 @@ export function buildPath(route)
 		return 'https://' + app_name +  '.herokuapp.com/' + route;
 	}
 	else
-	{        
+	{  
+		//return 'https://' + app_name +  '.herokuapp.com/' + route;
 		// On Android the localhost IP is 10.0.2.2
 		return 'http://10.0.2.2:5000/' + route;
 	}

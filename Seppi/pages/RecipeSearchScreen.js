@@ -27,16 +27,81 @@ import FilterCheckBox from '../components/FilterCheckBox';
 
 const RecipeSearchScreen = ({ navigation }) => {
 	const [searchText, setSearchText] = useState('');
+	const [filterText, setFilterText] = useState('');
 	const [onAllResultsTab, setOnAllResultsTab] = useState(true);
 	const [searchData, setSearchData] = useState([]);
+	const [favoritesData, setFavoritesData] = useState([]);
 	const [filterVisible, setFilterVisible] = useState(false);
 	const [recipeVisible, setRecipeVisible] = useState(false);
 	const [currentItem, setCurrentItem] = useState({recipe : {}});
 
+	// Meal filters
+	const defaultMealFilters = {
+		lunch: false,
+		dinner: false,
+		breakfast: false,
+		snack: false,
+		teaTime: false,
+	};
+	const [mealTypeFilters, setMealTypeFilters] = useState(defaultMealFilters);
+
+	// Dish filters
+	const defaultDishFilters = {
+		alcoholCocktail: false,
+        biscuitsAndCookies: false,
+        bread: false,
+        cereals: false,
+	};
+	const [dishTypeFilters, setDishTypeFilters] = useState(defaultDishFilters);
+
+	// Diet filters
+	const defaultDietFilters = {
+		balanced: false,
+        highFiber: false,
+        highProtein: false,
+        lowCarb: false,
+        lowFat: false,
+	};
+	const [dietFilters, setDietFilters] = useState(defaultDietFilters);
+
+	// Health filters
+	const defaultHealthFilters = {
+		alcoholFree: false,
+        immuneSupportive: false,
+        celeryFree: false,
+        crustaceanFree: false,
+        dairy: false,
+	};
+	const [healthFilters, setHealthFilters] = useState(defaultHealthFilters);
+
+	// Cuisine filters
+	const defaultCuisineFilters = {
+		american: false,
+        asian: false,
+        british: false,
+        caribbean: false,
+        centralEurope: false,
+        chinese: false,
+        easternEurope: false,
+        french: false,
+        indian: false,
+        italian: false,
+        japanese: false,
+        kosher: false,
+        mediterranean: false,
+        mexican: false,
+        middleEastern: false,
+        nordic: false,
+        southAmerican: false,
+        southEastAsian: false,
+	};
+	const [cuisineTypeFilters, setCuisineTypeFilters] = useState(defaultCuisineFilters);
+
 	const [state, setState] = useContext(UserContext);
 
 	const searchRecipe = async () => {
-		const query = searchText;
+		console.log(searchText, filterText);
+
 		const response = await fetch(buildPath('searchRecipe'), {
 			method: 'POST',
 			headers: {
@@ -45,6 +110,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 			},
 			body: JSON.stringify({
 				search: searchText,
+				filters: filterText
 			})
 		})
 		.catch((error) => console.error(error));
@@ -76,6 +142,127 @@ const RecipeSearchScreen = ({ navigation }) => {
 		return tags;
 	};
 
+	function keyToApiParameter(key) {
+		// Convert key strings for diet
+		if (key === 'highFiber')
+			return 'high-fiber';
+		if (key === 'highProtein')
+			return 'high-protein';
+		if (key === 'lowCarb')
+			return 'low-carb';
+		if (key === 'lowFat')
+			return 'low-fat';
+		
+		// Convert key strings for health
+		if (key === 'alcoholFree')
+			return 'alcohol-free';
+		if (key === 'immuneSupportive')
+			return 'immuno-supportive';
+		if (key === 'celeryFree')
+			return 'celery-free';
+		if (key === 'crustaceanFree')
+			return 'crustacean-free';
+		if (key === 'dairy')
+			return 'dairy-free';
+	};
+
+	const resetFilters = () => {
+		setFilterText(filterText => '');
+		setMealTypeFilters(mealTypeFilters => defaultMealFilters);
+		setDishTypeFilters(dishTypeFilters => defaultDishFilters);
+		setHealthFilters(healthFilters => defaultHealthFilters);
+		setDietFilters(dietFilters => defaultDietFilters);
+		setCuisineTypeFilters(cuisineTypeFilters => defaultCuisineFilters);
+	};
+	
+	const applyFilters = () => {
+		setFilterText(filterText => '');
+		let firstFoundKey = true;
+
+		for (var key of Object.keys(mealTypeFilters)) {
+			let str = '';
+			if (mealTypeFilters[key]) {
+				if (firstFoundKey) {
+					str += 'mealType=';
+					firstFoundKey = false;
+				}
+				if (keyToApiParameter(key) === undefined)
+					str += key + '&';
+				else 
+					str += keyToApiParameter(key) + '&';
+				setFilterText(filterText => filterText + str);
+			}
+		}
+
+		firstFoundKey = true;
+		for (var key of Object.keys(dishTypeFilters)) {
+			let str = '';
+			if (dishTypeFilters[key]) {
+				if (firstFoundKey) {
+					str += 'dishType=';
+					firstFoundKey = false;
+				}
+				if (keyToApiParameter(key) === undefined)
+					str += key + '&';
+				else 
+					str += keyToApiParameter(key) + '&';
+				setFilterText(filterText => filterText + str);
+			}
+		}
+
+		firstFoundKey = true;
+		for (var key of Object.keys(healthFilters)) {
+			let str = '';
+			if (healthFilters[key]) {
+				if (firstFoundKey) {
+					str += 'health=';
+					firstFoundKey = false;
+				}
+				if (keyToApiParameter(key) === undefined)
+					str += key + '&';
+				else 
+					str += keyToApiParameter(key) + '&';
+				setFilterText(filterText => filterText + str)
+			}
+		}
+
+		firstFoundKey = true;
+		for (var key of Object.keys(dietFilters)) {
+			let str = '';
+			if (dietFilters[key]) {
+				if (firstFoundKey) {
+					str += 'diet=';
+					firstFoundKey = false;
+				}
+				if (keyToApiParameter(key) === undefined)
+					str += key + '&';
+				else 
+					str += keyToApiParameter(key) + '&';
+				setFilterText(filterText => filterText + str)
+			}
+		}
+
+		firstFoundKey = true;
+		for (var key of Object.keys(cuisineTypeFilters)) {
+			let str = '';
+			if (cuisineTypeFilters[key]) {
+				if (firstFoundKey) {
+					str += 'cuisineType=';
+					firstFoundKey = false;
+				}
+				if (keyToApiParameter(key) === undefined)
+					str += key + '&';
+				else 
+					str += keyToApiParameter(key) + '&';
+				setFilterText(filterText => filterText + str)
+			}
+		}
+
+		console.log(filterText);
+		setFilterVisible(!filterVisible);
+		setState(state => ({ ...state, filterStack: []}));
+	};
+
 	const toggleFilterVisible = () => {
 		if (state.filterStack.length === 0)
 		{
@@ -105,10 +292,31 @@ const RecipeSearchScreen = ({ navigation }) => {
 		{
 			return (
 				<ScrollView>
-					<FilterCheckBox title="Lunch" />
-					<FilterCheckBox title="Dinner" />
-					<FilterCheckBox title="Breakfast" />
-					<FilterCheckBox title="Snack" />
+					<FilterCheckBox
+						onPress={() => setMealTypeFilters(mealTypeFilters => ({ ...mealTypeFilters, lunch : !mealTypeFilters.lunch}))}
+						isChecked={mealTypeFilters.lunch}
+						title="Lunch" 
+					/>
+					<FilterCheckBox 
+						onPress={() => setMealTypeFilters(mealTypeFilters => ({ ...mealTypeFilters, dinner : !mealTypeFilters.dinner}))}
+						isChecked={mealTypeFilters.dinner}
+						title="Dinner" 
+					/>
+					<FilterCheckBox 
+						title="Breakfast"
+						onPress={() => setMealTypeFilters(mealTypeFilters => ({ ...mealTypeFilters, breakfast : !mealTypeFilters.breakfast}))}
+						isChecked={mealTypeFilters.breakfast}
+					/>
+					<FilterCheckBox 
+						title="Snack" 
+						onPress={() => setMealTypeFilters(mealTypeFilters => ({ ...mealTypeFilters, snack : !mealTypeFilters.snack}))}
+						isChecked={mealTypeFilters.snack}
+					/>
+					<FilterCheckBox 
+						title="Teatime" 
+						onPress={() => setMealTypeFilters(mealTypeFilters => ({ ...mealTypeFilters, teaTime : !mealTypeFilters.teaTime}))}
+						isChecked={mealTypeFilters.teaTime}
+					/>
 				</ScrollView>
 			);
 		}
@@ -116,11 +324,91 @@ const RecipeSearchScreen = ({ navigation }) => {
 		{
 			return (
 				<ScrollView>
-					<FilterCheckBox title="Alcohol-cocktail" />
-					<FilterCheckBox title="Biscuits and cookies" />
-					<FilterCheckBox title="Bread" />
-					<FilterCheckBox title="Cereals" />
-					<FilterCheckBox title="Condiments and sauces" />
+					<FilterCheckBox 
+						title="Alcohol-cocktail" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, alcoholCocktail : !dishTypeFilters.alcoholCocktail}))}
+						isChecked={dishTypeFilters.alcoholCocktail}
+					/>
+					<FilterCheckBox 
+						title="Biscuits and cookies" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, biscuitsAndCookies : !dishTypeFilters.biscuitsAndCookies}))}
+						isChecked={dishTypeFilters.biscuitsAndCookies}
+					/>
+					<FilterCheckBox 
+						title="Bread"
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, bread : !dishTypeFilters.bread}))}
+						isChecked={dishTypeFilters.bread}
+					/>
+					<FilterCheckBox 
+						title="Cereals"
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, cereals : !dishTypeFilters.cereals}))}
+						isChecked={dishTypeFilters.cereals}
+					/>
+					<FilterCheckBox 
+						title="Condiments and sauces" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, condimentsAndSauces : !dishTypeFilters.condimentsAndSauces}))}
+						isChecked={dishTypeFilters.condimentsAndSauces}
+					/>
+					<FilterCheckBox 
+						title="Drinks" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, drinks : !dishTypeFilters.drinks}))}
+						isChecked={dishTypeFilters.drinks}
+					/>
+					<FilterCheckBox 
+						title="Desserts" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, desserts : !dishTypeFilters.desserts}))}
+						isChecked={dishTypeFilters.desserts}
+					/>
+					<FilterCheckBox 
+						title="Egg" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, egg : !dishTypeFilters.egg}))}
+						isChecked={dishTypeFilters.egg}
+					/>
+					<FilterCheckBox 
+						title="Main course" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, mainCourse : !dishTypeFilters.mainCourse}))}
+						isChecked={dishTypeFilters.mainCourse}
+					/>
+					<FilterCheckBox 
+						title="Omelet" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, omelet : !dishTypeFilters.omelet}))}
+						isChecked={dishTypeFilters.omelet}
+					/>
+					<FilterCheckBox 
+						title="Pancake" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, pancake : !dishTypeFilters.pancake}))}
+						isChecked={dishTypeFilters.pancake}
+					/>
+					<FilterCheckBox 
+						title="Preps" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, egg : !dishTypeFilters.egg}))}
+						isChecked={dishTypeFilters.egg}
+					/>
+					<FilterCheckBox 
+						title="Preserve"
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, preserve : !dishTypeFilters.preserve}))}
+						isChecked={dishTypeFilters.preserve}
+					/>
+					<FilterCheckBox 
+						title="Salad" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, salad : !dishTypeFilters.salad}))}
+						isChecked={dishTypeFilters.salad}
+					/>
+					<FilterCheckBox 
+						title="Sandwiches" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, sandwiches : !dishTypeFilters.sandwiches}))}
+						isChecked={dishTypeFilters.sandwiches}
+					/>
+					<FilterCheckBox 
+						title="Soup" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, soup : !dishTypeFilters.soup}))}
+						isChecked={dishTypeFilters.soup}
+					/>
+					<FilterCheckBox 
+						title="Starter" 
+						onPress={() => setDishTypeFilters(dishTypeFilters => ({ ...dishTypeFilters, starter : !dishTypeFilters.starter}))}
+						isChecked={dishTypeFilters.starter}
+					/>
 				</ScrollView>
 			);
 		}
@@ -137,11 +425,31 @@ const RecipeSearchScreen = ({ navigation }) => {
 		{
 			return (
 				<ScrollView>
-					<FilterCheckBox title="Alcohol-free" />
-					<FilterCheckBox title="Immune-Supportive" />
-					<FilterCheckBox title="Celery-free" />
-					<FilterCheckBox title="Crustacean-free" />
-					<FilterCheckBox title="Dairy" />
+					<FilterCheckBox 
+						title="Alcohol-free" 
+						onPress={() => setHealthFilters(healthFilters => ({ ...healthFilters, alcoholFree : !healthFilters.alcoholFree}))}
+						isChecked={healthFilters.alcoholFree}
+					/>
+					<FilterCheckBox 
+						title="Immune-Supportive" 
+						onPress={() => setHealthFilters(healthFilters => ({ ...healthFilters, immuneSupportive : !healthFilters.immuneSupportive}))}
+						isChecked={healthFilters.immuneSupportive}
+					/>
+					<FilterCheckBox 
+						title="Celery-free" 
+						onPress={() => setHealthFilters(healthFilters => ({ ...healthFilters, celeryFree : !healthFilters.celeryFree}))}
+						isChecked={healthFilters.celeryFree}
+					/>
+					<FilterCheckBox 
+						title="Crustacean-free" 
+						onPress={() => setHealthFilters(healthFilters => ({ ...healthFilters, crustaceanFree : !healthFilters.crustaceanFree}))}
+						isChecked={healthFilters.crustaceanFree}
+					/>
+					<FilterCheckBox 
+						title="Dairy" 
+						onPress={() => setHealthFilters(healthFilters => ({ ...healthFilters, dairy : !healthFilters.dairy}))}
+						isChecked={healthFilters.dairy}
+					/>
 				</ScrollView>
 			);
 		}
@@ -149,11 +457,31 @@ const RecipeSearchScreen = ({ navigation }) => {
 		{
 			return (
 				<ScrollView>
-					<FilterCheckBox title="Balanced" />
-					<FilterCheckBox title="High-Fiber" />
-					<FilterCheckBox title="High-Protein" />
-					<FilterCheckBox title="Low-Carb" />
-					<FilterCheckBox title="Low-Fat" />
+					<FilterCheckBox
+						onPress={() => setDietFilters(dietFilters => ({ ...dietFilters, balanced : !dietFilters.balanced}))}
+						isChecked={dietFilters.balanced}
+						title="Balanced" 
+					/>
+					<FilterCheckBox 
+						title="High-Fiber" 
+						onPress={() => setDietFilters(dietFilters => ({ ...dietFilters, highFiber : !dietFilters.highFiber}))}
+						isChecked={dietFilters.highFiber}
+					/>
+					<FilterCheckBox 
+						title="High-Protein"
+						onPress={() => setDietFilters(dietFilters => ({ ...dietFilters, highProtein : !dietFilters.highProtein}))}
+						isChecked={dietFilters.highProtein}
+					 />
+					<FilterCheckBox 
+						title="Low-Carb" 
+						onPress={() => setDietFilters(dietFilters => ({ ...dietFilters, lowCarb : !dietFilters.lowCarb}))}
+						isChecked={dietFilters.lowCarb}
+					/>
+					<FilterCheckBox 
+						title="Low-Fat"
+						onPress={() => setDietFilters(dietFilters => ({ ...dietFilters, lowFat : !dietFilters.lowFat}))}
+						isChecked={dietFilters.lowFat}
+					/>
 				</ScrollView>
 			);
 		}
@@ -161,11 +489,96 @@ const RecipeSearchScreen = ({ navigation }) => {
 		{
 			return (
 				<ScrollView>
-					<FilterCheckBox title="American" />
-					<FilterCheckBox title="Asian" />
-					<FilterCheckBox title="British" />
-					<FilterCheckBox title="Caribbean" />
-					<FilterCheckBox title="Central Europe" />
+					<FilterCheckBox 
+						title="American" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, american : !cuisineTypeFilters.american}))}
+						isChecked={cuisineTypeFilters.american}
+					/>
+					<FilterCheckBox 
+						title="Asian" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, asian : !cuisineTypeFilters.asian}))}
+						isChecked={cuisineTypeFilters.asian}
+					/>
+					<FilterCheckBox 
+						title="British" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, british : !cuisineTypeFilters.british}))}
+						isChecked={cuisineTypeFilters.british}
+					/>
+					<FilterCheckBox 
+						title="Caribbean" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, caribbean : !cuisineTypeFilters.caribbean}))}
+						isChecked={cuisineTypeFilters.caribbean}
+					/>
+					<FilterCheckBox 
+						title="Central Europe"
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, centralEurope : !cuisineTypeFilters.centralEurope}))}
+						isChecked={cuisineTypeFilters.centralEurope}
+					/>
+					<FilterCheckBox 
+						title="Chinese" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, chinese : !cuisineTypeFilters.chinese}))}
+						isChecked={cuisineTypeFilters.chinese}
+					/>
+					<FilterCheckBox 
+						title="Eastern Europe" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, easternEurope : !cuisineTypeFilters.easternEurope}))}
+						isChecked={cuisineTypeFilters.easternEurope}
+					/>
+					<FilterCheckBox 
+						title="French" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, french : !cuisineTypeFilters.french}))}
+						isChecked={cuisineTypeFilters.french}
+					/>
+					<FilterCheckBox 
+						title="Indian" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, indian : !cuisineTypeFilters.indian}))}
+						isChecked={cuisineTypeFilters.indian}
+					/>
+					<FilterCheckBox 
+						title="Italian" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, italian : !cuisineTypeFilters.italian}))}
+						isChecked={cuisineTypeFilters.italian}
+					/>
+					<FilterCheckBox 
+						title="Japanese" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, japanese : !cuisineTypeFilters.japanese}))}
+						isChecked={cuisineTypeFilters.japanese}
+					/>
+					<FilterCheckBox 
+						title="Kosher" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, kosher : !cuisineTypeFilters.kosher}))}
+						isChecked={cuisineTypeFilters.kosher}
+					/>
+					<FilterCheckBox 
+						title="Mediterranean" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, mediterranean : !cuisineTypeFilters.mediterranean}))}
+						isChecked={cuisineTypeFilters.mediterranean}
+					/>
+					<FilterCheckBox 
+						title="Mexican" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, mexican : !cuisineTypeFilters.mexican}))}
+						isChecked={cuisineTypeFilters.mexican}
+					/>
+					<FilterCheckBox 
+						title="Middle Eastern" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, middleEastern : !cuisineTypeFilters.middleEastern}))}
+						isChecked={cuisineTypeFilters.middleEastern}
+					/>
+					<FilterCheckBox 
+						title="Nordic" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, nordic : !cuisineTypeFilters.nordic}))}
+						isChecked={cuisineTypeFilters.nordic}
+					/>
+					<FilterCheckBox 
+						title="South American" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, southAmerican : !cuisineTypeFilters.southAmerican}))}
+						isChecked={cuisineTypeFilters.southAmerican}
+					/>
+					<FilterCheckBox 
+						title="South East Asian" 
+						onPress={() => setCuisineTypeFilters(cuisineTypeFilters => ({ ...cuisineTypeFilters, southEastAsian : !cuisineTypeFilters.southEastAsian}))}
+						isChecked={cuisineTypeFilters.southEastAsian}
+					/>
 				</ScrollView>
 			);
 		}
@@ -180,7 +593,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const FilterOverlay = () => {
 		return (
 			<View>
-				<Modal isVisible={filterVisible}>
+				<Modal animationIn='pulse' isVisible={filterVisible}>
 					<View style={styles.filterContainer}>
 						<View style={styles.filterTopBar}>
 							<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={toggleFilterVisible}>
@@ -188,11 +601,11 @@ const RecipeSearchScreen = ({ navigation }) => {
 							</TouchableOpacity>
 
 							<View style={styles.applyResetContainer}>
-								<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={() => console.log('Reset')}>
+								<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={resetFilters}>
 									<Text style={styles.filterCancelText}>RESET</Text>
 								</TouchableOpacity>
 
-								<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={() => console.log('test')}>
+								<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={applyFilters}>
 									<Text style={styles.filterApplyText}>Apply</Text>
 								</TouchableOpacity>
 							</View>
@@ -203,6 +616,66 @@ const RecipeSearchScreen = ({ navigation }) => {
 				</Modal>
 			</View>
 		);
+	};
+
+	const getFavorites = async () => {
+		const response = await fetch(buildPath('getFavorites'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		})
+		.catch((error) => console.error(error));
+
+		let status = await response.status;
+		console.log(status);
+
+		if (status === 200)
+		{
+			let json = JSON.parse(await response.text());
+			setFavoritesData(json.favorites);
+			return;
+		}
+		else
+		{
+			console.log('could not fetch favorites');
+			return;
+		}
+	};
+
+	const addFavorite = async () => {
+		currentItem.recipe['bookmarked'] = true;
+
+		const response = await fetch(buildPath('addFavorite'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				recipe: currentItem.recipe
+			})
+		}).catch((error) => console.error(error));
+
+		let status = await response.status;
+		console.log(status);
+
+		if (status === 200)
+		{
+			console.log('added favorite');
+			return;
+		}
+		else
+		{
+			console.log('failed to add favorite');
+			return;
+		}
+	};
+
+	// TODO 
+	const unfavorite = async () => {
+
 	};
 
 	const RecipeOverlay = () => {
@@ -230,8 +703,12 @@ const RecipeSearchScreen = ({ navigation }) => {
 								<Text style={styles.filterCancelText}>BACK</Text>
 						</TouchableOpacity>
 
-						<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={() => console.log('test')}>
-							<Text style={styles.filterApplyText}>Favorite</Text>
+						<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={addFavorite}>
+							{currentItem.recipe.bookmarked ? (
+								<Text style={styles.filterApplyText}>Unfavorite</Text>
+							 ) : (
+								 <Text style={styles.filterApplyText}>Favorite</Text>
+							 )}
 						</TouchableOpacity>
 					</View>
 				</Modal>
@@ -307,7 +784,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 						activeOpacity={0.5} 
 						onPress={() => {
 							setOnAllResultsTab(true);
-							// Change style text color and border color to orange
 						}}
 					>
 						<Text style={
@@ -333,8 +809,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 						} 
 						activeOpacity={0.5} 
 						onPress={() => {
+							getFavorites();
 							setOnAllResultsTab(false);
-							// Change style text color and border color to orange
 						}}
 					>
 						<Text style={
@@ -357,7 +833,12 @@ const RecipeSearchScreen = ({ navigation }) => {
 						keyExtractor={(item) => item.recipe.uri}
 					/> 
 				) : (
-					<Text>Favorites Tab</Text>
+					<FlatList 
+						style={{width: '100%', marginBottom: 200}}
+						data={favoritesData}
+						renderItem={renderSearchResult}
+						keyExtractor={(item) => item.recipe.uri}
+					/>
 				)}
 			</SafeAreaView>
 
@@ -447,7 +928,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FA730B',
 		elevation: 8,
 		borderRadius: 24,
-		width: 95,
+		width: 110,
 		height: 40,
 		marginVertical: 10,
 		padding: 12,
@@ -460,7 +941,6 @@ const styles = StyleSheet.create({
 		fontFamily: 'Inter',
 		fontWeight: 'bold',
 		fontSize: 16,
-		lineHeight: 24,
 	},
 	filterCancelContainer: {
 		justifyContent: 'center',

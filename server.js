@@ -57,6 +57,17 @@ app.post('/register', (req, res) => {
     user.updateProfile({
       displayName: req.body.name
     });
+
+    // Create a document for the user using the user's UID.
+    var userRef = db.collection('users').doc(user.uid);
+
+    // Set some of the user's fields.
+    userRef.set({
+      name: req.body.name,
+      allergies: '',
+      diet: '',
+    });
+
     return res.status(200).send(JSON.stringify({response:"Register successful email verification sent to " + req.body.email}));
   })
   .catch(function(error) {
@@ -196,10 +207,69 @@ app.post('/resendEmailVerification', (req, res) => {
 
 });
 
+app.post('/addFavorite', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var user = firebase.auth().currentUser;
+
+    if (user !== null)
+    {
+      let origString = req.body.recipe.uri; 
+      let replacementString = '_S'; 
+      let uri =  origString.replace(/\//g, replacementString); 
+      console.log(uri);
+
+      // Add the recipe JSON object to user's favorites list.
+      let userRef = db.collection('users').doc(user.uid);
+      await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body.recipe);
+
+      // Return the newly added favorite JSON.
+      const recipeRef = userRef.collection('BookmarkedRecipes').doc(uri);
+      const recipeDoc = await recipeRef.get();
+
+      if (!recipeDoc.exists) {
+        console.log('no such document');
+        return res.status(400).send({response: 'No such document.'});
+      }
+      else {
+        return res.status(200).send(recipeDoc.data());
+      }
+    }
+    else
+    {
+      return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+});
+
+app.post('/getFavorites', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var user = firebase.auth().currentUser;
+
+    if (user !== null) {
+      let userRef = db.collection('users').doc(user.uid);
+
+      const favoritesRef = userRef.collection('BookmarkedRecipes');
+      const favoritesDocs = await favoritesRef.get();
+      let docs = [];
+      favoritesDocs.forEach(doc => {
+        docs.push({recipe: doc.data()});
+      });
+
+      return res.status(200).send({favorites : docs});
+    }
+    else {
+      return res.status(400).send(JSON.stringify({response: 'No user'}));
+    }
+});
+
 app.post('/searchRecipe', (req, res) => {
     var apikey = process.env.RECIPE_API_KEY
     var app_id = process.env.RECIPE_APP_ID
-    var url = 'https://api.edamam.com/search?q=' + req.body.search + '&app_id='
+    var url = 'https://api.edamam.com/search?q=' + req.body.search;
+
+    if (req.body.filters !== undefined && req.body.filters !== null)
+      url += '&' + req.body.filters;
+
+    url += '&app_id=' 
     url += app_id
     url += "&app_key="
     url += apikey
