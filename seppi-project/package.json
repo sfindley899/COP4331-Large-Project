@@ -28,6 +28,7 @@
     "typeface-roboto": "^1.1.13"
   },
   "scripts": {
+    "build": "react-scripts build",
     "start": "node server.js",
     "start-dev": "react-scripts start",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
