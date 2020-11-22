@@ -1,0 +1,12 @@
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+
+.search{
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+
+    }
+    .card-inverse{
+        background-color: #333; 
+        border-color: rgb(124, 119, 119);
+        color: gr
+    }
