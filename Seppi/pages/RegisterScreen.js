@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView, Platform, Image, ScrollView } from 'react-native';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
-import { buildPath, validInput } from '../utils';
+import { deviceWidth, deviceHeight, buildPath, validInput } from '../utils';
 import { AuthContext, UserContext } from '../context';
 
 const RegisterScreen = ({ navigation }) => {
@@ -56,11 +56,8 @@ const RegisterScreen = ({ navigation }) => {
 		// 200 is OK response, continue handling user data.
 		let status = await response.status;
 		if (status === 200) {
-			//let json = JSON.parse(await response.text());
-
-			console.log('registered name: ' + state.name + ' email: ' + state.email);
-			setSignUpResult('Account successfully registered, please check your inbox to verify your email.');
 			signUp();
+			navigation.navigate('Email Validation', { data : { backgroundColor: '#EEC96F' } });
 			return;
 		}
 		// Tell the user the email has been registered already.
@@ -76,46 +73,77 @@ const RegisterScreen = ({ navigation }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
-				<Text style={styles.text}>Sign Up</Text>
-				<AppTextInput value={state.name} onChangeText={name => setState(state => ({ ...state, name: name }))} placeholder="John Doe" />
-				<AppTextInput value={state.email} onChangeText={email => setState(state => ({ ...state, email: email }))} placeholder="Email" />
-				<AppTextInput onChangeText={password => setPassword(password)} secureTextEntry={true} placeholder="Password" />
-				<AppTextInput onChangeText={confirmPassword => setConfirmPassword(confirmPassword)} secureTextEntry={true} placeholder="Confirm Password" />
-				<AppButton
-					title="Sign Up"
-					onPress={register}
-				/>
-				<AppButton 
-					title="Back"
-					onPress={() => navigation.navigate('Login/Register')}
-				/>
-				<Text style={styles.signUpResultText}>{signUpResult}</Text>
-				
-		</KeyboardAvoidingView>
+		<ScrollView>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+					<Image style={styles.image} source={require('../images/app-icon.png')} />
+					<Text style={styles.text}>Create Account</Text>
+					<AppTextInput 
+						value={state.name} 
+						onChangeText={name => setState(state => ({ ...state, name: name }))} 
+						placeholder="Your Name" />
+					<AppTextInput 
+						value={state.email} 
+						autoCapitalize="none"
+						onChangeText={email => setState(state => ({ ...state, email: email }))} 
+						placeholder="Email" />
+					<AppTextInput 
+						onChangeText={password => setPassword(password)} 
+						secureTextEntry={true} 
+						autoCapitalize="none"
+						placeholder="Password" />
+					<AppTextInput 
+						onChangeText={confirmPassword => setConfirmPassword(confirmPassword)} 
+						secureTextEntry={true} 
+						autoCapitalize="none"
+						placeholder="Confirm Password" />
+					<AppButton
+						title="Create Account"
+						buttonColor="#FA730B"
+						textColor="#FFFFFF"
+						onPress={register}
+					/>
+					<AppButton 
+						title="Back"
+						buttonColor="#FFFFFF"
+						textColor="#000000"
+						onPress={() => navigation.navigate('Login/Register')}
+					/>
+					<Text style={styles.signUpResultText}>{signUpResult}</Text>
+					
+			</KeyboardAvoidingView>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: deviceWidth,
+		height: deviceHeight,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#EFA25C',
+		backgroundColor: '#EEC96F',
 	},
 	text: {
-		width: 200,
-		textAlign: 'left',
-		color: '#FFFFFF',
-		fontFamily: "Righteous",
+		width: 250,
+		textAlign: 'center',
+		color: '#000000',
+		fontFamily: "Inter",
+		fontWeight: 'bold',
 		fontSize: 30,
 		lineHeight: 60,
 	},
 	signUpResultText: {
-		width: 190,
+		width: 310,
 		textAlign: 'center',
-		color: '#FFFFFF',
+		color: '#000000',
 		fontFamily: "Righteous",
+		fontWeight: '700',
+		fontSize: 16,
+		marginVertical: 10,
+	},
+	image: {
+		resizeMode: 'contain',
 	},
 })
 

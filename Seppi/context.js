@@ -9,9 +9,8 @@ const UserContext = React.createContext([{}, () => {}]);
 const UserProvider = (props) => {
   const [state, setState] = useState({
 	  name: '',
-	  email: '',
-
-	  // TODO: add more user specific info later
+    email: '',
+    filterStack: [],
   });
  
   return (

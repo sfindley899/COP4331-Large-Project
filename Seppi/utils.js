@@ -1,9 +1,13 @@
 /**
  * 	Javascript file that provides common utility functions used throughout the project components.
  */
+import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const app_name = 'seppi'
+
+export const deviceWidth = Dimensions.get('window').width;
+export const deviceHeight = Dimensions.get('window').height; 
 
 // Store string value in AsyncStorage given a key, value pair.
 export const storeData = async (key, value) => {
@@ -40,6 +44,7 @@ export function buildPath(route)
 	}
 	else
 	{        
+		//return 'https://' + app_name +  '.herokuapp.com/' + route;
 		// On Android the localhost IP is 10.0.2.2
 		return 'http://10.0.2.2:5000/' + route;
 	}

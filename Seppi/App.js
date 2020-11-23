@@ -11,27 +11,35 @@ import { AuthContext, UserProvider } from './context';
 import { DrawerContent } from './DrawerContent';
 
 // Import screen components
+import SplashScreen from './pages/SplashScreen';
 import MainScreen from './pages/MainScreen';
 import LoginScreen from './pages/LoginScreen';
+import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import RegisterScreen from './pages/RegisterScreen';
-import HomeScreen from './pages/HomeScreen';
-import SplashScreen from './pages/SplashScreen';
+import EmailValidationScreen from './pages/EmailValidationScreen';
+import RecipeSearchScreen from './pages/RecipeSearchScreen';
+import ProfileScreen from './pages/ProfileScreen';
+import ChangeUsernameScreen from './pages/ChangeUsernameScreen';
+import ChangeEmailScreen from './pages/ChangeEmailScreen';
 
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
-const HomeStack = createStackNavigator();
+const RecipeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const AuthStackScreen = () => (
 	<AuthStack.Navigator>
 		<AuthStack.Screen name="Login/Register" component={MainScreen} />
 		<AuthStack.Screen name="Login" component={LoginScreen} />
+		<AuthStack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
 		<AuthStack.Screen name="Register" component={RegisterScreen} />
+		<AuthStack.Screen name="Email Validation" component={EmailValidationScreen} />
 	</AuthStack.Navigator>
 );
 
-const HomeStackScreen = ({ navigation, route }) => (
-	<HomeStack.Navigator 
+const RecipeStackScreen = ({ navigation, route }) => (
+	<RecipeStack.Navigator 
 		screenOptions={{
 			headerTitle: getHeaderTitle(route),
 			headerLeft: () => (
@@ -47,13 +55,39 @@ const HomeStackScreen = ({ navigation, route }) => (
 			),
 		}}
 	>
-		<HomeStack.Screen name="Home" component={HomeScreen} />
-	</HomeStack.Navigator>
+		<RecipeStack.Screen name="Recipe Search" component={RecipeSearchScreen} />
+	</RecipeStack.Navigator>
+);
+
+const ProfileStackScreen = ({ navigation, route }) => (
+	<ProfileStack.Navigator 
+		screenOptions={{
+			headerTitle: getHeaderTitle(route),
+			headerLeft: () => (
+				<TouchableOpacity
+					activeOpacity={0.15}
+					onPress={() => navigation.dispatch(navigation.toggleDrawer())}
+				>
+					<Icon
+						iconStyle={{marginLeft: 20}}
+						name='menu'
+					/>
+				</TouchableOpacity>
+			),
+		}}
+	>
+		<ProfileStack.Screen name="Profile" component={ProfileScreen} />
+		<ProfileStack.Screen name="Change Username" component={ChangeUsernameScreen} />
+		<ProfileStack.Screen name="Change Email" component={ChangeEmailScreen} />
+		<ProfileStack.Screen name="Validate Email" component={EmailValidationScreen} />
+		<ProfileStack.Screen name="Reset Password" component={ForgotPasswordScreen} />
+	</ProfileStack.Navigator>
 );
 
 const DrawerScreen = () => (
 	<Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} >
-		<Drawer.Screen name="Home" component={HomeStackScreen} />
+		<Drawer.Screen name="Recipe Search" component={RecipeStackScreen} />
+		<Drawer.Screen name="Profile" component={ProfileStackScreen} />
 	</Drawer.Navigator>
 );
 
@@ -61,7 +95,7 @@ const RootStackScreen = ({ userToken }) => {
 		return (
 		<RootStack.Navigator screenOptions={({ route }) => ({headerTitle: getHeaderTitle(route)})}>
 			{userToken ? (
-				<RootStack.Screen name="My Home" component={DrawerScreen}
+				<RootStack.Screen name="Recipe Search" component={DrawerScreen}
 					options={({ navigation, route }) => ({
 						headerTitle: getHeaderTitle(route),
 						headerLeft: () => (
@@ -90,12 +124,18 @@ function getHeaderTitle(route) {
 	const routeName = getFocusedRouteNameFromRoute(route) ?? 'Login/Register';
   
 	switch (routeName) {
-		case 'Home':
-			return 'My Home';
+		case 'Recipe Search':
+			return 'Recipe Search';
+		case 'Profile':
+			return 'Account';
 		case 'Login':
-			return 'Login';
+			return 'Sign In';
 		case 'Register':
-			return 'Register';
+			return 'Create Account';
+		case 'Forgot Password':
+			return 'Reset Password';
+		case 'Email Validation':
+			return 'Validate Your Email';
 	}
 }
 
