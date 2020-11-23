@@ -212,8 +212,8 @@ app.post('/addFavorite', async (req, res) => {
 
     if (user !== null)
     {
-      let origString = req.body.recipe.uri; 
-      let replacementString = '_S'; 
+      let origString = req.body.recipe.uri;
+      let replacementString = '_S';
       let uri =  origString.replace(/\//g, replacementString);
 
       // Add the recipe JSON object to user's favorites list.
@@ -243,8 +243,8 @@ app.post('/removeFavorite', async (req, res) => {
     var user = firebase.auth().currentUser;
 
     if (user !== null) {
-      let origString = req.body.uri; 
-      let replacementString = '_S'; 
+      let origString = req.body.uri;
+      let replacementString = '_S';
       let uri =  origString.replace(/\//g, replacementString);
 
       let userRef = db.collection('users').doc(user.uid);
@@ -287,6 +287,93 @@ app.post('/getFavorites', async (req, res) => {
     }
 });
 
+app.post('/userInfo', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+      firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+          console.log(user.displayName);
+          // eventually an array if needed
+          return res.status(200).send(JSON.stringify({response:user.displayName}));
+        // User is signed in.
+      } else {
+          return res.status(400).send(JSON.stringify({response:"Not logged in"}));
+        // No user is signed in.
+      }
+    });
+
+});
+
+app.post('/userSet', (req, res) => {
+
+
+    // Add a new document in collection "cities" with ID 'LA'
+    var user = firebase.auth().currentUser;
+    const res1 = db.collection('users').doc(user.uid)
+              .set({
+                  Allergies: req.body.allergies,
+                  Diet: req.body.diet,
+                  UID: user.uid
+              });
+    console.log(res1);
+    return res.status(200).send(JSON.stringify({response:"gottem"}));
+});
+
+
+
+app.post('/addIngredient', (req, res) => {
+
+
+    // Add a new document in collection "cities" with ID 'LA'
+    var user = firebase.auth().currentUser;
+    const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc(req.body.Ingredient)
+              .set({
+                  Ingredient: req.body.Ingredient,
+                  Amount: req.body.Amount,
+                  ExpirationDate: req.body.Expiration
+              });
+    console.log(res1);
+    return res.status(200).send(JSON.stringify({response:"Success"}));
+});
+
+app.post('/getIngredients', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    var data = doc.data();
+                    var obj = [{Ingredients: data.Ingredients}]
+                    array.push(obj);
+
+                });
+                return res.status(200).send(JSON.stringify({response:array}));
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
+
+});
+
+app.post('/getUser', (req, res) => {
+            var user = firebase.auth().currentUser;
+            db.collection("users").where("UID", "==", user.uid)
+                    .get()
+                    .then(function(querySnapshot) {
+                        querySnapshot.forEach(function(doc) {
+                            // doc.data() is never undefined for query doc snapshots
+                            var data = doc.data();
+                            var al = data.Allergies;
+                            obj = [{Allergies: data.Allergies}, {Diet: data.Diet}]
+                            return res.status(200).send(JSON.stringify({response:obj}));
+
+                        });
+                    })
+                    .catch(function(error) {
+                        console.log("Error getting documents: ", error);
+                    });
+});
+
 app.post('/searchRecipe', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
@@ -312,7 +399,7 @@ app.post('/searchRecipe', async (req, res) => {
     if (req.body.filters !== undefined && req.body.filters !== null)
       url += '&' + req.body.filters;
 
-    url += '&app_id=' 
+    url += '&app_id='
     url += app_id
     url += "&app_key="
     url += apikey
