@@ -325,6 +325,12 @@ app.post('/searchRecipe', async (req, res) => {
       _res.on("end", function () {
             // Process the search data and figure out which recipes are bookmarked by the user.
             let data = JSON.parse(x);
+            
+            // If data doesn't exist return.
+            if (data === undefined || data.hits === undefined) {
+              return res.status(400).send({response: 'No searches returned'});
+            }
+
             for (let i = 0; i < data.hits.length; ++i) {
               if (docSet.has(data.hits[i].recipe.uri)) {
                 data.hits[i].bookmarked = true;
