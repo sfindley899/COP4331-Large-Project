@@ -4,7 +4,7 @@ Seppi/android/java_pid7964.hprof
 
 # dependencies
 seppi-project/node_modules/*.json
-seppi-project/node_modules
+seppi-project/node_modules/
 node_modules*
 .env
 /.pnp
@@ -14,7 +14,7 @@ node_modules*
 /coverage
 
 # production
-seppi-project/build
+seppi-project/build/
 
 # misc
 seppi-project/.env
