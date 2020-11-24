@@ -38,15 +38,15 @@ export const getData = async (key) => {
 
 export function buildPath(route)
 {
-	if (process.env.NODE_ENV === 'production') 
-	{
-		return 'https://' + app_name +  '.herokuapp.com/' + route;
-	}
-	else
+	if (__DEV__)
 	{        
-		//return 'https://' + app_name +  '.herokuapp.com/' + route;
 		// On Android the localhost IP is 10.0.2.2
 		return 'http://10.0.2.2:5000/' + route;
+	}
+	else
+	{
+		// Use heroku app server instead.
+		return 'https://' + app_name +  '.herokuapp.com/' + route;
 	}
 }
 
