@@ -361,9 +361,6 @@ app.post('/userInfo', (req, res) => {
 });
 
 app.post('/userSet', (req, res) => {
-
-
-    // Add a new document in collection "cities" with ID 'LA'
     var user = firebase.auth().currentUser;
     const res1 = db.collection('users').doc(user.uid)
               .set({
@@ -375,12 +372,53 @@ app.post('/userSet', (req, res) => {
     return res.status(200).send(JSON.stringify({response:"gottem"}));
 });
 
+app.post('/addIngredient', async (req, res) => {
+    var user = firebase.auth().currentUser;
 
+    if (user === null) {
+      return res.status(400).send({response: "User not logged in."});
+    }
+    else if (req.body.category === undefined) {
+      return res.status(400).send({response: "category field is required."});
+    }
+    else if (req.body.ingredient === undefined) {
+      return res.status(400).send({response: "ingredient field is required."});
+    }
+    
+    let userRef = db.collection('users').doc(user.uid);
+    let ingredientRef = userRef.collection('IngredientList').doc(req.body.category).collection('Ingredients').doc(req.body.ingredient);
+    const currDoc = await ingredientRef.get();
+    if (currDoc.exists)
+        return res.status(401).send({response: "Ingredient already exists!"});
 
-app.post('/addIngredient', (req, res) => {
+    let amount = req.body.amount;
+    let expiration = req.body.expiration;
+    if (amount === undefined)
+      amount = '1';
+    if (expiration === undefined)
+      expiration = 'No Expiration';
 
+    ingredientRef.set({
+      ingredient: req.body.ingredient,
+      category: req.body.category,
+      amount: amount,
+      expiration: expiration,
+    });
 
-    // Add a new document in collection "cities" with ID 'LA'
+    return res.status(200).send({response : "Added ingredient to database."});
+});
+
+/*app.post('/getIngredients', (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user logged in."});
+    }
+
+    return res.status(200).send();
+});*/
+
+/*app.post('/addIngredient', (req, res) => {
     var user = firebase.auth().currentUser;
     const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc(req.body.Ingredient)
               .set({
@@ -390,26 +428,25 @@ app.post('/addIngredient', (req, res) => {
               });
     console.log(res1);
     return res.status(200).send(JSON.stringify({response:"Success"}));
-});
+});*/
 
 app.post('/getIngredients', (req, res) => {
-            var user = firebase.auth().currentUser;
-            var array = [];
-            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").get()
-            .then(function(querySnapshot) {
-                querySnapshot.forEach(function(doc) {
-                    // doc.data() is never undefined for query doc snapshots
-                    var data = doc.data();
-                    var obj = [{Ingredient: data.Ingredient}]
-                    array.push(data);
+    var user = firebase.auth().currentUser;
+    var array = [];
+    var res1 = db.collection("users").doc(user.uid).collection("IngredientList").get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            var data = doc.data();
+            var obj = [{Ingredients: data.Ingredients}]
+            array.push(obj);
 
-                });
-                return res.status(200).send(JSON.stringify({response:array}));
-            })
-            .catch(function(error) {
-                console.log("Error getting documents: ", error);
-            });
-
+        });
+        return res.status(200).send(JSON.stringify({response:array}));
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
 });
 
 app.post('/deleteIngredient', (req, res) => {
