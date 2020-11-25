@@ -38,7 +38,7 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'pantry' }));
-						console.log(state.currentTab);
+						navigation.navigate('Pantry');
 					}}
 				>
 					<Image style={styles.toolbarImage} source={require('../images/toolbar/pantry-icon.png')} />
