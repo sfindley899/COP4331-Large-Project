@@ -16,9 +16,21 @@ const PantryScreen = ({ navigation }) => {
 	const [addCategoryVisible, setAddCategoryVisible] = useState(false);
 
 	const [categoryText, setCategoryText] = useState('');
+	const [categoryResult, setCategoryResult] = useState('');
 
 	const toggleAddCategory = () => {
 		setAddCategoryVisible(!addCategoryVisible);
+	};
+
+	const createCategory = () => {
+		setCategoryResult('');
+
+		if (categoryText === undefined || categoryText.length === 0) {
+			setCategoryResult('Please enter a valid category name.');
+			return;
+		}
+
+		console.log('good category');
 	};
 
 	return (
@@ -37,8 +49,10 @@ const PantryScreen = ({ navigation }) => {
 						style={styles.overlayTextInput}
 					/>
 
+					<Text style={styles.categoryResultText}>{categoryResult}</Text>
+
 					<AppButton
-						onPress={toggleAddCategory}
+						onPress={createCategory}
 						title="Submit"
 						buttonColor="#FA730B"
 						textColor="#FFFFFF"
@@ -192,6 +206,11 @@ const styles = StyleSheet.create({
 	overlayTextInput: {
 		marginVertical: 20,
 		width: 250,
+	},
+	categoryResultText: {
+		fontWeight: 'bold',
+		textAlign: 'center',
+		textAlignVertical: 'center',
 	},
 });
 
