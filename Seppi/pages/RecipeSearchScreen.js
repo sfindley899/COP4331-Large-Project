@@ -590,7 +590,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const FilterOverlay = () => {
 		return (
 			<View>
-				<Modal animationIn='pulse' isVisible={filterVisible}>
+				<Modal backdropTransitionOutTiming={0} animationIn='pulse' isVisible={filterVisible}>
 					<View style={styles.filterContainer}>
 						<View style={styles.filterTopBar}>
 							<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={toggleFilterVisible}>
@@ -718,7 +718,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const RecipeOverlay = () => {
 		return (
 			<View>
-				<Modal style={styles.recipeOverlayContainer} isVisible={recipeVisible}>
+				<Modal backdropTransitionOutTiming={0} style={styles.recipeOverlayContainer} isVisible={recipeVisible}>
 					<ScrollView>
 						<View style={styles.recipeLabelImageContainer}>
 							<Image style={styles.recipeOverlayImage} source={{uri: currentItem.recipe.image}} />
