@@ -5,7 +5,8 @@ Seppi/android/java_pid7964.hprof
 # dependencies
 seppi-project/node_modules/*.json
 seppi-project/node_modules/
-node_modules*
+!seppi-project/node_modules/jest
+!seppi-project/node_modules/jest-runtime
 .env
 /.pnp
 .pnp.js
