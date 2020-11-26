@@ -1,12 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
 import { deviceWidth, deviceHeight } from '../utils';
 import CategoryItem from './CategoryItem';
+import { UserContext } from '../context';
+import { AirbnbRating } from 'react-native-elements';
 
 const CategoryButton = (props) => {
 	const [isCollapsed, setIsCollapsed] = useState(true);
+	const [state, setState] = useContext(UserContext);
+
+	const createAlert = async () => new Promise((resolve) => {
+		Alert.alert(
+	      "Delete Category",
+	      "Are you sure you want to delete this category and all its items?",
+	      [
+	        {
+	          text: "CANCEL",
+	          onPress: () => resolve('CANCELED'),
+	          style: "cancel"
+	        },
+	        { text: "OK", onPress: deleteCategory }
+	      ],
+	      { cancelable: false }
+	    );
+	});
+
+	const deleteCategory = async () => {
+		let array = state.categories;
+		let index = -1;
+
+		if (array === undefined)
+			return;
+
+		for (let i = 0; i < array.length; ++i) {
+			if (array[i].category === props.header)
+				index = i;
+		}
+
+		if (index !== -1) {
+			array.splice(index, 1);
+			setState(state => ({ ...state, categories: array}));
+		}
+	};
+
+	const showAlert = async () => {
+		await createAlert();
+	};
 
 	return (
 		<View style={styles.collapsedContainer}>
@@ -22,14 +63,11 @@ const CategoryButton = (props) => {
 			>
 
 				<View>
-					<CategoryItem 
-						itemName="Frozen Brocolli"
-						itemExpiration="Expiration Date: 12/18/2021"
-					/>
-					<CategoryItem
-						itemName="Ice Cream"
-						itemExpiration="Expiration Date: 12/19/2021"
-					/>
+					<TouchableOpacity style={styles.deleteCategoryButton} activeOpacity={0.6} onPress={showAlert}>
+						<Image style={styles.deleteIcon} source={require('../images/pantry/remove-circle.png')} />
+						<Text style={styles.headerText}>Delete Category</Text>
+					</TouchableOpacity>
+
 				</View>
 			</Collapsible>
 		</View>
@@ -62,6 +100,17 @@ const styles = StyleSheet.create({
 	icon: {
 		resizeMode: 'contain',
 		marginRight: 26,
+	},
+	deleteIcon: {
+		resizeMode: 'contain',
+	},
+	deleteCategoryButton: {
+		alignItems: 'center',
+		paddingLeft: 15,
+		width: deviceWidth,
+		height: 60,
+		flexDirection: 'row',
+		backgroundColor: '#F5F5F5'
 	},
 });
 

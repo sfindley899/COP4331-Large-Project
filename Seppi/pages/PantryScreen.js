@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, Button, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
@@ -8,6 +8,7 @@ import Toolbar from '../components/Toolbar';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
 import CategoryButton from '../components/CategoryButton';
+import { UserContext } from '../context';
 import { deviceWidth, deviceHeight, buildPath } from '../utils';
 
 const PantryScreen = ({ navigation }) => {
@@ -17,20 +18,60 @@ const PantryScreen = ({ navigation }) => {
 
 	const [categoryText, setCategoryText] = useState('');
 	const [categoryResult, setCategoryResult] = useState('');
+	const [state, setState] = useContext(UserContext);
 
 	const toggleAddCategory = () => {
 		setAddCategoryVisible(!addCategoryVisible);
 	};
 
-	const createCategory = () => {
+	const createCategory = async () => {
 		setCategoryResult('');
 
-		if (categoryText === undefined || categoryText.length === 0) {
+		if (categoryText === undefined || categoryText.length === 0 || categoryText.trim().length == 0) {
 			setCategoryResult('Please enter a valid category name.');
 			return;
 		}
 
-		console.log('good category');
+		for (let i = 0; i < state.categories.length; ++i) {
+			if (state.categories[i].category === categoryText) {
+				setCategoryResult('You already have a category with that name.');
+				return;
+			}
+		}
+
+		let jsonObj = {category: categoryText};
+		state.categories.push(jsonObj);
+		setState(state => ({ ...state, categories: state.categories}));
+
+		// Submit the request to the server to add the category to the db.
+		const response = await fetch(buildPath('/addCategory'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				category: categoryText
+			})
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+
+		if (status !== 200) {
+			setCategoryText('Failed to add category due to server error.');
+			return;
+		}
+
+		setCategoryText('');
+		toggleAddCategory();
+	};
+
+	const renderCategories = () => {
+		return (
+			<View>
+				{state.categories.map((item, index) => <CategoryButton header={item.category} key={index} />)}
+			</View>
+		);
 	};
 
 	return (
@@ -53,7 +94,7 @@ const PantryScreen = ({ navigation }) => {
 
 					<AppButton
 						onPress={createCategory}
-						title="Submit"
+						title="Add"
 						buttonColor="#FA730B"
 						textColor="#FFFFFF"
 					/>
@@ -67,10 +108,10 @@ const PantryScreen = ({ navigation }) => {
 				</View>
 			</Modal>
 
-			<ScrollView>
+			<ScrollView contentContainerStyle={styles.scrollView}>
 				<View style={styles.collapsedContainer}>
 					<TouchableOpacity style={styles.header} onPress={() => setIsExpiredCollapsed(!isExpiredCollapsed)}>
-						<Text style={styles.headerText}>Expired</Text>
+						<Text style={styles.headerText}>Expiring Soon/Expired</Text>
 						<Image 
 							style={styles.icon} 
 							source={isExpiredCollapsed ? 
@@ -108,16 +149,14 @@ const PantryScreen = ({ navigation }) => {
 								<Text style={styles.categoryText}>New Category</Text>
 							</TouchableOpacity>
 
-							<CategoryButton 
-								header="Freezer"
-							/>
+							{renderCategories()}
 							
 						</View>
 					</Collapsible>
 				</View>
 			</ScrollView>
 
-			<TouchableOpacity style={styles.barcodeButtonContainer} activeOpacity={0.6}>
+			<TouchableOpacity onPress={() => console.log('barcode')} style={styles.barcodeButtonContainer} activeOpacity={0.6}>
 				<Image source={require('../images/pantry/barcode-button.png')} />
 			</TouchableOpacity>
 
@@ -160,8 +199,9 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 	},
 	barcodeButtonContainer: {
-		marginLeft: 'auto',
-		margin: 10,
+		position: 'absolute',
+		bottom: 90,
+		right: 10,
 	},
 	newCategoryButton: {
 		alignItems: 'center',
@@ -211,6 +251,9 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 		textAlignVertical: 'center',
+	},
+	scrollView: {
+		paddingBottom: 100,
 	},
 });
 

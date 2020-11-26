@@ -386,6 +386,11 @@ app.post('/addIngredient', async (req, res) => {
     }
     
     let userRef = db.collection('users').doc(user.uid);
+
+    userRef.collection('IngredientList').doc(req.body.category).set({
+      category: req.body.category
+    });
+
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category).collection('Ingredients').doc(req.body.ingredient);
     const currDoc = await ingredientRef.get();
     if (currDoc.exists)
@@ -408,45 +413,86 @@ app.post('/addIngredient', async (req, res) => {
     return res.status(200).send({response : "Added ingredient to database."});
 });
 
-/*app.post('/getIngredients', (req, res) => {
+app.post('/addCategory', async (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user logged in."});
+    }
+    else if (req.body.category === undefined) {
+      return res.status(400).send({response: "category field is required."});
+    }
+
+    let userRef = db.collection('users').doc(user.uid);
+    let categoryRef = userRef.collection('IngredientList').doc(req.body.category);
+
+    const currDoc = await categoryRef.get();
+    if (currDoc.exists)
+        return res.status(401).send({response: "Category already exists!"});
+
+    categoryRef.set({
+      category: req.body.category
+    });
+
+    categoryRef.collection('Ingredients');
+
+    return res.status(200).send({response: "Added category."});
+});
+
+app.post('/removeCategory', async (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user logged in."});
+    }
+    else if (req.body.category === undefined) {
+      return res.status(400).send({response: "category field is required."});
+    }
+
+    let userRef = db.collection('users').doc(user.uid);
+    let categoryRef = userRef.collection('IngredientList').doc(req.body.category);
+
+    // Get all the ingredient documents and delete them in the collection.
+    const ingredients = await categoryRef.collection('Ingredients').get();
+    ingredients.forEach(ingredient => {
+      ingredient.ref.delete();
+    });
+
+    // Delete the category document.
+    await categoryRef.delete();
+
+    return res.status(200).send({response: 'Deleted category'});
+});
+
+app.post('/getCategories', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+
     var user = firebase.auth().currentUser;
 
     if (user === null) {
       return res.status(400).send({response: "No user logged in."});
     }
 
-    return res.status(200).send();
-});*/
+    let userRef = db.collection('users').doc(user.uid);
+    let categoriesRef = userRef.collection('IngredientList');
+    let arr = [];
 
-/*app.post('/addIngredient', (req, res) => {
-    var user = firebase.auth().currentUser;
-    const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc(req.body.Ingredient)
-              .set({
-                  Ingredient: req.body.Ingredient,
-                  Amount: req.body.Amount,
-                  ExpirationDate: req.body.Expiration
-              });
-    console.log(res1);
-    return res.status(200).send(JSON.stringify({response:"Success"}));
-});*/
+    let categories = await categoriesRef.get();
+    let categoriesArr = [];
 
-app.post('/getIngredients', (req, res) => {
-    var user = firebase.auth().currentUser;
-    var array = [];
-    var res1 = db.collection("users").doc(user.uid).collection("IngredientList").get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            var data = doc.data();
-            var obj = [{Ingredients: data.Ingredients}]
-            array.push(obj);
-
-        });
-        return res.status(200).send(JSON.stringify({response:array}));
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
+    categories.forEach(category => {
+      categoriesArr.push(category);
     });
+
+    for (let i = 0; i < categoriesArr.length; ++i) {
+      let ingredients = await categoriesRef.doc(categoriesArr[i].id).collection('Ingredients').get();
+
+      ingredients.forEach(ingredient => {
+        arr.push(ingredient.data());
+      });
+    }
+
+    return res.status(200).send({categories : arr});
 });
 
 app.post('/deleteIngredient', (req, res) => {
