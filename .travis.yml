@@ -10,6 +10,8 @@ matrix:
   fast_finish: true
 
 before_script: cd seppi-project
+script:
+- npm run test
 after_success:
   - "curl -o /tmp/travis-automerge https://raw.githubusercontent.com/sfindley899/travis-automerge/master/travis-automerge"
   - "chmod a+x /tmp/travis-automerge"
