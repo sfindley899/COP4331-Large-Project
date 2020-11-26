@@ -25,9 +25,13 @@
     "react-skylight": "^0.5.1",
     "react-toastify": "^6.1.0",
     "swagger-ui-express": "^4.1.5",
-    "typeface-roboto": "^1.1.13"
+    "typeface-roboto": "^1.1.13",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.0.1"
   },
   "scripts": {
+    "test": "jest server.test.js",
     "build": "react-scripts build",
     "start": "node server.js",
     "start-dev": "react-scripts start",
