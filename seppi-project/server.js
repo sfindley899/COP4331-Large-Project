@@ -325,7 +325,7 @@ app.post('/searchRecipe', async (req, res) => {
       _res.on("end", function () {
             // Process the search data and figure out which recipes are bookmarked by the user.
             let data = JSON.parse(x);
-            
+
             // If data doesn't exist return.
             if (data === undefined || data.hits === undefined) {
               return res.status(400).send({response: 'No searches returned'});
@@ -400,8 +400,8 @@ app.post('/getIngredients', (req, res) => {
                 querySnapshot.forEach(function(doc) {
                     // doc.data() is never undefined for query doc snapshots
                     var data = doc.data();
-                    var obj = [{Ingredients: data.Ingredients}]
-                    array.push(obj);
+                    var obj = [{Ingredient: data.Ingredient}]
+                    array.push(data);
 
                 });
                 return res.status(200).send(JSON.stringify({response:array}));
@@ -412,6 +412,51 @@ app.post('/getIngredients', (req, res) => {
 
 });
 
+app.post('/deleteIngredient', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
+            return res.status(200).send(JSON.stringify({response:"Deleted"}));
+
+});
+
+app.post('/updateIngredient', (req, res) => {
+    const data1 = {
+        Ingredient: req.body.toIngredient,
+        Amount: req.body.Amount,
+        ExpirationDate: req.body.Expiration
+    };
+    var user = firebase.auth().currentUser;
+    if (req.body.toIngredient != req.body.fromIngredient)
+    {
+        var doc = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).get();
+        if (doc != null) {
+            return res.status(401).send(JSON.stringify({response:"To ingredients document already exists " + req.body.toIngredient}));
+            }
+    }
+    if(res.headersSent)
+    {
+        return;
+    }
+
+// get the data from 'name@xxx.com'
+db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.fromIngredient).get()
+.then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        var data = doc.data();
+        var al = data.Allergies;
+        obj = [{Allergies: data.Allergies}, {Diet: data.Diet}]
+        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.fromIngredient).delete();
+        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).set(data1)
+            // deletes the old document
+
+            return res.status(200).send(JSON.stringify({response:"Updated from" + JSON.stringify(data1) + " to: " + JSON.stringify(data)}));
+    });
+})
+
+
+});
 app.post('/getUser', (req, res) => {
             var user = firebase.auth().currentUser;
             db.collection("users").where("UID", "==", user.uid)
@@ -451,21 +496,6 @@ app.post('/changeDisplayName', (req, res) => {
   });
 });
 
-app.post('/userInfo', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-      firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-          console.log(user.displayName);
-          // eventually an array if needed
-          return res.status(200).send(JSON.stringify({response:user.displayName}));
-        // User is signed in.
-      } else {
-          return res.status(400).send(JSON.stringify({response:"Not logged in"}));
-        // No user is signed in.
-      }
-    });
-
-});
 
 if (process.env.NODE_ENV === 'production')
 {

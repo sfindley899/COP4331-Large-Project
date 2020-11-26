@@ -46,6 +46,91 @@
 		  }
 		}
     },
+    "pref": {
+      "required": [
+        "allergies",
+        "diet"
+      ],
+      "properties": {
+        "allergies": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "Nuts"
+        },
+        "diet": {
+          "type": "string",
+          "uniqueItems": false,
+          "example": "Healthy"
+        }
+      }
+  },
+  "ingred": {
+    "required": [
+      "Ingredient",
+      "Amount",
+      "Expiration"
+    ],
+    "properties": {
+      "Ingredient": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "Milk"
+      },
+      "Amount": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "3"
+      },
+      "Expiration": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "7/15/2011"
+      }
+    }
+},
+"ingred2": {
+  "required": [
+    "fromIngredient",
+    "toIngredient",
+    "Amount",
+    "Expiration"
+
+  ],
+  "properties": {
+    "fromIngredient": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "Milk"
+    },
+    "toIngredient": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "Milk"
+    },
+    "Amount": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "3"
+    },
+    "Expiration": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "7/15/2011"
+    }
+  }
+},
+"ingred1": {
+  "required": [
+    "Ingredient"
+  ],
+  "properties": {
+    "Ingredient": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "Milk"
+    }
+  }
+},
     "Register": {
       "required": [
         "email",
@@ -266,6 +351,192 @@
   				"Users"
   			  ],
   			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/userSet": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/pref"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/addIngredient": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/ingred"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/updateIngredient": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/ingred2"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/deleteIngredient": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
+  			  "parameters": [
+  				{
+  				  "name": "user",
+  				  "in": "body",
+  				  "description": "When user is signed in call this to get info",
+  				  "schema": {
+                      "$ref": "#/definitions/ingred1"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Went through"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
+          "/getIngredients": {
+           "post": {
+             "tags": [
+               "Users"
+             ],
+             "description": "Sets user Allergies",
+             "parameters": [
+               {
+                 "name": "user",
+                 "in": "body",
+                 "description": "When user is signed in call this to get info",
+                 "schema": {
+
+                 }
+               }
+             ],
+             "produces": [
+               "application/json"
+             ],
+             "responses": {
+                 "200":
+                 {
+                     "description": "Went through"
+                 },
+                 "400":
+                 {
+                     "description": "Internal Server Error"
+                 }
+                 }
+             }
+         },
+          "/getUser": {
+  			"post": {
+  			  "tags": [
+  				"Users"
+  			  ],
+  			  "description": "Sets user Allergies",
   			  "parameters": [
   				{
   				  "name": "user",
