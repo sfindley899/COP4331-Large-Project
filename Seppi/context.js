@@ -11,7 +11,7 @@ const UserProvider = (props) => {
 	  name: '',
     email: '',
     filterStack: [],
-    categories: [],
+    categories: {},
   });
  
   return (

@@ -26,7 +26,29 @@ export function DrawerContent(props) {
     const paperTheme = useTheme();
 
     const { signOut } = React.useContext(AuthContext);
-	const [state, setState] = useContext(UserContext);
+    const [state, setState] = useContext(UserContext);
+
+    const fetchIngredients = async () => {
+		const response = await fetch(buildPath('getCategories'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+
+		if (status !== 200) {
+			console.log('Could not fetch ingredients for categories.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		console.log(Object.entries(json.categories));
+		let categoriesJson = json.categories;
+		setState(state => ({ ...state, categories : categoriesJson}));
+    };
 
     return(
         <View style={{flex:1}}>
@@ -66,7 +88,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Pantry"
-                            onPress={() => {props.navigation.navigate('Pantry')}}
+                            onPress={() => {fetchIngredients(); props.navigation.navigate('Pantry');}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (

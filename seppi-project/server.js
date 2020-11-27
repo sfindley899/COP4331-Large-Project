@@ -400,7 +400,7 @@ app.post('/addIngredient', async (req, res) => {
     let expiration = req.body.expiration;
     if (amount === undefined)
       amount = '1';
-    if (expiration === undefined)
+    if (expiration === undefined || expiration.trim().length === 0)
       expiration = 'No Expiration';
 
     ingredientRef.set({
@@ -411,6 +411,82 @@ app.post('/addIngredient', async (req, res) => {
     });
 
     return res.status(200).send({response : "Added ingredient to database."});
+});
+
+app.post('/removeIngredient', async (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "User not logged in."});
+    }
+    else if (req.body.category === undefined) {
+      return res.status(400).send({response: "category field is required."});
+    }
+    else if (req.body.ingredient === undefined) {
+      return res.status(400).send({response: "ingredient field is required."});
+    }
+    
+    let userRef = db.collection('users').doc(user.uid);
+
+    let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
+                        .collection('Ingredients').doc(req.body.ingredient);
+
+    const currDoc = await ingredientRef.get();
+    if (!currDoc.exists)
+        return res.status(401).send({response: "Ingredient doesn't exist!"});
+
+    await ingredientRef.delete();
+
+    return res.status(200).send({response: "Deleted Ingredient."});
+});
+
+app.post('/editIngredient', async (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "User not logged in."});
+    }
+    else if (req.body.category === undefined) {
+      return res.status(400).send({response: "category field is required."});
+    }
+    else if (req.body.ingredient === undefined) {
+      return res.status(400).send({response: "ingredient field is required."});
+    }
+    else if (req.body.expiration === undefined) {
+      return res.status(400).send({response: "expiration field is required"});
+    }
+    
+    let userRef = db.collection('users').doc(user.uid);
+
+    let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
+                        .collection('Ingredients').doc(req.body.ingredient);
+
+    let ingredient = await ingredientRef.get();
+
+    if (!ingredient.exists)
+        return res.status(400).send({response: "Ingredient doesn't exist."});
+
+    let newIngredient = req.body.newIngredient;
+
+    if (newIngredient === undefined)
+      newIngredient = req.body.ingredient;
+
+    let newRef = userRef.collection('IngredientList').doc(req.body.category)
+                 .collection('Ingredients').doc(newIngredient);
+    
+    let newIngredientDoc = await newRef.get();
+    if (newIngredientDoc.exists && req.body.ingredient !== newIngredient)
+      return res.status(401).send({response: "Ingredient name already exists for this category."});
+
+      await ingredientRef.delete();
+
+      newRef.set({
+        ingredient: newIngredient,
+        category: req.body.category,
+        expiration: req.body.expiration,
+      });
+
+    return res.status(200).send({response: "Edited ingredient."});
 });
 
 app.post('/addCategory', async (req, res) => {
@@ -476,6 +552,7 @@ app.post('/getCategories', async (req, res) => {
     let userRef = db.collection('users').doc(user.uid);
     let categoriesRef = userRef.collection('IngredientList');
     let arr = [];
+    let json = {};
 
     let categories = await categoriesRef.get();
     let categoriesArr = [];
@@ -490,9 +567,12 @@ app.post('/getCategories', async (req, res) => {
       ingredients.forEach(ingredient => {
         arr.push(ingredient.data());
       });
+
+      json[categoriesArr[i].id] = arr;
+      arr = [];
     }
 
-    return res.status(200).send({categories : arr});
+    return res.status(200).send({categories : json});
 });
 
 app.post('/deleteIngredient', (req, res) => {
@@ -623,7 +703,6 @@ app.post('/changeDisplayName', (req, res) => {
     }
   });
 });
-
 
 if (process.env.NODE_ENV === 'production')
 {

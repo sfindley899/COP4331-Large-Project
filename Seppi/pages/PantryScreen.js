@@ -24,6 +24,10 @@ const PantryScreen = ({ navigation }) => {
 		setAddCategoryVisible(!addCategoryVisible);
 	};
 
+	const toggleIsCategoriesCollapsed = () => {
+		setIsCategoriesCollapsed(!isCategoriesCollapsed);
+	};
+
 	const createCategory = async () => {
 		setCategoryResult('');
 
@@ -32,19 +36,8 @@ const PantryScreen = ({ navigation }) => {
 			return;
 		}
 
-		for (let i = 0; i < state.categories.length; ++i) {
-			if (state.categories[i].category === categoryText) {
-				setCategoryResult('You already have a category with that name.');
-				return;
-			}
-		}
-
-		let jsonObj = {category: categoryText};
-		state.categories.push(jsonObj);
-		setState(state => ({ ...state, categories: state.categories}));
-
 		// Submit the request to the server to add the category to the db.
-		const response = await fetch(buildPath('/addCategory'), {
+		const response = await fetch(buildPath('addCategory'), {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -57,11 +50,17 @@ const PantryScreen = ({ navigation }) => {
 
 		let status = await response.status;
 
-		if (status !== 200) {
-			setCategoryText('Failed to add category due to server error.');
+		if (status === 401) {
+			setCategoryResult('You already have a category with that name.');
+			return;
+		}
+		else if (status !== 200) {
+			setCategoryResult('Failed to add category due to server error.');
 			return;
 		}
 
+		state.categories[categoryText] = [];
+		setState(state => ({ ...state, categories: state.categories}));
 		setCategoryText('');
 		toggleAddCategory();
 	};
@@ -69,7 +68,8 @@ const PantryScreen = ({ navigation }) => {
 	const renderCategories = () => {
 		return (
 			<View>
-				{state.categories.map((item, index) => <CategoryButton header={item.category} key={index} />)}
+				{Object.entries(state.categories) !== undefined ? Object.entries(state.categories).map((item, index) => <CategoryButton items={item[1]} header={item[0]} key={item[0]} />) :
+																  <View></View>}
 			</View>
 		);
 	};
@@ -130,7 +130,7 @@ const PantryScreen = ({ navigation }) => {
 				</View>
 
 				<View style={styles.collapsedContainer}>
-					<TouchableOpacity style={styles.header} onPress={() => setIsCategoriesCollapsed(!isCategoriesCollapsed)}>
+					<TouchableOpacity style={styles.header} onPress={toggleIsCategoriesCollapsed}>
 						<Text style={styles.headerText}>Categories</Text>
 						<Image 
 							style={styles.icon} 
