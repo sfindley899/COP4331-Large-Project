@@ -45,6 +45,27 @@ const BarcodeScreen = ({ navigation }) => {
 		setState(state => ({ ...state, categories : categoriesJson}));
 	};
 
+	const fetchExpiring = async () => {
+		const response = await fetch(buildPath('getExpiringIngredients'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch expiring ingredients.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		console.log(json);
+		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
 	const addIngredient = async () => {
 		const re = /^(?:(?:(?:0?[13578]|1[02])(\/|-|\.)31)\1|(?:(?:0?[1,3-9]|1[0-2])(\/|-|\.)(?:29|30)\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:0?2(\/|-|\.)29\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\/|-|\.)(?:0?[1-9]|1\d|2[0-8])\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
 
@@ -84,8 +105,9 @@ const BarcodeScreen = ({ navigation }) => {
 			return;
 		}
 
-		console.log('added ingredient');
+		showToast('Ingredient successfully added to pantry.')
 		fetchIngredients();
+		fetchExpiring();
 		setIsItemFoundVisible(false);
 	};
 
@@ -135,7 +157,6 @@ const BarcodeScreen = ({ navigation }) => {
 			console.log(json.hints[0].food.label);
 			setItemName(json.hints[0].food.label);
 			setIsItemFoundVisible(true);
-			showToast('Ingredient successfully added to pantry.')
 		}
 		
 		setIsManualEntryVisible(false);

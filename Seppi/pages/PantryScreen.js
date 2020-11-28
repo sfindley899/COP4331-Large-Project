@@ -20,6 +20,27 @@ const PantryScreen = ({ navigation }) => {
 	const [categoryResult, setCategoryResult] = useState('');
 	const [state, setState] = useContext(UserContext);
 
+	const fetchExpiring = async () => {
+		const response = await fetch(buildPath('getExpiringIngredients'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch expiring ingredients.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		console.log(json);
+		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
 	const toggleAddCategory = () => {
 		setAddCategoryVisible(!addCategoryVisible);
 	};
@@ -118,7 +139,7 @@ const PantryScreen = ({ navigation }) => {
 
 			<ScrollView contentContainerStyle={styles.scrollView}>
 				<View style={styles.collapsedContainer}>
-					<TouchableOpacity style={styles.header} onPress={() => setIsExpiredCollapsed(!isExpiredCollapsed)}>
+					<TouchableOpacity style={styles.header} onPress={() => {fetchExpiring(); setIsExpiredCollapsed(!isExpiredCollapsed);}}>
 						<Text style={styles.headerText}>Expiring Soon/Expired</Text>
 						<Image 
 							style={styles.icon} 

@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
 	},
 	textContainer: {
 		flexDirection: 'column',
+		width: deviceWidth * 0.6,
 	},
 	itemNameText: {
 		fontFamily: 'Inter',

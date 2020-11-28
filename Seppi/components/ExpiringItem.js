@@ -39,7 +39,7 @@ const ExpiringItem = (props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: deviceWidth,
-		height: 50,
+		height: 'auto',
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		fontSize: 16,
 		lineHeight: 24,
+		width: deviceWidth * 0.75,
 		textAlign: 'left',
 		textAlignVertical: 'center',
 	},
@@ -82,7 +83,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		color: '#B1B1B1',
-		marginRight: 20,
+		paddingRight: 25,
+		paddingTop: 5,
 	},
 });
 
