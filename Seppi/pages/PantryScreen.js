@@ -98,7 +98,7 @@ const PantryScreen = ({ navigation }) => {
 	const renderExpiringItems = () => {
 		return (
 			<View>
-				{state.expiring.map((item, index) => <ExpiringItem key={index} category={item.category} itemName={item.ingredient} itemExpiration={item.daysExpired} />)}
+				{state.expiring.map((item, index) => <ExpiringItem key={item.ingredient} category={item.category} itemName={item.ingredient} itemExpiration={item.daysExpired} />)}
 			</View>
 		);
 	};
