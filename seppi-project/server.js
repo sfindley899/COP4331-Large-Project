@@ -382,7 +382,7 @@ app.post('/addIngredient', (req, res) => {
 
     // Add a new document in collection "cities" with ID 'LA'
     var user = firebase.auth().currentUser;
-    const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc(req.body.Ingredient)
+    const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc()
               .set({
                   Ingredient: req.body.Ingredient,
                   Amount: req.body.Amount,
@@ -400,8 +400,13 @@ app.post('/getIngredients', (req, res) => {
                 querySnapshot.forEach(function(doc) {
                     // doc.data() is never undefined for query doc snapshots
                     var data = doc.data();
-                    var obj = [{Ingredient: data.Ingredient}]
-                    array.push(data);
+                    var myId = doc.id;
+                    const data1 = {
+                        id: myId
+                    };
+
+                    var obj = Object.assign(data, data1);
+                    array.push(obj)
 
                 });
                 return res.status(200).send(JSON.stringify({response:array}));
@@ -415,48 +420,31 @@ app.post('/getIngredients', (req, res) => {
 app.post('/deleteIngredient', (req, res) => {
             var user = firebase.auth().currentUser;
             var array = [];
-            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.Ingredient);
+            res1.get().then(function(querySnapshot)
+        {
+            querySnapshot.forEach(function(doc) {
+                doc.ref.delete();
+            });
+        });
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
 
 });
 
+
+
 app.post('/updateIngredient', (req, res) => {
     const data1 = {
-        Ingredient: req.body.toIngredient,
+        Ingredient: req.body.Ingredient,
         Amount: req.body.Amount,
         ExpirationDate: req.body.Expiration
     };
     var user = firebase.auth().currentUser;
-    if (req.body.toIngredient != req.body.fromIngredient)
-    {
-        var doc = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).get();
-        if (doc != null) {
-            return res.status(401).send(JSON.stringify({response:"To ingredients document already exists " + req.body.toIngredient}));
-            }
-    }
-    if(res.headersSent)
-    {
-        return;
-    }
-
-// get the data from 'name@xxx.com'
-db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.fromIngredient).get()
-.then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        var data = doc.data();
-        var al = data.Allergies;
-        obj = [{Allergies: data.Allergies}, {Diet: data.Diet}]
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.fromIngredient).delete();
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).set(data1)
-            // deletes the old document
-
-            return res.status(200).send(JSON.stringify({response:"Updated from" + JSON.stringify(data1) + " to: " + JSON.stringify(data)}));
-    });
-})
-
+    var docref = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.id).update(data1);
+    return res.status(200).send(JSON.stringify({response:"Updated"}));
 
 });
+
 
 app.post('/lookupBarcode', (req, res) => {
     var user = firebase.auth().currentUser;
@@ -477,14 +465,14 @@ app.post('/lookupBarcode', (req, res) => {
     url += apikey
     const https = require('https');
     var x = "";
-  
+
     https.get(url, (_res) => {
       _res.on('data', (d) => {
         x += d;
       });
       _res.on("end", function () {
             let data = JSON.parse(x);
-            
+
             // If data doesn't exist return.
             if (data === undefined) {
               return res.status(400).send({response: 'No data found.'});

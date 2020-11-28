@@ -1,0 +1,67 @@
+app.post('/addIngredient', (req, res) => {
+
+
+    // Add a new document in collection "cities" with ID 'LA'
+    var user = firebase.auth().currentUser;
+    const res1 = db.collection('users').doc(user.uid).collection('IngredientList').doc()
+              .set({
+                  Ingredient: req.body.Ingredient,
+                  Amount: req.body.Amount,
+                  ExpirationDate: req.body.Expiration
+              });
+    console.log(res1);
+    return res.status(200).send(JSON.stringify({response:"Success"}));
+});
+
+app.post('/getIngredients', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    var data = doc.data();
+                    var myId = doc.id;
+                    const data1 = {
+                        id: myId
+                    };
+
+                    var obj = Object.assign(data, data1);
+                    array.push(obj)
+
+                });
+                return res.status(200).send(JSON.stringify({response:array}));
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
+
+});
+
+app.post('/deleteIngredient', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.Ingredient);
+            res1.get().then(function(querySnapshot)
+        {
+            querySnapshot.forEach(function(doc) {
+                doc.ref.delete();
+            });
+        });
+            return res.status(200).send(JSON.stringify({response:"Deleted"}));
+
+});
+
+
+
+app.post('/updateIngredient', (req, res) => {
+    const data1 = {
+        Ingredient: req.body.Ingredient,
+        Amount: req.body.Amount,
+        ExpirationDate: req.body.Expiration
+    };
+    var user = firebase.auth().currentUser;
+    var docref = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.id).update(data1);
+    return res.status(200).send(JSON.stringify({response:"Updated"}));
+
+});

@@ -97,12 +97,12 @@
 
   ],
   "properties": {
-    "fromIngredient": {
+    "id": {
       "type": "string",
       "uniqueItems": false,
-      "example": "Milk"
+      "example": "bZ9u2l4156KzT4vp4x2b"
     },
-    "toIngredient": {
+    "Ingredient": {
       "type": "string",
       "uniqueItems": false,
       "example": "Milk"
