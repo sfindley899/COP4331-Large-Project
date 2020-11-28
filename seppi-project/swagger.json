@@ -66,22 +66,28 @@
   },
   "ingred": {
     "required": [
-      "Ingredient",
-      "Amount",
-      "Expiration"
+      "ingredient",
+      "amount",
+      "expiration",
+      "category"
     ],
     "properties": {
-      "Ingredient": {
+      "ingredient": {
         "type": "string",
         "uniqueItems": false,
         "example": "Milk"
       },
-      "Amount": {
+      "amount": {
         "type": "string",
         "uniqueItems": false,
         "example": "3"
       },
-      "Expiration": {
+      "category": {
+        "type": "string",
+        "uniqueItems": false,
+        "example": "3"
+      },
+      "expiration": {
         "type": "string",
         "uniqueItems": false,
         "example": "7/15/2011"
@@ -90,45 +96,69 @@
 },
 "ingred2": {
   "required": [
-    "fromIngredient",
-    "toIngredient",
-    "Amount",
-    "Expiration"
+    "category",
+    "newIngredient",
+    "ingredient",
+    "expiration"
 
   ],
   "properties": {
-    "fromIngredient": {
+    "ingredient": {
       "type": "string",
       "uniqueItems": false,
       "example": "Milk"
     },
-    "toIngredient": {
+    "id": {
       "type": "string",
       "uniqueItems": false,
       "example": "Milk"
     },
-    "Amount": {
+    "category": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "Milk"
+    },
+    "newIngredient": {
       "type": "string",
       "uniqueItems": false,
       "example": "3"
     },
-    "Expiration": {
+    "expiration": {
       "type": "string",
       "uniqueItems": false,
       "example": "7/15/2011"
     }
   }
 },
-"ingred1": {
+"getIngred": {
   "required": [
-    "Ingredient"
+    "category"
+
   ],
   "properties": {
-    "Ingredient": {
+    "category": {
       "type": "string",
       "uniqueItems": false,
       "example": "Milk"
     }
+  }
+},
+"ingred1": {
+  "required": [
+    "id",
+    "category"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "uniqueItems": false,
+      "example": "Milk"
+  },
+  "category": {
+    "type": "string",
+    "uniqueItems": false,
+    "example": "3"
+  }
   }
 },
     "Register": {
@@ -438,7 +468,7 @@
   				  }
   			  }
   		  },
-          "/updateIngredient": {
+          "/editIngredient": {
   			"post": {
   			  "tags": [
   				"Users"
@@ -469,7 +499,7 @@
   				  }
   			  }
   		  },
-          "/deleteIngredient": {
+          "/removeIngredient": {
   			"post": {
   			  "tags": [
   				"Users"
@@ -512,7 +542,7 @@
                  "in": "body",
                  "description": "When user is signed in call this to get info",
                  "schema": {
-
+                     "$ref": "#/definitions/getIngred"
                  }
                }
              ],

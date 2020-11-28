@@ -384,15 +384,17 @@ app.post('/addIngredient', async (req, res) => {
     else if (req.body.ingredient === undefined) {
       return res.status(400).send({response: "ingredient field is required."});
     }
-    
+
     let userRef = db.collection('users').doc(user.uid);
 
     userRef.collection('IngredientList').doc(req.body.category).set({
       category: req.body.category
     });
 
-    let ingredientRef = userRef.collection('IngredientList').doc(req.body.category).collection('Ingredients').doc(req.body.ingredient);
+    let ingredientRef = userRef.collection('IngredientList').doc(req.body.category).collection('Ingredients').doc();
+
     const currDoc = await ingredientRef.get();
+    // should never happen
     if (currDoc.exists)
         return res.status(401).send({response: "Ingredient already exists!"});
 
@@ -422,14 +424,12 @@ app.post('/removeIngredient', async (req, res) => {
     else if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
-    else if (req.body.ingredient === undefined) {
-      return res.status(400).send({response: "ingredient field is required."});
-    }
-    
+
+
     let userRef = db.collection('users').doc(user.uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
-                        .collection('Ingredients').doc(req.body.ingredient);
+                        .collection('Ingredients').doc(req.body.id);
 
     const currDoc = await ingredientRef.get();
     if (!currDoc.exists)
@@ -455,11 +455,11 @@ app.post('/editIngredient', async (req, res) => {
     else if (req.body.expiration === undefined) {
       return res.status(400).send({response: "expiration field is required"});
     }
-    
+
     let userRef = db.collection('users').doc(user.uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
-                        .collection('Ingredients').doc(req.body.ingredient);
+                        .collection('Ingredients').doc(req.body.id);
 
     let ingredient = await ingredientRef.get();
 
@@ -471,16 +471,9 @@ app.post('/editIngredient', async (req, res) => {
     if (newIngredient === undefined)
       newIngredient = req.body.ingredient;
 
-    let newRef = userRef.collection('IngredientList').doc(req.body.category)
-                 .collection('Ingredients').doc(newIngredient);
-    
-    let newIngredientDoc = await newRef.get();
-    if (newIngredientDoc.exists && req.body.ingredient !== newIngredient)
-      return res.status(401).send({response: "Ingredient name already exists for this category."});
 
-      await ingredientRef.delete();
 
-      newRef.set({
+      ingredientRef.update({
         ingredient: newIngredient,
         category: req.body.category,
         expiration: req.body.expiration,
@@ -578,48 +571,37 @@ app.post('/getCategories', async (req, res) => {
 app.post('/deleteIngredient', (req, res) => {
             var user = firebase.auth().currentUser;
             var array = [];
-            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.id).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
 
 });
 
-app.post('/updateIngredient', (req, res) => {
-    const data1 = {
-        Ingredient: req.body.toIngredient,
-        Amount: req.body.Amount,
-        ExpirationDate: req.body.Expiration
-    };
-    var user = firebase.auth().currentUser;
-    if (req.body.toIngredient != req.body.fromIngredient)
-    {
-        var doc = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).get();
-        if (doc != null) {
-            return res.status(401).send(JSON.stringify({response:"To ingredients document already exists " + req.body.toIngredient}));
-            }
-    }
-    if(res.headersSent)
-    {
-        return;
-    }
+app.post('/getIngredients', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.category)
+                                .collection('Ingredients').get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    var data = doc.data();
+                    var myId = doc.id;
+                    const data1 = {
+                        id: myId
+                    };
 
-// get the data from 'name@xxx.com'
-db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.fromIngredient).get()
-.then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        var data = doc.data();
-        var al = data.Allergies;
-        obj = [{Allergies: data.Allergies}, {Diet: data.Diet}]
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.fromIngredient).delete();
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).set(data1)
-            // deletes the old document
+                    var obj = Object.assign(data, data1);
+                    array.push(obj)
 
-            return res.status(200).send(JSON.stringify({response:"Updated from" + JSON.stringify(data1) + " to: " + JSON.stringify(data)}));
-    });
-})
-
+                });
+                return res.status(200).send(JSON.stringify({response:array}));
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
 
 });
+
 
 app.post('/lookupBarcode', (req, res) => {
     var user = firebase.auth().currentUser;
@@ -640,14 +622,14 @@ app.post('/lookupBarcode', (req, res) => {
     url += apikey
     const https = require('https');
     var x = "";
-  
+
     https.get(url, (_res) => {
       _res.on('data', (d) => {
         x += d;
       });
       _res.on("end", function () {
             let data = JSON.parse(x);
-            
+
             // If data doesn't exist return.
             if (data === undefined) {
               return res.status(400).send({response: 'No data found.'});
@@ -697,7 +679,7 @@ app.post('/getExpiringIngredients', async (req, res) => {
         }
       });
     }
-    
+
     return res.status(200).send({expiring: arr});
 });
 
