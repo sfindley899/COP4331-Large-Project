@@ -55,6 +55,27 @@ const CategoryItem = (props) => {
 		setState(state => ({ ...state, categories : categoriesJson}));
 	};
 
+	const fetchExpiring = async () => {
+		const response = await fetch(buildPath('getExpiringIngredients'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch expiring ingredients.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		console.log(json);
+		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
 	const deleteIngredient = async () => {
 		const response = await fetch(buildPath('removeIngredient'), {
 			method: 'POST',
@@ -80,6 +101,7 @@ const CategoryItem = (props) => {
 		}
 
 		fetchIngredients();
+		fetchExpiring();
 	};
 
 	const toggleEditModal = () => {
@@ -129,6 +151,7 @@ const CategoryItem = (props) => {
 		}
 
 		fetchIngredients();
+		fetchExpiring();
 		toggleEditModal();
 	};
 

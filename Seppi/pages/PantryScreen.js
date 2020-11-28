@@ -9,9 +9,10 @@ import AppButton from '../components/AppButton';
 import CategoryButton from '../components/CategoryButton';
 import { UserContext } from '../context';
 import { deviceWidth, deviceHeight, buildPath } from '../utils';
+import ExpiringItem from '../components/ExpiringItem';
 
 const PantryScreen = ({ navigation }) => {
-	const [isExpiredCollapsed, setIsExpiredCollapsed] = useState(false);
+	const [isExpiredCollapsed, setIsExpiredCollapsed] = useState(true);
 	const [isCategoriesCollapsed, setIsCategoriesCollapsed] = useState(false);
 	const [addCategoryVisible, setAddCategoryVisible] = useState(false);
 
@@ -73,6 +74,14 @@ const PantryScreen = ({ navigation }) => {
 		);
 	};
 
+	const renderExpiringItems = () => {
+		return (
+			<View>
+				{state.expiring.map((item, index) => <ExpiringItem key={index} category={item.category} itemName={item.ingredient} itemExpiration={item.daysExpired} />)}
+			</View>
+		);
+	};
+
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
 			<Modal
@@ -123,7 +132,7 @@ const PantryScreen = ({ navigation }) => {
 						collapsed={isExpiredCollapsed}
 					>
 						<View>
-							
+							{renderExpiringItems()}
 						</View>
 					</Collapsible>
 				</View>

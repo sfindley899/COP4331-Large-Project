@@ -39,6 +39,27 @@ const CategoryButton = (props) => {
 		setAddItemModalVisible(!addItemModalVisible);
 	};
 
+	const fetchExpiring = async () => {
+		const response = await fetch(buildPath('getExpiringIngredients'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch expiring ingredients.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		console.log(json);
+		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
 	const addIngredient = async () => {
 		setAddIngredientResult('');
 
@@ -99,6 +120,7 @@ const CategoryButton = (props) => {
 		let categoriesJson = json.categories;
 		setState(state => ({ ...state, categories : categoriesJson}));
 
+		fetchExpiring();
 		setAddItemModalVisible(!addItemModalVisible);
 	}
 
