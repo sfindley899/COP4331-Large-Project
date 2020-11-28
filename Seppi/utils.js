@@ -38,8 +38,7 @@ export const getData = async (key) => {
 
 export function buildPath(route)
 {
-	//if (__DEV__)
-	if (false)
+	if (__DEV__)
 	{        
 		// On Android the localhost IP is 10.0.2.2
 		return 'http://10.0.2.2:5000/' + route;

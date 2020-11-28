@@ -103,8 +103,6 @@ const CategoryItem = (props) => {
 			return;
 		}
 
-		console.log(ingredientText + " vs " + props.itemName);
-
 		const response = await fetch(buildPath('editIngredient'), {
 			method: 'POST',
 			headers: {
@@ -185,7 +183,7 @@ const CategoryItem = (props) => {
 			<View style={styles.itemContainer}>
 				<View style={styles.textContainer}>
 					<Text style={styles.itemNameText}>{props.itemName}</Text>
-					<Text style={styles.itemExpirationText}>{props.itemExpiration}</Text>
+					<Text style={styles.itemExpirationText}>{'Expiration Date: ' + props.itemExpiration}</Text>
 				</View>
 
 				<View style={styles.buttonsContainer}>
