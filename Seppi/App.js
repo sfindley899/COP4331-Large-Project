@@ -19,6 +19,7 @@ import RegisterScreen from './pages/RegisterScreen';
 import EmailValidationScreen from './pages/EmailValidationScreen';
 import RecipeSearchScreen from './pages/RecipeSearchScreen';
 import PantryScreen from './pages/PantryScreen';
+import BarcodeScreen from './pages/BarcodeScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import ChangeUsernameScreen from './pages/ChangeUsernameScreen';
 import ChangeEmailScreen from './pages/ChangeEmailScreen';
@@ -79,6 +80,7 @@ const PantryStackScreen = ({ navigation, route }) => (
 		}}
 	>
 		<PantryStack.Screen name="Pantry" component={PantryScreen} />
+		<PantryStack.Screen name="Barcode" component={BarcodeScreen} />
 	</PantryStack.Navigator>
 );
 
@@ -152,6 +154,8 @@ function getHeaderTitle(route) {
 			return 'Recipe Search';
 		case 'Pantry':
 			return 'Pantry';
+		case 'Barcode':
+			return 'Scan Barcode';
 		case 'Profile':
 			return 'Account';
 		case 'Login':

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, KeyboardAvoidingView, TouchableOpacity, Button, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-
 import Modal from 'react-native-modal';
 
 import Toolbar from '../components/Toolbar';
@@ -156,7 +155,7 @@ const PantryScreen = ({ navigation }) => {
 				</View>
 			</ScrollView>
 
-			<TouchableOpacity onPress={() => console.log('barcode')} style={styles.barcodeButtonContainer} activeOpacity={0.6}>
+			<TouchableOpacity onPress={() => navigation.navigate('Barcode')} style={styles.barcodeButtonContainer} activeOpacity={0.6}>
 				<Image source={require('../images/pantry/barcode-button.png')} />
 			</TouchableOpacity>
 
