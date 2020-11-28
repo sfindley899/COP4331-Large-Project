@@ -665,6 +665,42 @@ app.post('/lookupBarcode', (req, res) => {
     });
 });
 
+app.post('/getExpiringIngredients', async (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user logged in."});
+    }
+
+    let userRef = db.collection('users').doc(user.uid);
+    let categoriesRef = userRef.collection('IngredientList');
+    let categories = await categoriesRef.get();
+    let categoriesArr = [];
+    let arr = [];
+
+    categories.forEach(category => {
+      categoriesArr.push(category);
+    });
+
+    for (let i = 0; i < categoriesArr.length; ++i) {
+      let ingredients = await categoriesRef.doc(categoriesArr[i].id).collection('Ingredients').get();
+
+      ingredients.forEach(ingredient => {
+        let data = ingredient.data();
+        let expiration = new Date(data.expiration).getTime();
+        let date = Date.now();
+        let days = Math.floor((expiration - date) / (1000 * 3600 * 24)) + 1;
+
+        if (days <= 0 || (days > 0 && days <= 5)) {
+          data['daysExpired'] = days;
+          arr.push(data);
+        }
+      });
+    }
+    
+    return res.status(200).send({expiring: arr});
+});
+
 app.post('/getUser', (req, res) => {
             var user = firebase.auth().currentUser;
             db.collection("users").where("UID", "==", user.uid)

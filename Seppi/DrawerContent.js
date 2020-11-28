@@ -50,6 +50,26 @@ export function DrawerContent(props) {
 		setState(state => ({ ...state, categories : categoriesJson}));
     };
 
+    const fetchExpiring = async () => {
+        const response = await fetch(buildPath('getExpiringIngredients'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch expiring ingredients.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		setState(state => ({ ...state, expiring: json.expiring}));
+    };
+
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -88,7 +108,11 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Pantry"
-                            onPress={() => {fetchIngredients(); props.navigation.navigate('Pantry');}}
+                            onPress={() => {
+                                fetchIngredients();
+                                fetchExpiring();
+                                props.navigation.navigate('Pantry');
+                            }}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
