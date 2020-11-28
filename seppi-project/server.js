@@ -457,6 +457,51 @@ db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredi
 
 
 });
+
+app.post('/lookupBarcode', (req, res) => {
+    var user = firebase.auth().currentUser;
+
+    if (user === null)
+      return res.status(400).send({response: "No user logged in."});
+    else if (req.body.code === undefined) {
+      return res.status(400).send({response: "code field is required."});
+    }
+
+    var apikey = process.env.FOOD_API_KEY
+    var app_id = process.env.FOOD_APP_ID
+    var url = 'https://api.edamam.com/api/food-database/v2/parser?upc=' + req.body.code;
+
+    url += '&app_id='
+    url += app_id
+    url += "&app_key="
+    url += apikey
+    const https = require('https');
+    var x = "";
+  
+    https.get(url, (_res) => {
+      _res.on('data', (d) => {
+        x += d;
+      });
+      _res.on("end", function () {
+            let data = JSON.parse(x);
+            
+            // If data doesn't exist return.
+            if (data === undefined) {
+              return res.status(400).send({response: 'No data found.'});
+            }
+            else if (data.error === "not_found") {
+              return res.status(401).send({response: data.error});
+            }
+
+            return res.status(200).send(data);
+      });
+
+    }).on('error', (e) => {
+      console.error(e);
+      return res.status(400).send({response: e});
+    });
+});
+
 app.post('/getUser', (req, res) => {
             var user = firebase.auth().currentUser;
             db.collection("users").where("UID", "==", user.uid)
