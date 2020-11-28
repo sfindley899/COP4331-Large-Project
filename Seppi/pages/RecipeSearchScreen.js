@@ -587,34 +587,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}
 	};
 
-	const FilterOverlay = () => {
-		return (
-			<View>
-				<Modal backdropTransitionOutTiming={0} animationIn='pulse' isVisible={filterVisible}>
-					<View style={styles.filterContainer}>
-						<View style={styles.filterTopBar}>
-							<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={toggleFilterVisible}>
-								<Text style={styles.filterCancelText}>BACK</Text>
-							</TouchableOpacity>
-
-							<View style={styles.applyResetContainer}>
-								<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={resetFilters}>
-									<Text style={styles.filterCancelText}>RESET</Text>
-								</TouchableOpacity>
-
-								<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={applyFilters}>
-									<Text style={styles.filterApplyText}>Apply</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-
-						{renderFilterScrollView()}
-					</View>
-				</Modal>
-			</View>
-		);
-	};
-
 	const getFavorites = async () => {
 		const response = await fetch(buildPath('getFavorites'), {
 			method: 'POST',
@@ -717,7 +689,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 
 	const RecipeOverlay = () => {
 		return (
-			<View>
 				<Modal backdropTransitionOutTiming={0} style={styles.recipeOverlayContainer} isVisible={recipeVisible}>
 					<ScrollView>
 						<View style={styles.recipeLabelImageContainer}>
@@ -730,7 +701,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 							<Text style={styles.ingredientLine}>Ingredients:</Text>
 							
 							{(currentItem.recipe.ingredientLines !== undefined) ? 
-							currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{index + 1}. {item}</Text>) :
+							currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{'\u2B24'}{item}</Text>) :
 							<View></View> }
 						</View>
 					</ScrollView>
@@ -757,7 +728,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 						</TouchableOpacity>
 					</View>
 				</Modal>
-			</View>
 		);
 	};
 
@@ -808,6 +778,27 @@ const RecipeSearchScreen = ({ navigation }) => {
 
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+			<Modal backdropTransitionOutTiming={0} animationIn='pulse' isVisible={filterVisible}>
+					<View style={styles.filterContainer}>
+						<View style={styles.filterTopBar}>
+							<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={toggleFilterVisible}>
+								<Text style={styles.filterCancelText}>BACK</Text>
+							</TouchableOpacity>
+
+							<View style={styles.applyResetContainer}>
+								<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={resetFilters}>
+									<Text style={styles.filterCancelText}>RESET</Text>
+								</TouchableOpacity>
+
+								<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={applyFilters}>
+									<Text style={styles.filterApplyText}>Apply</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+
+						{renderFilterScrollView()}
+					</View>
+				</Modal>
 			<View style={styles.topBar}>
 					<SearchBar 
 						containerStyle={styles.searchBar}
@@ -889,8 +880,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 					/>
 				)}
 			</SafeAreaView>
-
-			<FilterOverlay />
 
 			<RecipeOverlay />
 			
