@@ -159,9 +159,10 @@ app.post('/register', (req, res) => {
       });
 });
 
-app.post('/changeEmail', (req, res) => {
-    var user = firebase.auth().currentUser;
+app.post('/changeEmail', async(req, res) => {
+
     var emailx = req.body.email;
+    var user = firebase.auth().currentUser;
 
     // cant change to empty email
     if (emailx != null && user != null)
@@ -1038,7 +1039,7 @@ app.post('/getUser', async(req, res) => {
     }
     const uid = decodedToken.uid;
 
-            db.collection("users").where("UID", "==", uid)
+            var docref = await db.collection("users").doc(uid)
                     .get()
                     .then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
@@ -1123,6 +1124,10 @@ router.route('/signout')
 
 router.route('/resetPassword')
     .post();
+
+    router.route('/changeDisplayName')
+        .post();
+
 
 const server = app.listen(port, () => {
       console.log(`Server is running on port: ${port}`);
