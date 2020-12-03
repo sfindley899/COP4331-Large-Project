@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
 	collapsedContainer: {
 		flexDirection: 'column',
 		width: deviceWidth,
+		height: 'auto',
 	},
 	header: {
 		flexDirection: 'row',
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		lineHeight: 24,
 		textAlign: 'left',
+		width: deviceWidth * 0.8,
 		textAlignVertical: 'center',
 		marginLeft: 15,
 	},

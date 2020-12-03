@@ -122,8 +122,8 @@ export function DrawerContent(props) {
                                 size={size}
                                 />
                             )}
-                            label="Grocery Lists"
-                            onPress={() => {console.log('lists')}}
+                            label="Grocery List"
+                            onPress={() => {props.navigation.navigate('Grocery List')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
