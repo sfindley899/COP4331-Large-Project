@@ -104,10 +104,19 @@ app.post('/register', (req, res) => {
                   }
                   // sends 200 when email is verified.
                   else if(user != null) {
-                      return res.status(200).send({
-                        name: user.displayName,
-                        email: user.email,
-                      });
+                      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+  // Send token to your backend via HTTPS
+  // ...
+  return res.status(200).send({
+    name: user.displayName,
+    email: user.email,
+    idToken: idToken
+  });
+}).catch(function(error) {
+  // Handle error
+});
+
+
                   }
                   // user not signed in
                 } else {
@@ -200,16 +209,24 @@ app.post('/resendEmailVerification', (req, res) => {
 });
 
 app.post('/addFavorite', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user !== null)
+    if (req.body.idToken == null)
     {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+
+
       let origString = req.body.recipe.uri;
       let replacementString = '_S';
       let uri =  origString.replace(/\//g, replacementString);
 
       // Add the recipe JSON object to user's favorites list.
-      let userRef = db.collection('users').doc(user.uid);
+      let userRef = db.collection('users').doc(uid);
       await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body);
 
       // Return the newly added favorite JSON.
@@ -223,22 +240,25 @@ app.post('/addFavorite', async (req, res) => {
       else {
         return res.status(200).send(recipeDoc.data());
       }
-    }
-    else
-    {
-      return res.status(400).send(JSON.stringify({response : 'No user'}));
-    }
+
 });
 
 app.post('/removeFavorite', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user !== null) {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
       let origString = req.body.uri;
       let replacementString = '_S';
       let uri =  origString.replace(/\//g, replacementString);
 
-      let userRef = db.collection('users').doc(user.uid);
+      let userRef = db.collection('users').doc(uid);
 
       const favoritesRef = userRef.collection('BookmarkedRecipes');
       await favoritesRef.doc(uri).delete();
@@ -251,17 +271,23 @@ app.post('/removeFavorite', async (req, res) => {
       });
 
       return res.status(200).send({favorites : docs});
-    }
-    else {
-      return res.status(400).send({response: 'No user'});
-    }
+
+
 });
 
 app.post('/getFavorites', async (req, res) => {
-    var user = firebase.auth().currentUser;
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-    if (user !== null) {
-      let userRef = db.collection('users').doc(user.uid);
+      let userRef = db.collection('users').doc(uid);
 
                   let categoriesRef = userRef.collection('IngredientList');
                   let arr = [];
@@ -339,20 +365,23 @@ app.post('/getFavorites', async (req, res) => {
       });
 
       return res.status(200).send({favorites : docs});
-    }
-    else {
-      return res.status(400).send(JSON.stringify({response: 'No user'}));
-    }
+
 });
 
 app.post('/searchRecipe', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: 'No User'});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-    let userRef = db.collection('users').doc(user.uid);
+
+    let userRef = db.collection('users').doc(uid);
     const favoritesRef = userRef.collection('BookmarkedRecipes');
     const favoritesDocs = await favoritesRef.get();
 
@@ -496,7 +525,7 @@ app.post('/userSet', (req, res) => {
     if (user === null) {
       return res.status(400).send({response: "No user logged in."});
     }
-    
+
     const res1 = db.collection('users').doc(user.uid)
               .set({
                   Allergies: req.body.allergies,
@@ -508,19 +537,24 @@ app.post('/userSet', (req, res) => {
 });
 
 app.post('/addIngredient', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "User not logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.category === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
     else if (req.body.ingredient === undefined) {
       return res.status(400).send({response: "ingredient field is required."});
     }
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
 
     userRef.collection('IngredientList').doc(req.body.category).set({
       category: req.body.category
@@ -549,19 +583,26 @@ app.post('/addIngredient', async (req, res) => {
 });
 
 app.post('/removeIngredient', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "User not logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.category === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+
+
+     if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
     else if (req.body.ingredient === undefined) {
       return res.status(400).send({response: "ingredient field is required."});
     }
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
                         .collection('Ingredients').doc(req.body.ingredient);
@@ -576,12 +617,17 @@ app.post('/removeIngredient', async (req, res) => {
 });
 
 app.post('/editIngredient', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "User not logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.category === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
     else if (req.body.ingredient === undefined) {
@@ -591,7 +637,7 @@ app.post('/editIngredient', async (req, res) => {
       return res.status(400).send({response: "expiration field is required"});
     }
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
                         .collection('Ingredients').doc(req.body.ingredient);
@@ -625,16 +671,23 @@ app.post('/editIngredient', async (req, res) => {
 });
 
 app.post('/addCategory', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.category === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+
+
+    if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
     let categoryRef = userRef.collection('IngredientList').doc(req.body.category);
 
     const currDoc = await categoryRef.get();
@@ -653,16 +706,21 @@ app.post('/addCategory', async (req, res) => {
 
 
 app.post('/removeCategory', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.category === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    if (req.body.category === undefined) {
       return res.status(400).send({response: "category field is required."});
     }
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
     let categoryRef = userRef.collection('IngredientList').doc(req.body.category);
 
     // Get all the ingredient documents and delete them in the collection.
@@ -678,13 +736,18 @@ app.post('/removeCategory', async (req, res) => {
 });
 
 app.post('/getCategories', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
     let categoriesRef = userRef.collection('IngredientList');
     let arr = [];
     let json = {};
@@ -711,28 +774,38 @@ app.post('/getCategories', async (req, res) => {
 });
 
 app.post('/deleteIngredient', async (req, res) => {
-            var user = firebase.auth().currentUser;
-
-            if (user === null) {
-              return res.status(400).send({response: "No user logged in."});
-            }
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
             var array = [];
-            var res1 = await db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
+            var res1 = await db.collection("users").doc(uid).collection("IngredientList").doc(req.body.Ingredient).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
 });
 
 
-app.post('/getGrocery', (req, res) => {
-            var user = firebase.auth().currentUser;
-
-            if (user === null) {
-              return res.status(400).send({response: "No user signed in."});
-            }
+app.post('/getGrocery', async(req, res) => {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
             var array = [];
             var numChecked = 0;
-            var res1 = db.collection("users").doc(user.uid).collection("GroceryList").get()
+            var res1 = db.collection("users").doc(uid).collection("GroceryList").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
                     // doc.data() is never undefined for query doc snapshots
@@ -746,7 +819,7 @@ app.post('/getGrocery', (req, res) => {
 
                     if (obj.check)
                       numChecked++;
-                    
+
                     array.push(obj)
                 });
 
@@ -760,30 +833,40 @@ app.post('/getGrocery', (req, res) => {
 });
 
 app.post('/deleteGrocery', async (req, res) => {
-            var user = firebase.auth().currentUser;
-
-            if (user === null) {
-              return res.status(400).send({response: "No user signed in."});
-            }
-            else if (req.body.id === undefined) {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+            if (req.body.id === undefined) {
               return res.status(400).send({response: "id is required"});
             }
 
             var array = [];
-            var res1 = await db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).delete();
+            var res1 = await db.collection("users").doc(uid).collection("GroceryList").doc(req.body.id).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
 
 });
 
 app.post('/addGrocery', async (req, res) => {
     // Checked field
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user signed in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-    const res1 = await db.collection('users').doc(user.uid).collection('GroceryList').doc()
+    const res1 = await db.collection('users').doc(uid).collection('GroceryList').doc()
               .set({
                   ingredient: req.body.ingredient,
                   note: req.body.note,
@@ -794,15 +877,20 @@ app.post('/addGrocery', async (req, res) => {
 
 app.post('/addGroceryArray', async (req, res) => {
     // Checked field
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user signed in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
     for (var i = 0; i < req.body.grocery.length; i++)
     {
-        const res1 = await db.collection('users').doc(user.uid).collection('GroceryList').doc()
+        const res1 = await db.collection('users').doc(uid).collection('GroceryList').doc()
                   .set({
                       ingredient: req.body.grocery[i],
                       note: "For recipe: " + req.body.recipe,
@@ -819,11 +907,17 @@ app.post('/updateGrocery', async (req, res) => {
         note: req.body.note,
         check: req.body.check
     };
-    var user = firebase.auth().currentUser;
-    if (user === null) {
-      return res.status(400).send({response: "User not logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    else if (req.body.note === undefined) {
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    if (req.body.note === undefined) {
       return res.status(400).send({response: "note field is required."});
     }
     else if (req.body.ingredient === undefined) {
@@ -836,17 +930,23 @@ app.post('/updateGrocery', async (req, res) => {
       return res.status(400).send({response: "id field is required"});
     }
 
-    var docref = await db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).update(data1);
+    var docref = await db.collection("users").doc(uid).collection("GroceryList").doc(req.body.id).update(data1);
     return res.status(200).send(JSON.stringify({response:"Updated"}));
 });
 
 
-app.post('/lookupBarcode', (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null)
-      return res.status(400).send({response: "No user logged in."});
-    else if (req.body.code === undefined) {
+app.post('/lookupBarcode', async(req, res) => {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    if (req.body.code === undefined) {
       return res.status(400).send({response: "code field is required."});
     }
 
@@ -886,13 +986,18 @@ app.post('/lookupBarcode', (req, res) => {
 });
 
 app.post('/getExpiringIngredients', async (req, res) => {
-    var user = firebase.auth().currentUser;
-
-    if (user === null) {
-      return res.status(400).send({response: "No user logged in."});
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-    let userRef = db.collection('users').doc(user.uid);
+    let userRef = db.collection('users').doc(uid);
     let categoriesRef = userRef.collection('IngredientList');
     let categories = await categoriesRef.get();
     let categoriesArr = [];
@@ -921,14 +1026,19 @@ app.post('/getExpiringIngredients', async (req, res) => {
     return res.status(200).send({expiring: arr});
 });
 
-app.post('/getUser', (req, res) => {
-            var user = firebase.auth().currentUser;
+app.post('/getUser', async(req, res) => {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
 
-            if (user === null) {
-              return res.status(400).send({response: "No user logged in."});
-            }
-
-            db.collection("users").where("UID", "==", user.uid)
+            db.collection("users").where("UID", "==", uid)
                     .get()
                     .then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
