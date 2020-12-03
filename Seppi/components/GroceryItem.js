@@ -22,7 +22,10 @@ const GroceryItem = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -44,7 +47,8 @@ const GroceryItem = (props) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				id: props.id
+				id: props.id,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -69,7 +73,8 @@ const GroceryItem = (props) => {
 				ingredient: props.itemName,
 				note: props.itemNotes,
 				check: !isChecked,
-				id: props.id
+				id: props.id,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -100,7 +105,8 @@ const GroceryItem = (props) => {
 				ingredient: ingredientText,
 				note: notesText,
 				check: isChecked,
-				id: props.id
+				id: props.id,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 

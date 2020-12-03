@@ -37,7 +37,8 @@ const ListsScreen = ({ navigation }) => {
 			},
 			body: JSON.stringify({
 				ingredient: itemText,
-				note: notesText
+				note: notesText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -58,7 +59,10 @@ const ListsScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;

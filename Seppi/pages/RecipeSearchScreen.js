@@ -108,7 +108,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 			},
 			body: JSON.stringify({
 				search: searchText,
-				filters: filterText
+				filters: filterText,
+				idToken: state.idToken
 			})
 		})
 		.catch((error) => console.error(error));
@@ -593,7 +594,10 @@ const RecipeSearchScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+			body: JSON.stringify({
+				idToken: state.idToken
+			})
 		})
 		.catch((error) => console.error(error));
 
@@ -621,6 +625,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 				break;
 			}
 		}
+
+		currentItem['idToken'] = state.idToken;
 
 		const response = await fetch(buildPath('addFavorite'), {
 			method: 'POST',
@@ -663,7 +669,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				uri: currentItem.recipe.uri
+				uri: currentItem.recipe.uri,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 
