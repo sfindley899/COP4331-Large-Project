@@ -213,7 +213,7 @@ app.post('/addFavorite', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -248,7 +248,7 @@ app.post('/removeFavorite', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -373,7 +373,7 @@ app.post('/searchRecipe', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -541,7 +541,7 @@ app.post('/addIngredient', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -587,7 +587,7 @@ app.post('/removeIngredient', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -621,7 +621,7 @@ app.post('/editIngredient', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -675,7 +675,7 @@ app.post('/addCategory', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -710,7 +710,7 @@ app.post('/removeCategory', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -740,7 +740,7 @@ app.post('/getCategories', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -778,7 +778,7 @@ app.post('/deleteIngredient', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -796,7 +796,7 @@ app.post('/getGrocery', async(req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -837,7 +837,7 @@ app.post('/deleteGrocery', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -859,7 +859,7 @@ app.post('/addGrocery', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -881,7 +881,7 @@ app.post('/addGroceryArray', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -911,7 +911,7 @@ app.post('/updateGrocery', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -940,7 +940,7 @@ app.post('/lookupBarcode', async(req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -990,7 +990,7 @@ app.post('/getExpiringIngredients', async (req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
@@ -1031,7 +1031,7 @@ app.post('/getUser', async(req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    var decodedToken = await admin.auth().verifyIdToken(req.body.idToken);
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
