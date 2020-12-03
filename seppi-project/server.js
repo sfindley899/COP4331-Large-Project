@@ -946,22 +946,22 @@ app.post('/getUser', (req, res) => {
 });
 
 app.post('/changeDisplayName', (req, res) => {
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      user.updateProfile({
-        displayName: req.body.name,
-      }).then(function() {
-        // Profile updated successfully!
-        return res.status(200).send({name: user.displayName});
-      })
-      .catch(function(error) {
-        return res.status(400).send(JSON.stringify({response:error}));
-      });
-    }
-    else {
-      return res.status(400).send({response: "User not logged in."});
-    }
+  var user = firebase.auth().currentUser;
+
+  if (user === null) {
+    return res.status(400).send({response: "No user logged in."});
+  }
+
+  user.updateProfile({
+    displayName: req.body.name,
+  }).then(function() {
+    // Profile updated successfully!
+    return res.status(200).send({name: user.displayName});
+  })
+  .catch(function(error) {
+    return res.status(400).send(JSON.stringify({response:error}));
   });
+
 });
 
 if (process.env.NODE_ENV === 'production')
