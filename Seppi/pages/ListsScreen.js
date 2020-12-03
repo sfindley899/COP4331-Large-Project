@@ -17,13 +17,69 @@ const ListsScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
 
 	const toggleAddItemModal = () => {
+		setItemText('');
+		setNotesText('');
+		setAddItemResult('');
 		setAddItemVisible(!addItemVisible);
 	};
 
+	const addGrocery = async() => {
+		if (itemText.trim().length === 0) {
+			setAddItemResult('Please input a non-empty ingredient name.');
+			return;
+		}
+
+		const response = await fetch(buildPath('addGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				ingredient: itemText,
+				note: notesText
+			})
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+
+		if (status !== 200) {
+			setAddItemResult('Could not add grocery item due to server error.');
+			return;
+		}
+
+		fetchGroceries();
+		toggleAddItemModal();
+	};
+
 	const fetchGroceries = async () => {
-		console.log('fetching groceries');
+		const response = await fetch(buildPath('getGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
 
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch groceries.');
+			return;
+		}
 
+		let json = JSON.parse(await response.text());
+		console.log(json);
+		setState(state => ({ ...state, list: json}));
+	};
+
+	const renderGroceries = () => {
+		return (
+			<ScrollView contentContainerStyle={styles.scrollView}>
+				{state.list.response !== undefined ? state.list.response.map((item) => <GroceryItem key={item.id} id={item.id} itemName={item.ingredient} itemNotes={item.note} checked={item.check} />)
+													: <View></View>}
+			</ScrollView>
+		);
 	};
 
 	return (
@@ -41,11 +97,17 @@ const ListsScreen = ({ navigation }) => {
 						placeholder="Ingredient Name"
 						style={styles.overlayTextInput}
 					/>
+					<AppTextInput
+						value={notesText}
+						onChangeText={text => setNotesText(text)}
+						placeholder="Notes (optional)"
+						style={styles.overlayTextInput}
+					/>
 
 					<Text style={styles.addItemResultText}>{addItemResult}</Text>
 
 					<AppButton
-						onPress={() => console.log('add')}
+						onPress={addGrocery}
 						title="Add"
 						buttonColor="#FA730B"
 						textColor="#FFFFFF"
@@ -61,15 +123,10 @@ const ListsScreen = ({ navigation }) => {
 			</Modal>
 
 			<View style={styles.topBar}>
-				<Text style={styles.topText}>x Items | y Items Completed</Text>
+				<Text style={styles.topText}>{state.list.response !== undefined ? state.list.response.length : 0} Items | {state.list.numChecked} Items Completed</Text>
 			</View>
 
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				<GroceryItem 
-					itemName="Frozen Broccoli"
-					itemNotes="Get the florettes!"
-				/>
-			</ScrollView>
+			{renderGroceries()}				
 
 			<TouchableOpacity onPress={toggleAddItemModal} style={styles.addButtonContainer} activeOpacity={0.6}>
 				<Image source={require('../images/lists/add-button.png')} />
@@ -113,7 +170,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: '#FFFFFF',
-		maxHeight: 300,
+		maxHeight: 400,
 		borderRadius: 30,
 	},
 	overlayText: {

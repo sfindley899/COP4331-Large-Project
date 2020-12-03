@@ -48,8 +48,27 @@ const Toolbar = () => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
+	const fetchGroceries = async () => {
+		const response = await fetch(buildPath('getGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch groceries.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		setState(state => ({ ...state, list: json}));
 	};
 
 	return (
@@ -98,6 +117,7 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'lists' }));
+						fetchGroceries();
 						navigation.navigate('Grocery List');
 					}}
 				>

@@ -37,7 +37,6 @@ const PantryScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
 	};
 
