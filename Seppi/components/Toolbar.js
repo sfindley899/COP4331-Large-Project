@@ -89,7 +89,7 @@ const Toolbar = () => {
 				</TouchableOpacity>
 
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.listsIconContainer, (route.name === 'Grocery Lists') ? {
+					style={StyleSheet.compose(styles.listsIconContainer, (route.name === 'Grocery List') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -98,7 +98,7 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'lists' }));
-						console.log(state.currentTab);
+						navigation.navigate('Grocery List');
 					}}
 				>
 					<Image style={styles.toolbarImage} source={require('../images/toolbar/lists-icon.png')} />

@@ -20,6 +20,7 @@ import EmailValidationScreen from './pages/EmailValidationScreen';
 import RecipeSearchScreen from './pages/RecipeSearchScreen';
 import PantryScreen from './pages/PantryScreen';
 import BarcodeScreen from './pages/BarcodeScreen';
+import ListsScreen from './pages/ListsScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import ChangeUsernameScreen from './pages/ChangeUsernameScreen';
 import ChangeEmailScreen from './pages/ChangeEmailScreen';
@@ -29,6 +30,7 @@ const AuthStack = createStackNavigator();
 const RecipeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const PantryStack = createStackNavigator();
+const ListsStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const AuthStackScreen = () => (
@@ -84,6 +86,27 @@ const PantryStackScreen = ({ navigation, route }) => (
 	</PantryStack.Navigator>
 );
 
+const ListsStackScreen = ({ navigation, route }) => (
+	<ListsStack.Navigator
+		screenOptions={{
+			headerTitle: getHeaderTitle(route),
+			headerLeft: () => (
+				<TouchableOpacity
+					activeOpacity={0.15}
+					onPress={() => navigation.dispatch(navigation.toggleDrawer())}
+				>
+					<Icon
+						iconStyle={{marginLeft: 20}}
+						name='menu'
+					/>
+				</TouchableOpacity>
+			),
+		}}
+	>
+		<ListsStack.Screen name="Grocery List" component={ListsScreen} />
+	</ListsStack.Navigator>
+);
+
 const ProfileStackScreen = ({ navigation, route }) => (
 	<ProfileStack.Navigator 
 		screenOptions={{
@@ -114,6 +137,7 @@ const DrawerScreen = () => (
 		<Drawer.Screen name="Recipe Search" component={RecipeStackScreen} />
 		<Drawer.Screen name="Profile" component={ProfileStackScreen} />
 		<Drawer.Screen name="Pantry" component={PantryStackScreen} />
+		<Drawer.Screen name="Grocery List" component={ListsStackScreen} />
 	</Drawer.Navigator>
 );
 
@@ -156,6 +180,8 @@ function getHeaderTitle(route) {
 			return 'Pantry';
 		case 'Barcode':
 			return 'Scan Barcode';
+		case 'Grocery List':
+			return 'Grocery List';
 		case 'Profile':
 			return 'Account';
 		case 'Login':

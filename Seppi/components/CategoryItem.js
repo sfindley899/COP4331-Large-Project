@@ -227,6 +227,7 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		width: deviceWidth,
+		height: 'auto',
 	},
 	itemContainer: {
 		flex: 1,
