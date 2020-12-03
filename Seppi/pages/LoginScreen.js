@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
 			//console.log(await getData('@token'));
 
 			// Set the user's email and display name from the response.
-			setState(state => ({ ...state, name: json.name, email: json.email }));
+			setState(state => ({ ...state, name: json.name, email: json.email, idToken: json.idToken }));
 			//storeData('state', JSON.stringify(state));
 
 			setLoginResult('');

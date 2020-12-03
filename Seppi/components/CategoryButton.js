@@ -45,7 +45,10 @@ const CategoryButton = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -85,7 +88,8 @@ const CategoryButton = (props) => {
 			body: JSON.stringify({
 				category: props.header,
 				ingredient: ingredientText,
-				expiration: expirationText
+				expiration: expirationText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -105,7 +109,10 @@ const CategoryButton = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status2 = await response2.status;
@@ -136,7 +143,8 @@ const CategoryButton = (props) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				category: props.header
+				category: props.header,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 

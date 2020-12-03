@@ -14,6 +14,7 @@ const UserProvider = (props) => {
     categories: {},
     expiring: [],
     list: {response: [], numChecked: 0},
+    idToken: '',
   });
  
   return (

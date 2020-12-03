@@ -40,7 +40,10 @@ const CategoryItem = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -61,7 +64,10 @@ const CategoryItem = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -84,7 +90,8 @@ const CategoryItem = (props) => {
 			},
 			body: JSON.stringify({
 				ingredient: props.itemName,
-				category: props.category
+				category: props.category,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -134,7 +141,8 @@ const CategoryItem = (props) => {
 				category: props.category,
 				ingredient: props.itemName,
 				newIngredient: ingredientText,
-				expiration: temp
+				expiration: temp,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 

@@ -30,7 +30,10 @@ const BarcodeScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -51,7 +54,10 @@ const BarcodeScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -90,6 +96,7 @@ const BarcodeScreen = ({ navigation }) => {
 				category: categoryText,
 				ingredient: itemName,
 				expiration: expirationText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -128,7 +135,8 @@ const BarcodeScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				code: code
+				code: code,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
