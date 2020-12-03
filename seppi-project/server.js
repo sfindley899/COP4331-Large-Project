@@ -273,10 +273,78 @@ app.post('/getFavorites', async (req, res) => {
     if (user !== null) {
       let userRef = db.collection('users').doc(user.uid);
 
+                  let categoriesRef = userRef.collection('IngredientList');
+                  let arr = [];
+                  let json = {};
+
+                  let categories = await categoriesRef.get();
+                  let categoriesArr = [];
+
+                  categories.forEach(category => {
+                    categoriesArr.push(category);
+                  });
+
+                  for (let i = 0; i < categoriesArr.length; ++i) {
+                    let ingredients = await categoriesRef.doc(categoriesArr[i].id).collection('Ingredients').get();
+                    // would check if expired here I guess. If wanted to add that
+                    ingredients.forEach(ingredient => {
+                        let data = ingredient.data();
+                        let expiration = new Date(data.expiration).getTime();
+                        let date = Date.now();
+                        let days = Math.floor((expiration - date) / (1000 * 3600 * 24)) + 1;
+                        if (days >= 0) {
+                          arr.push(ingredient.data().ingredient);
+                        }
+                    });
+
+                  }
+                  console.log(arr);
       const favoritesRef = userRef.collection('BookmarkedRecipes');
       const favoritesDocs = await favoritesRef.get();
       let docs = [];
       favoritesDocs.forEach(doc => {
+          array2 = []
+              array1 = []
+              match = []
+              not = []
+              var ratio = 0;
+              var total = 0;
+              for (let j = 0; j < doc.data().recipe.ingredients.length; j++)
+              {
+                  var y = 0;
+                  for (let k = 0; k < arr.length; k++)
+                  {
+                      if (arr[k].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"") == doc.data().recipe.ingredients[j].food.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"") || arr[k].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").concat("s") == doc.data().recipe.ingredients[j].food.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))
+                      {
+                          y = 1;
+                          ratio++;
+                          total++;
+                          match.push(doc.data().recipe.ingredients[j].food)
+                      }
+                  }
+                  total++;
+                  if (y == 0)
+                  {
+                      not.push(doc.data().recipe.ingredients[j].food)
+                  }
+                  //array1.push(data.hits[i].recipe.ingredients[j].food)
+              }
+              console.log(doc.data().recipe.match)
+              console.log(match)
+              ratio = ratio / total
+              recipe = doc.data().recipe;
+              recipe.match = match
+              recipe.not = not;
+              recipe.ratio = ratio;
+              let origString = doc.data().recipe.uri;
+              let replacementString = '_S';
+              let uri =  origString.replace(/\//g, replacementString);
+
+              userRef.collection('BookmarkedRecipes').doc(uri).update({recipe: recipe});
+
+      });
+      favoritesDocs.forEach(doc => {
+
         docs.push(doc.data());
       });
 
