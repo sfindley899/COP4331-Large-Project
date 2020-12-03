@@ -436,6 +436,11 @@ app.post('/userInfo', (req, res) => {
 
 app.post('/userSet', (req, res) => {
     var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user logged in."});
+    }
+    
     const res1 = db.collection('users').doc(user.uid)
               .set({
                   Allergies: req.body.allergies,
@@ -653,6 +658,11 @@ app.post('/getCategories', async (req, res) => {
 
 app.post('/deleteIngredient', (req, res) => {
             var user = firebase.auth().currentUser;
+
+            if (user === null) {
+              return res.status(400).send({response: "No user logged in."});
+            }
+
             var array = [];
             var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
@@ -662,6 +672,11 @@ app.post('/deleteIngredient', (req, res) => {
 
 app.post('/getGrocery', (req, res) => {
             var user = firebase.auth().currentUser;
+
+            if (user === null) {
+              return res.status(400).send({response: "No user signed in."});
+            }
+
             var array = [];
             var res1 = db.collection("users").doc(user.uid).collection("GroceryList").get()
             .then(function(querySnapshot) {
@@ -687,6 +702,11 @@ app.post('/getGrocery', (req, res) => {
 
 app.post('/deleteGrocery', (req, res) => {
             var user = firebase.auth().currentUser;
+
+            if (user === null) {
+              return res.status(400).send({response: "No user signed in."});
+            }
+
             var array = [];
             var res1 = db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
@@ -694,10 +714,13 @@ app.post('/deleteGrocery', (req, res) => {
 });
 
 app.post('/addGrocery', (req, res) => {
-
-
     // Checked field
     var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user signed in."});
+    }
+
     const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
               .set({
                   ingredient: req.body.ingredient,
@@ -709,10 +732,13 @@ app.post('/addGrocery', (req, res) => {
 });
 
 app.post('/addGroceryArray', (req, res) => {
-
-
     // Checked field
     var user = firebase.auth().currentUser;
+
+    if (user === null) {
+      return res.status(400).send({response: "No user signed in."});
+    }
+
     for (var i = 0; i < req.body.grocery.length; i++)
     {
         const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
@@ -725,9 +751,6 @@ app.post('/addGroceryArray', (req, res) => {
 
     return res.status(200).send(JSON.stringify({response:"Success"}));
 });
-
-
-
 
 app.post('/updateGrocery', (req, res) => {
     const data1 = {
@@ -836,6 +859,11 @@ app.post('/getExpiringIngredients', async (req, res) => {
 
 app.post('/getUser', (req, res) => {
             var user = firebase.auth().currentUser;
+
+            if (user === null) {
+              return res.status(400).send({response: "No user logged in."});
+            }
+
             db.collection("users").where("UID", "==", user.uid)
                     .get()
                     .then(function(querySnapshot) {
@@ -852,8 +880,6 @@ app.post('/getUser', (req, res) => {
                         console.log("Error getting documents: ", error);
                     });
 });
-
-
 
 app.post('/changeDisplayName', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
