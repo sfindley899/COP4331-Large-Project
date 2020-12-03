@@ -46,8 +46,6 @@ app.get('/user', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
-
-  res.setHeader('Content-Type', 'application/json');
   if (req.body.name == "")
   {
       return res.status(400).send(JSON.stringify({response:"Need a non empty name"}));
@@ -82,7 +80,6 @@ app.post('/register', (req, res) => {
 
  });
   app.post('/login', (req, res) => {
-      res.setHeader('Content-Type', 'application/json');
       if(!res.headersSent) {
       // signs in
       firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(function() {
@@ -130,7 +127,6 @@ app.post('/register', (req, res) => {
   });
 
   app.post('/resetPassword', (req, res) => {
-      res.setHeader('Content-Type', 'application/json');
       var auth = firebase.auth();
 
     var emailAddress = req.body.email;
@@ -145,7 +141,6 @@ app.post('/register', (req, res) => {
 });
 
   app.post('/signout', (req, res) => {
-      res.setHeader('Content-Type', 'application/json');
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
         return res.status(200).send(JSON.stringify({response:"successfully signed out"}));
@@ -156,7 +151,6 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/changeEmail', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
     var emailx = req.body.email;
 
@@ -186,7 +180,6 @@ app.post('/changeEmail', (req, res) => {
 });
 
 app.post('/resendEmailVerification', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
   var user = firebase.auth().currentUser;
 
   if (user != null)
@@ -207,7 +200,6 @@ app.post('/resendEmailVerification', (req, res) => {
 });
 
 app.post('/addFavorite', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
 
     if (user !== null)
@@ -239,7 +231,6 @@ app.post('/addFavorite', async (req, res) => {
 });
 
 app.post('/removeFavorite', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
 
     if (user !== null) {
@@ -267,7 +258,6 @@ app.post('/removeFavorite', async (req, res) => {
 });
 
 app.post('/getFavorites', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
 
     if (user !== null) {
@@ -356,7 +346,6 @@ app.post('/getFavorites', async (req, res) => {
 });
 
 app.post('/searchRecipe', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     var user = firebase.auth().currentUser;
 
     if (user === null) {
@@ -488,7 +477,6 @@ app.post('/searchRecipe', async (req, res) => {
 });
 
 app.post('/userInfo', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
       firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
           console.log(user.displayName);
@@ -690,8 +678,6 @@ app.post('/removeCategory', async (req, res) => {
 });
 
 app.post('/getCategories', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-
     var user = firebase.auth().currentUser;
 
     if (user === null) {
@@ -960,7 +946,6 @@ app.post('/getUser', (req, res) => {
 });
 
 app.post('/changeDisplayName', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       user.updateProfile({
