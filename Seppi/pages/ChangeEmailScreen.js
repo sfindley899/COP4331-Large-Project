@@ -33,7 +33,6 @@ const ChangeEmailScreen = ({ navigation }) => {
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{

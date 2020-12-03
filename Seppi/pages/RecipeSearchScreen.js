@@ -598,7 +598,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 		.catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
@@ -633,7 +632,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
@@ -670,11 +668,9 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
-			console.log('removed favorite');
 			let json = JSON.parse(await response.text());
 			setFavoritesData(json.favorites);
 			setRecipeVisible(!recipeVisible);

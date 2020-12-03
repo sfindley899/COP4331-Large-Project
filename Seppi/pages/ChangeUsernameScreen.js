@@ -32,7 +32,6 @@ const ChangeUsernameScreen = ({ navigation }) => {
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;	
-		console.log(status);
 		if (status === 200)
 		{
 			let json = JSON.parse(await response.text());

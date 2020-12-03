@@ -656,7 +656,7 @@ app.post('/getCategories', async (req, res) => {
     return res.status(200).send({categories : json});
 });
 
-app.post('/deleteIngredient', (req, res) => {
+app.post('/deleteIngredient', async (req, res) => {
             var user = firebase.auth().currentUser;
 
             if (user === null) {
@@ -664,9 +664,8 @@ app.post('/deleteIngredient', (req, res) => {
             }
 
             var array = [];
-            var res1 = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
+            var res1 = await db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.Ingredient).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
-
 });
 
 
@@ -678,6 +677,7 @@ app.post('/getGrocery', (req, res) => {
             }
 
             var array = [];
+            var numChecked = 0;
             var res1 = db.collection("users").doc(user.uid).collection("GroceryList").get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
@@ -689,31 +689,39 @@ app.post('/getGrocery', (req, res) => {
                     };
 
                     var obj = Object.assign(data, data1);
-                    array.push(obj)
 
+                    if (obj.check)
+                      numChecked++;
+                    
+                    array.push(obj)
                 });
-                return res.status(200).send(JSON.stringify({response:array}));
+
+                return res.status(200).send(JSON.stringify({response:array, numChecked: numChecked}));
             })
             .catch(function(error) {
                 console.log("Error getting documents: ", error);
+                return res.status(400).send(JSON.stringify({response: error}));
             });
 
 });
 
-app.post('/deleteGrocery', (req, res) => {
+app.post('/deleteGrocery', async (req, res) => {
             var user = firebase.auth().currentUser;
 
             if (user === null) {
               return res.status(400).send({response: "No user signed in."});
             }
+            else if (req.body.id === undefined) {
+              return res.status(400).send({response: "id is required"});
+            }
 
             var array = [];
-            var res1 = db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).delete();
+            var res1 = await db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).delete();
             return res.status(200).send(JSON.stringify({response:"Deleted"}));
 
 });
 
-app.post('/addGrocery', (req, res) => {
+app.post('/addGrocery', async (req, res) => {
     // Checked field
     var user = firebase.auth().currentUser;
 
@@ -721,17 +729,16 @@ app.post('/addGrocery', (req, res) => {
       return res.status(400).send({response: "No user signed in."});
     }
 
-    const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
+    const res1 = await db.collection('users').doc(user.uid).collection('GroceryList').doc()
               .set({
                   ingredient: req.body.ingredient,
                   note: req.body.note,
-                  check: 0
+                  check: false
               });
-    console.log(res1);
     return res.status(200).send(JSON.stringify({response:"Success"}));
 });
 
-app.post('/addGroceryArray', (req, res) => {
+app.post('/addGroceryArray', async (req, res) => {
     // Checked field
     var user = firebase.auth().currentUser;
 
@@ -741,7 +748,7 @@ app.post('/addGroceryArray', (req, res) => {
 
     for (var i = 0; i < req.body.grocery.length; i++)
     {
-        const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
+        const res1 = await db.collection('users').doc(user.uid).collection('GroceryList').doc()
                   .set({
                       ingredient: req.body.grocery[i],
                       note: "For recipe: " + req.body.recipe,
@@ -752,7 +759,7 @@ app.post('/addGroceryArray', (req, res) => {
     return res.status(200).send(JSON.stringify({response:"Success"}));
 });
 
-app.post('/updateGrocery', (req, res) => {
+app.post('/updateGrocery', async (req, res) => {
     const data1 = {
         ingredient: req.body.ingredient,
         note: req.body.note,
@@ -771,9 +778,12 @@ app.post('/updateGrocery', (req, res) => {
     else if (req.body.check === undefined) {
       return res.status(400).send({response: "check field is required"});
     }
-    var docref = db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).update(data1);
-    return res.status(200).send(JSON.stringify({response:"Updated"}));
+    else if (req.body.id === undefined) {
+      return res.status(400).send({response: "id field is required"});
+    }
 
+    var docref = await db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).update(data1);
+    return res.status(200).send(JSON.stringify({response:"Updated"}));
 });
 
 

@@ -62,7 +62,6 @@ const BarcodeScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
 	};
 
@@ -134,7 +133,6 @@ const BarcodeScreen = ({ navigation }) => {
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		// Failure Overlay toast pop-up
 		if (status === 401) {
@@ -149,7 +147,6 @@ const BarcodeScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 
 		// Success overlay pop-up
 		if (json.hints !== undefined & json.hints.length > 0)

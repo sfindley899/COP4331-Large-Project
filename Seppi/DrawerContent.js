@@ -70,6 +70,26 @@ export function DrawerContent(props) {
 		setState(state => ({ ...state, expiring: json.expiring}));
     };
 
+    const fetchGroceries = async () => {
+		const response = await fetch(buildPath('getGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch groceries.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		setState(state => ({ ...state, list: json}));
+	};
+
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -123,7 +143,10 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Grocery List"
-                            onPress={() => {props.navigation.navigate('Grocery List')}}
+                            onPress={() => {
+                                fetchGroceries();
+                                props.navigation.navigate('Grocery List');
+                            }}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
