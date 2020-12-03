@@ -299,6 +299,32 @@ app.post('/searchRecipe', async (req, res) => {
     const favoritesRef = userRef.collection('BookmarkedRecipes');
     const favoritesDocs = await favoritesRef.get();
 
+                let categoriesRef = userRef.collection('IngredientList');
+                let arr = [];
+                let json = {};
+
+                let categories = await categoriesRef.get();
+                let categoriesArr = [];
+
+                categories.forEach(category => {
+                  categoriesArr.push(category);
+                });
+
+                for (let i = 0; i < categoriesArr.length; ++i) {
+                  let ingredients = await categoriesRef.doc(categoriesArr[i].id).collection('Ingredients').get();
+                  // would check if expired here I guess. If wanted to add that
+                  ingredients.forEach(ingredient => {
+                      let data = ingredient.data();
+                      let expiration = new Date(data.expiration).getTime();
+                      let date = Date.now();
+                      let days = Math.floor((expiration - date) / (1000 * 3600 * 24)) + 1;
+                      if (days >= 0) {
+                        arr.push(ingredient.data().ingredient);
+                      }
+                  });
+
+                }
+                console.log(arr)
     // Add the favorited URI's to a set.
     let docSet = new Set();
     favoritesDocs.forEach(doc => {
@@ -311,7 +337,26 @@ app.post('/searchRecipe', async (req, res) => {
 
     if (req.body.filters !== undefined && req.body.filters !== null)
       url += '&' + req.body.filters;
-
+    var from = 0;
+    var to = 10;
+    if (req.body.from != null)
+    {
+        from = req.body.from;
+    }
+    if (req.body.to != null)
+    {
+        to = req.body.from;
+    }
+    /* or if you want to send page and size of each page. where page 0 is starting.
+    page = req.body.page;
+    size = req.body.size;
+    and then you can do
+    url += '&from=' + page * size;
+    var next = page + 1;
+    url += '&to=' + next * size;
+    */
+    url += '&from=' + from;
+    url += '&to=' + to;
     url += '&app_id='
     url += app_id
     url += "&app_key="
@@ -330,14 +375,43 @@ app.post('/searchRecipe', async (req, res) => {
             if (data === undefined || data.hits === undefined) {
               return res.status(400).send({response: 'No searches returned'});
             }
-
+            array2 = []
             for (let i = 0; i < data.hits.length; ++i) {
+                array1 = []
+                match = []
+                not = []
+                var ratio = 0;
+                var total = 0;
+                for (let j = 0; j < data.hits[i].recipe.ingredients.length; j++)
+                {
+                    var y = 0;
+                    for (let k = 0; k < arr.length; k++)
+                    {
+                        if (arr[k].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"") == data.hits[i].recipe.ingredients[j].food.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"") || arr[k].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").concat("s") == data.hits[i].recipe.ingredients[j].food.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))
+                        {
+                            y = 1;
+                            ratio++;
+                            total++;
+                            match.push(data.hits[i].recipe.ingredients[j].food)
+                        }
+                    }
+                    total++;
+                    if (y == 0)
+                    {
+                        not.push(data.hits[i].recipe.ingredients[j].food)
+                    }
+                    //array1.push(data.hits[i].recipe.ingredients[j].food)
+                }
+                data.hits[i].recipe.match = match
+                data.hits[i].recipe.not = not
+                data.hits[i].recipe.ratio = ratio / total
+                array2.push(array1)
               if (docSet.has(data.hits[i].recipe.uri)) {
                 data.hits[i].bookmarked = true;
               }
             }
 
-            return res.status(200).send(data);
+            return res.status(200).send(data.hits);
         });
 
     }).on('error', (e) => {
@@ -384,7 +458,7 @@ app.post('/addIngredient', async (req, res) => {
     else if (req.body.ingredient === undefined) {
       return res.status(400).send({response: "ingredient field is required."});
     }
-    
+
     let userRef = db.collection('users').doc(user.uid);
 
     userRef.collection('IngredientList').doc(req.body.category).set({
@@ -425,7 +499,7 @@ app.post('/removeIngredient', async (req, res) => {
     else if (req.body.ingredient === undefined) {
       return res.status(400).send({response: "ingredient field is required."});
     }
-    
+
     let userRef = db.collection('users').doc(user.uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
@@ -455,7 +529,7 @@ app.post('/editIngredient', async (req, res) => {
     else if (req.body.expiration === undefined) {
       return res.status(400).send({response: "expiration field is required"});
     }
-    
+
     let userRef = db.collection('users').doc(user.uid);
 
     let ingredientRef = userRef.collection('IngredientList').doc(req.body.category)
@@ -473,7 +547,7 @@ app.post('/editIngredient', async (req, res) => {
 
     let newRef = userRef.collection('IngredientList').doc(req.body.category)
                  .collection('Ingredients').doc(newIngredient);
-    
+
     let newIngredientDoc = await newRef.get();
     if (newIngredientDoc.exists && req.body.ingredient !== newIngredient)
       return res.status(401).send({response: "Ingredient name already exists for this category."});
@@ -514,6 +588,8 @@ app.post('/addCategory', async (req, res) => {
 
     return res.status(200).send({response: "Added category."});
 });
+
+
 
 app.post('/removeCategory', async (req, res) => {
     var user = firebase.auth().currentUser;
@@ -583,43 +659,100 @@ app.post('/deleteIngredient', (req, res) => {
 
 });
 
-app.post('/updateIngredient', (req, res) => {
-    const data1 = {
-        Ingredient: req.body.toIngredient,
-        Amount: req.body.Amount,
-        ExpirationDate: req.body.Expiration
-    };
-    var user = firebase.auth().currentUser;
-    if (req.body.toIngredient != req.body.fromIngredient)
-    {
-        var doc = db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).get();
-        if (doc != null) {
-            return res.status(401).send(JSON.stringify({response:"To ingredients document already exists " + req.body.toIngredient}));
-            }
-    }
-    if(res.headersSent)
-    {
-        return;
-    }
 
-// get the data from 'name@xxx.com'
-db.collection("users").doc(user.uid).collection("IngredientList").where("Ingredient", "==", req.body.fromIngredient).get()
-.then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        var data = doc.data();
-        var al = data.Allergies;
-        obj = [{Allergies: data.Allergies}, {Diet: data.Diet}]
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.fromIngredient).delete();
-        db.collection("users").doc(user.uid).collection("IngredientList").doc(req.body.toIngredient).set(data1)
-            // deletes the old document
+app.post('/getGrocery', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("GroceryList").get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    var data = doc.data();
+                    var myId = doc.id;
+                    const data1 = {
+                        id: myId
+                    };
 
-            return res.status(200).send(JSON.stringify({response:"Updated from" + JSON.stringify(data1) + " to: " + JSON.stringify(data)}));
-    });
-})
+                    var obj = Object.assign(data, data1);
+                    array.push(obj)
 
+                });
+                return res.status(200).send(JSON.stringify({response:array}));
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
 
 });
+
+app.post('/deleteGrocery', (req, res) => {
+            var user = firebase.auth().currentUser;
+            var array = [];
+            var res1 = db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).delete();
+            return res.status(200).send(JSON.stringify({response:"Deleted"}));
+
+});
+
+app.post('/addGrocery', (req, res) => {
+
+
+    // Checked field
+    var user = firebase.auth().currentUser;
+    const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
+              .set({
+                  ingredient: req.body.ingredient,
+                  note: req.body.note,
+                  check: 0
+              });
+    console.log(res1);
+    return res.status(200).send(JSON.stringify({response:"Success"}));
+});
+
+app.post('/addGroceryArray', (req, res) => {
+
+
+    // Checked field
+    var user = firebase.auth().currentUser;
+    for (var i = 0; i < req.body.grocery.length; i++)
+    {
+        const res1 = db.collection('users').doc(user.uid).collection('GroceryList').doc()
+                  .set({
+                      ingredient: req.body.grocery[i],
+                      note: "For recipe: " + req.body.recipe,
+                      check: 0
+                  });
+    }
+
+    return res.status(200).send(JSON.stringify({response:"Success"}));
+});
+
+
+
+
+app.post('/updateGrocery', (req, res) => {
+    const data1 = {
+        ingredient: req.body.ingredient,
+        note: req.body.note,
+        check: req.body.check
+    };
+    var user = firebase.auth().currentUser;
+    if (user === null) {
+      return res.status(400).send({response: "User not logged in."});
+    }
+    else if (req.body.note === undefined) {
+      return res.status(400).send({response: "note field is required."});
+    }
+    else if (req.body.ingredient === undefined) {
+      return res.status(400).send({response: "ingredient field is required."});
+    }
+    else if (req.body.check === undefined) {
+      return res.status(400).send({response: "check field is required"});
+    }
+    var docref = db.collection("users").doc(user.uid).collection("GroceryList").doc(req.body.id).update(data1);
+    return res.status(200).send(JSON.stringify({response:"Updated"}));
+
+});
+
 
 app.post('/lookupBarcode', (req, res) => {
     var user = firebase.auth().currentUser;
@@ -640,14 +773,14 @@ app.post('/lookupBarcode', (req, res) => {
     url += apikey
     const https = require('https');
     var x = "";
-  
+
     https.get(url, (_res) => {
       _res.on('data', (d) => {
         x += d;
       });
       _res.on("end", function () {
             let data = JSON.parse(x);
-            
+
             // If data doesn't exist return.
             if (data === undefined) {
               return res.status(400).send({response: 'No data found.'});
@@ -697,7 +830,7 @@ app.post('/getExpiringIngredients', async (req, res) => {
         }
       });
     }
-    
+
     return res.status(200).send({expiring: arr});
 });
 
@@ -719,6 +852,8 @@ app.post('/getUser', (req, res) => {
                         console.log("Error getting documents: ", error);
                     });
 });
+
+
 
 app.post('/changeDisplayName', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
