@@ -411,7 +411,7 @@ app.post('/searchRecipe', async (req, res) => {
               }
             }
 
-            return res.status(200).send(data.hits);
+            return res.status(200).send({hits: data.hits});
         });
 
     }).on('error', (e) => {
