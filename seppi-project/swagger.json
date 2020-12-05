@@ -833,7 +833,7 @@
              }
          }
      },
-          "/getUser": {
+          "/changeDisplayName": {
   			"post": {
   			  "tags": [
   				"Users"
