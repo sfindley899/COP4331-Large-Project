@@ -159,31 +159,54 @@ app.post('/register', (req, res) => {
       });
 });
 
-app.post('/changeEmail', (req, res) => {
-    var user = firebase.auth().currentUser;
-    var emailx = req.body.email;
-
-    // cant change to empty email
-    if (emailx != null && user != null)
+app.post('/changeEmail', async(req, res) => {
+    if (req.body.idToken == null)
     {
-        user.updateEmail(emailx).then(function() {
-            user.sendEmailVerification().then(function() {
-         // Email sent.
-         return res.status(200).send(JSON.stringify({email:user.emailAddress}));
-       }).catch(function(error) {
-         // An error happened.
-         return res.status(400).send(JSON.stringify({response:error}));
-       });
-       }).catch(function(error) {
-           // An error happened.
-       console.log(error);
-       return res.status(400).send(JSON.stringify({response:error}));
-   });
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+    var rec = await firebaseAdminSdk
+  .auth()
+  .getUser(uid)
+
+
+    if (req.body.email == rec.email)
+    {
+        return res.status(400).send(JSON.stringify({response : 'Same email'}));
+    }
+
+    emailx = req.body.email;
+
+    if (emailx != null && uid != null)
+    {
+        try {
+            var record = await firebaseAdminSdk
+      .auth()
+      .updateUser(uid, {
+        email: emailx,
+        emailVerified: false,
+      })
+      return res.status(200).send(JSON.stringify({response:record}));
+        } catch (e)
+        {
+            return res.status(400).send(JSON.stringify({response:e}));
+        }
+
+
+
+
     }
     else {
-
-        return res.status(400).send(JSON.stringify({response:"no user"}));
+        return res.status(400).send(JSON.stringify("yes"));
     }
+
+    return res.status(200).send(JSON.stringify({response:"end"}));
+
 
 
 });
@@ -1055,24 +1078,36 @@ app.post('/getUser', async(req, res) => {
                     });
 });
 
-app.post('/changeDisplayName', (req, res) => {
-  var user = firebase.auth().currentUser;
-
-  if (user === null) {
-    return res.status(400).send({response: "No user logged in."});
+app.post('/changeDisplayName', async(req, res) => {
+    if (req.body.idToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
+    if (decodedToken == null)
+    {
+        return res.status(400).send(JSON.stringify({response : 'No user'}));
+    }
+    const uid = decodedToken.uid;
+  if (req.body.displayName == null)
+  {
+       return res.status(400).send(JSON.stringify({response:"empty displayName"}));
   }
-
-  user.updateProfile({
-    displayName: req.body.name,
-  }).then(function() {
-    // Profile updated successfully!
-    return res.status(200).send({name: user.displayName});
+    try {
+        var record = await firebaseAdminSdk
+  .auth()
+  .updateUser(uid, {
+    displayName: req.body.displayName
   })
-  .catch(function(error) {
-    return res.status(400).send(JSON.stringify({response:error}));
-  });
+  return res.status(200).send(JSON.stringify({response:record}));
+    } catch (e)
+    {
+        return res.status(400).send(JSON.stringify({response:e}));
+    }
+return res.status(200).send(JSON.stringify({response:"end"}));
 
 });
+
 
 if (process.env.NODE_ENV === 'production')
 {
