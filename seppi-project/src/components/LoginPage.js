@@ -4,12 +4,14 @@ import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import { Link } from 'react-router-dom'
 import {AuthContext, UserContext}from '../context'
-import {useContext} from 'react';
+import {useState, useContext} from 'react';
 
 const LoginPage = () => {
 
   // User's login status
-	const [state, setState] = useContext(UserContext);
+  const [state, setState] = useContext(UserContext);
+  const [loginResult, setLoginResult] = useState('');
+
 
   // Login button handler
   const [show, setShowLogin] = React.useState(false);
@@ -53,36 +55,45 @@ const LoginPage = () => {
                 password:data.password
                 };
     var js = JSON.stringify(obj);
-    alert(js);
-    try {
-      const response = await fetch(buildPath('/login'),
-      {
-        method: 'POST',
-        body: js,
-        headers:{Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                }
-                
-      });
-      alert("testing");
+    const response = await fetch(buildPath('login'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: data.email,
+				password: data.password
+			})
+		})
+    .catch((error) => console.error(error));
+    let status = await response.status;
+    if (status === 200) {
       var res = JSON.parse(await response.text());
-      alert(res);
-      if (res.id <= 0) {
-        setMessage('User/Password combination incorrect');
-      }
-      else {
-        setState(state => ({ ...state, name: res.body.name, email: res.body.email, idToken: res.body.idToken }));
-        var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
-        localStorage.setItem('user_data', JSON.stringify(user));
-
-        setMessage('');
-        window.location.href = '/SearchResult';
-      }
+      setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
+      var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
+      localStorage.setItem('user_data', JSON.stringify(user));
+      setMessage('');
+      window.location.href = '/SearchResult';
     }
-    catch (e) {
-      alert(e.toString());
-      return;
-    }
+    else if (status === 400) {
+      var x = document.getElementById("loginFooter");
+      x.style.display = "block";
+      setLoginResult('Email/Password combination is incorrect.');
+			return;
+		}
+		else if (status === 401) {
+      var y = document.getElementById("loginFooter");
+      y.style.display = "block";
+			setLoginResult('Email not verified, please check your email.');
+			return;
+		}
+		else {
+      var z = document.getElementById("loginFooter");
+      z.style.display = "block";
+			setLoginResult('Failed to login to account due to internal server error.');
+			return;
+		}
   };
   
 // Register state
@@ -232,6 +243,11 @@ const handleRegChange = event => {
             </div>
           </form>
         </Modal.Body>
+        <Modal.Footer style={{textAlign: "center"}}>
+          <div id="loginFooter">
+            {loginResult}
+          </div>
+        </Modal.Footer>
       </Modal>
 
 

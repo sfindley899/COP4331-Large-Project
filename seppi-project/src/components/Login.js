@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import {Link} from "react-router-dom"
 import {AuthContext, UserContext}from '../context'
+import {useContext} from 'react';
 
 const Login=() => {
     const app_name = 'seppi'
+    // User's login status
+    const [state, setState] = useContext(UserContext);
+    const [loginResult, setLoginResult] = useState('');
+
 
     const buildPath=(route)=> {
         if (process.env.NODE_ENV === 'production') 
@@ -28,44 +33,52 @@ const Login=() => {
       });
     };
     const doLogin = async event => {
-        event.preventDefault();
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        var obj = {email: data.email.value,
-                   password:data.password.value
-                   };
-        var js = JSON.stringify(obj);
-        // alert(js);
-        try
-        {    
-            const response = await fetch(buildPath('api/login'),
-                {method:'POST',
-                body:js,
-                headers:{Accept: 'application/json',
-                         'Content-Type': 'application/json'
-                }
-            });
-
-            var res = JSON.parse(await response.text());
-            alert(res);
-            if( res.id <= 0 )
-            {
-                setMessage('User/Password combination incorrect');
-            }
-            else
-            {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
-                localStorage.setItem('user_data', JSON.stringify(user));
-
-                setMessage('');
-                window.location.href = '/SearchResult';
-            }
-        }
-        catch(e)
-        {
-            alert(e.toString());
-            return;
-        }    
+      event.preventDefault();
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  
+      var obj = {email: data.email,
+                  password:data.password
+                  };
+      var js = JSON.stringify(obj);
+      const response = await fetch(buildPath('login'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
+      })
+      .catch((error) => console.error(error));
+      let status = await response.status;
+      if (status === 200) {
+        var res = JSON.parse(await response.text());
+        setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
+        var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
+        localStorage.setItem('user_data', JSON.stringify(user));
+        setMessage('');
+        window.location.href = '/SearchResult';
+      }
+      else if (status === 400) {
+        var x = document.getElementById("loginFooter");
+        x.style.display = "block";
+        setLoginResult('Email/Password combination is incorrect.');
+        return;
+      }
+      else if (status === 401) {
+        var y = document.getElementById("loginFooter");
+        y.style.display = "block";
+        setLoginResult('Email not verified, please check your email.');
+        return;
+      }
+      else {
+        var z = document.getElementById("loginFooter");
+        z.style.display = "block";
+        setLoginResult('Failed to login to account due to internal server error.');
+        return;
+      }
     };
 
     return(
@@ -116,14 +129,14 @@ const Login=() => {
             </Link>
         </p>
         </div>
-      </form>
-      <br/>
+        </form>
+        <br/>
         <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
             Go Home
         </Link>
-      <div>
-         <span id="loginResult">{message}</span>
-       </div>
+        <div id="loginFooter" style={{textAlign: "center", backgroundColor: "white", color: "black"}}>
+            {loginResult}
+        </div>
         </div>
       </div>
 
