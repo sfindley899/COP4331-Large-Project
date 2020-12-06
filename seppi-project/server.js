@@ -1156,16 +1156,86 @@ router.route('/register')
 router.route('/login')
   .post();
 
-router.route('/userInfo')
-    .post();
-
 router.route('/changeEmail')
-     .post();
+	.post();
+
+router.route('/resendEmailVerification')
+	.post();
+
+router.route('/searchRecipe')
+	.post();
+
+router.route('/addIngredient')
+	.post();
+
+router.route('/removeIngredient')
+	.post();
+
+router.route('/editIngredient')
+	.post();
+
+router.route('/addCategory')
+	.post();
+
+router.route('/removeCategory')
+	.post();
+
+router.route('/getCategories')
+	.post();
+
+router.route('/deleteIngredient')
+	.post();
+
+router.route('/getGrocery')
+	.post();
+
+router.route('/deleteGrocery')
+	.post();
+
+router.route('/addGrocery')
+	.post();
+
+router.route('/addGroceryArray')
+	.post();
+
+router.route('/updateGrocery')
+	.post();
+
+router.route('/lookupBarcode')
+	.post();
+
+router.route('/getExpiringIngredients')
+	.post();
+
+
+router.route('/getUser')
+	.post();
+
+router.route('/changeDisplayName')
+	.post();
+
+router.route('/userInfo')
+	.post();
+
+router.route('/userSet')
+	.post();
+
+router.route('/addFavorite')
+	.post();
+
+router.route('/getFavorites')
+	.post();
+
+router.route('/removeFavorite')
+    .post();
 
 router.route('/signout')
     .post();
 
 router.route('/resetPassword')
+	.post();
+
+router.route('/signout')
     .post();
 
 const server = app.listen(port, () => {
