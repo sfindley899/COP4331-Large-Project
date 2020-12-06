@@ -71,10 +71,10 @@ app.post('/register', (req, res) => {
       diet: '',
     });
 
-    return res.status(200).send(JSON.stringify({response:"Register successful email verification sent to " + req.body.email}));
+    return res.status(200).json({response:"Register successful email verification sent to " + req.body.email, status:200});
   })
   .catch(function(error) {
-    return res.status(400).send(JSON.stringify({response:error.message}));
+    return res.status(400).json({response:error.message, status: 400});
   });
 
 
@@ -93,12 +93,12 @@ app.post('/register', (req, res) => {
                       console.log("email not verified resending email");
 
                       user.sendEmailVerification().then(function() {
-                          return res.status(401).send(JSON.stringify({response:"email not verified"}));
+                          return res.status(401).json({response: 'email not verified', status: 401});
 
                  }).catch(function(error) {
                    // An error happened.
                    // this probably happens from too many requests to send email verification
-                   return res.status(401).send(JSON.stringify({response:error}));
+                   return res.status(401).json({response:error.message, status: 401});
                  });
 
                   }
@@ -121,7 +121,7 @@ app.post('/register', (req, res) => {
                   // user not signed in
                 } else {
                   // No user is signed in.
-                    return res.status(400).send(JSON.stringify({response:"No User"}));
+                    return res.status(400).json({response:"No User", status: 400});
                 }
           }
           // catches when sign in has problems.
@@ -129,22 +129,27 @@ app.post('/register', (req, res) => {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        return res.status(400).send(JSON.stringify({response:error.message}));
+        return res.status(400).json({response:error.message, status: 400});
      });
  }
 
   });
 
   app.post('/resetPassword', (req, res) => {
-      var auth = firebase.auth();
+    
+    var auth = firebase.auth();
+    var emailAddress = "";
+    if (req.body.email !== undefined)
+    {
+      emailAddress = req.body.email.replace(/[|&;$%"<>()+,]/g, "");
+    }
 
-    var emailAddress = req.body.email;
 
     auth.sendPasswordResetEmail(emailAddress).then(function() {
-        return res.status(200).send(JSON.stringify({response:"email ver sent"}));
+        return res.status(200).json({response:"email ver sent", status: 200});
         // Email sent.
   }).catch(function(error) {
-      return res.status(400).send(JSON.stringify({response:error}));
+      return res.status(400).json({response: error.message, status: 400});
 
   })
 });
