@@ -1,37 +1,83 @@
 import React from 'react';
 import 'typeface-roboto';
 import {Link} from "react-router-dom"
+import {AuthContext, UserContext}from '../context'
+import {useState, useContext} from 'react';
 
 const Register =() => {
    
-    const initialState = {
+    const app_name = 'seppi'
+    const buildPath = (route) => {
+        if (process.env.NODE_ENV === 'production') {
+        return 'https://' + app_name + '.herokuapp.com/' + route;
+        }
+        else {
+        return 'http://localhost:5000/' + route;
+        }
+    }
+
+    const regState = {
         firstName: "",
           lastName: "",
           email: "",
         password: "",
         confirmPassword: ""      
     };
-    const [data, setData] = React.useState(initialState);
+
+    const [regdata, setRegData] = React.useState(regState);
+    const [signUpResult, setSignUpResult] = useState('');
     
-    const handleChange = event => {
-        setData({
-          ...data,
+    const handleRegChange = event => {
+        setRegData({
+          ...regdata,
           [event.target.name]: event.target.value
         });
       };
 
-    //  registerFormat = {
-    //     width: '90%',
-    //     minHeight: '500px',
-    //     position: 'absolute',
-    //     top: '45%',
-    //     marginTop: '-200px',
-    //     backgroundColor: '#fff',
-    //     borderRadius: '2px',
-    //     zIndex: '100',
-    //     padding: '15px',
-    //     boxShadow: '0px 0px 4px rgba(0,0,0,.14),0px 4px 8px rgba(0,0,0,.28)',
-    //   }
+    const doRegister = async event => {
+        event.preventDefault();
+        //	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+        // Validate input data
+            if (regdata.password !== regdata.confirmPassword) {
+                setSignUpResult('Passwords don\'t match.');
+                return;
+        }
+        
+            const response = await fetch(buildPath('register'), {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: regdata.name,
+                    email: regdata.email,
+                    password: regdata.password
+                })
+            })
+        .catch((error) => console.error(error));
+        
+            let status = await response.status;
+            if (status === 200) {
+          var x = document.getElementById("registerFooter");
+          x.style.display = "block";
+                setSignUpResult('Please confirm your email address by clicking the link we sent you.');
+                return;
+        }
+            else if (status === 400) {
+          var y = document.getElementById("registerFooter");
+          y.style.display = "block";
+                setSignUpResult('This email is already registered.');
+                return;
+            }
+            else {
+          var z = document.getElementById("registerFooter");
+          z.style.display = "block";
+                setSignUpResult('Failed to create account due to internal server error.');
+                return;
+            }
+    };
 
     return(
         <div class="registerDiv" 
@@ -44,22 +90,22 @@ const Register =() => {
                 </h1><br/>
                  <div> Already a member?<Link to="/Login" style={{color: "orange"}}> Sign In</Link>
                 </div>
-                <form>
+                <form onSubmit={doRegister}>
                 <input type="text" 
                 className="form-control mt-2" 
                 id="firstname" 
                 placeholder="Firstname"
                 name="firstName"
-                value={data.firstName}
-                onChange={handleChange} 
+                value={regdata.firstName}
+                onChange={handleRegChange}
                 required/>
                 <input type="text" 
                 className="form-control mt-2" 
                 id="lastname" 
                 name="lastName"
                 placeholder="Lastname"
-                value={data.lastName}
-                onChange={handleChange} 
+                value={regdata.lastName}
+                onChange={handleRegChange}
                 required/>
                 <input 
                 type="text" 
@@ -67,8 +113,8 @@ const Register =() => {
                 id="email" 
                 name="email"
                 placeholder="Email" 
-                value={data.email}
-                onChange={handleChange} 
+                value={regdata.email}
+                onChange={handleRegChange}
                 required/>
                 <input 
                 type="password" 
@@ -76,8 +122,8 @@ const Register =() => {
                 id="password" 
                 name="password"
                 placeholder="Enter Password"
-                value={data.password}
-                onChange={handleChange}  
+                value={regdata.password}
+                onChange={handleRegChange}
                 required/>
                 <input 
                 type="password" 
@@ -85,21 +131,23 @@ const Register =() => {
                 id="PasswordConfirm" 
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                value={data.confrirmPassword}
-                onChange={handleChange}  
+                value={regdata.confrirmPassword}
+                onChange={handleRegChange}
                 required/>
                 <div id = "passwordInfo" className="mt-2">
                     Please provide a password of at least 6 characters.<br/>
                     Your password must include at least 1 uppercase letter or special character.
                 </div>
                 <input type="submit" id="registerButton" 
-                // onClick= {alert('registeration successful')} 
                 className="btn btn-primary mt-3" value = "Create my Account"/>
                 </form>
                 <br/>
                 <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
                     Go Home
                 </Link>
+                <div id="registerFooter">
+                    {signUpResult}
+                </div>
             </div>
 
     );

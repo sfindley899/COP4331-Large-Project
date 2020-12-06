@@ -40,7 +40,6 @@ const LoginPage = () => {
     password: "",
   };
   const [data, setData] = React.useState(initialState);
-  const [message, setMessage] = React.useState('')
   const handleChange = event => {
     setData({
       ...data,
@@ -49,12 +48,8 @@ const LoginPage = () => {
   };
   const doLogin = async event => {
     event.preventDefault();
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    var obj = {email: data.email,
-                password:data.password
-                };
-    var js = JSON.stringify(obj);
     const response = await fetch(buildPath('login'), {
 			method: 'POST',
 			headers: {
@@ -71,9 +66,6 @@ const LoginPage = () => {
     if (status === 200) {
       var res = JSON.parse(await response.text());
       setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
-      var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
-      localStorage.setItem('user_data', JSON.stringify(user));
-      setMessage('');
       window.location.href = '/SearchResult';
     }
     else if (status === 400) {
@@ -99,12 +91,13 @@ const LoginPage = () => {
 // Register state
   const regState = {
     firstName: "",
-      lastName: "",
-      email: "",
+    lastName: "",
+    email: "",
     password: "",
     confirmPassword: ""      
 };
 const [regdata, setRegData] = React.useState(regState);
+const [signUpResult, setSignUpResult] = useState('');
 
 const handleRegChange = event => {
     setRegData({
@@ -112,6 +105,51 @@ const handleRegChange = event => {
       [event.target.name]: event.target.value
     });
   };
+
+const doRegister = async event => {
+    event.preventDefault();
+	//	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    // Validate input data
+		if (regdata.password !== regdata.confirmPassword) {
+			setSignUpResult('Passwords don\'t match.');
+			return;
+    }
+    
+		const response = await fetch(buildPath('register'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				name: regdata.name,
+				email: regdata.email,
+				password: regdata.password
+			})
+		})
+    .catch((error) => console.error(error));
+    
+		let status = await response.status;
+		if (status === 200) {
+      var x = document.getElementById("registerFooter");
+      x.style.display = "block";
+			setSignUpResult('Please confirm your email address by clicking the link we sent you.');
+			return;
+    }
+		else if (status === 400) {
+      var y = document.getElementById("registerFooter");
+      y.style.display = "block";
+			setSignUpResult('This email is already registered.');
+			return;
+		}
+		else {
+      var z = document.getElementById("registerFooter");
+      z.style.display = "block";
+			setSignUpResult('Failed to create account due to internal server error.');
+			return;
+		}
+};
 
   return (
     <div style={{
@@ -260,7 +298,7 @@ const handleRegChange = event => {
           <div style={{textAlign: "center"}}> 
             Already a member?<Link to="/Login" style={{color: "orange"}}> Sign In</Link>
           </div>
-          <form>
+          <form  onSubmit={doRegister}>
             <input type="text"
               className="form-control mt-2"
               id="firstname"
@@ -309,10 +347,14 @@ const handleRegChange = event => {
                     Your password must include at least 1 uppercase letter or special character.
                 </div>
             <input type="submit" id="registerButton"
-              // onClick= {alert('registeration successful')} 
               className="btn btn-primary mt-3" value="Create my Account" />
           </form>
         </Modal.Body>
+        <Modal.Footer style={{textAlign: "center"}}>
+          <div id="registerFooter">
+            {signUpResult}
+          </div>
+        </Modal.Footer>
       </Modal>
     </div>
   )

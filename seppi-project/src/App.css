@@ -473,6 +473,18 @@ body {
   padding: 10px;
 }
 
+#registerFooter{
+  display: none;
+  font-size: 20px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
 #resultSearch {
   color: grey;
   height: 30px;

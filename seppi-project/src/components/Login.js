@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Link} from "react-router-dom"
-import {AuthContext, UserContext}from '../context'
-import {useContext} from 'react';
+import {UserContext}from '../context'
+import {AuthContext, useContext} from 'react';
 
 const Login=() => {
     const app_name = 'seppi'
@@ -25,7 +25,6 @@ const Login=() => {
         password: "",
           };
         const [data, setData] = React.useState(initialState);
-        const   [message, setMessage] = React.useState('')  
     const handleChange = event => {
       setData({
         ...data,
@@ -34,12 +33,8 @@ const Login=() => {
     };
     const doLogin = async event => {
       event.preventDefault();
-      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  
-      var obj = {email: data.email,
-                  password:data.password
-                  };
-      var js = JSON.stringify(obj);
+    //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
       const response = await fetch(buildPath('login'), {
         method: 'POST',
         headers: {
@@ -56,9 +51,6 @@ const Login=() => {
       if (status === 200) {
         var res = JSON.parse(await response.text());
         setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
-        var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
-        localStorage.setItem('user_data', JSON.stringify(user));
-        setMessage('');
         window.location.href = '/SearchResult';
       }
       else if (status === 400) {
