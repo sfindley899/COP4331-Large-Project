@@ -169,44 +169,53 @@ app.post('/changeEmail', async(req, res) => {
     {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
-    const uid = decodedToken.uid;
-    var rec = await firebaseAdminSdk
-  .auth()
-  .getUser(uid)
+var emailx = req.body.newEmail;
+if (emailx == decodedToken.email)
+{
+    return res.status(400).send(JSON.stringify({response : 'Same email'}));
+}
+if (emailx == null)
+{
+    return res.status(400).send(JSON.stringify({response : 'No email'}));
+}
+try {
+    await firebase.auth().signInWithEmailAndPassword(decodedToken.email, req.body.password)
+             var user = firebase.auth().currentUser;
 
 
-    if (req.body.email == rec.email)
-    {
-        return res.status(400).send(JSON.stringify({response : 'Same email'}));
-    }
-
-    emailx = req.body.email;
-
-    if (emailx != null && uid != null)
-    {
-        try {
-            var record = await firebaseAdminSdk
-      .auth()
-      .updateUser(uid, {
-        email: emailx,
-        emailVerified: false,
-      })
-      return res.status(200).send(JSON.stringify({response:record}));
-        } catch (e)
-        {
-            return res.status(400).send(JSON.stringify({response:e}));
-        }
+              if (user != null) {
+                // User is signed in.
+                // checks if email is verified
 
 
 
+                    await user.updateEmail(emailx)
+                    user.sendEmailVerification().then(function() {
+  // Email sent.
+}).catch(function(error) {
+  // An error happened.
+});
 
-    }
-    else {
-        return res.status(400).send(JSON.stringify("yes"));
-    }
+                     // Email sent.
+                     return res.status(200).send(JSON.stringify({response:"email sent to " + emailx}));
 
-    return res.status(200).send(JSON.stringify({response:"end"}));
 
+
+                // user not signed in
+              } else {
+                // No user is signed in.
+                  return res.status(400).send(JSON.stringify({response:"No User"}));
+              }
+
+        // catches when sign in has problems.
+
+              return res.status(200).send(JSON.stringify({response:"email send to " + emailx}));
+
+} catch (e) {
+    return res.status(400).send(JSON.stringify({response:e.message}));
+} finally {
+
+}
 
 
 });

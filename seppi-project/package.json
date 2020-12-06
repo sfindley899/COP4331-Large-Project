@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "start": "node server.js",
     "start-dev": "react-scripts start",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run start-dev"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build && npm run start-dev"
   },
   "eslintConfig": {
     "extends": "react-app"
