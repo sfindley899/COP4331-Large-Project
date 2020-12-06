@@ -34,14 +34,14 @@ test('Login User with correct credentials and verified email', async () => {
     expect(res.body.email).toBe("lap65222@cuoly.com")
 });
 
-test('Login User with correct credentials with an unverified email', async () => {
+test.skip('Login User with correct credentials with an unverified email', async () => {
     const res = await request(server).post('/login').send({"email":"jagoh46664@idcbill.com", "password":"!^$b$fN6moHRE&@XjRW6iL"})
 
     expect(res.status).toBe(401) // 401 = Unauthorized
     expect(res.body.response).toBe("email not verified")
 });
 
-test('Login User with incorrect credentials', async () => {
+test.skip('Login User with incorrect credentials', async () => {
     const res = await request(server).post('/login').send({"email":"sflap65222@cuoly.com", "password":"sdfs8xkI7cX$oJUnT5fzp3D!xj"})
 
     expect(res.status).toBe(400) // 400 = Bad Request
@@ -63,7 +63,7 @@ test.skip('Forgot Password on a valid account', async () => {
     expect(res.body.response).toBe("email ver sent")
 });
 
-test('Forgot Password on a nonexsistant account', async () => {
+test.skip('Forgot Password on a nonexsistant account', async () => {
     const res = await request(server).post('/resetPassword').send({"email":"sdfsfsfjagoh46664@idcbill.com"})
 
     expect(res.status).toBe(400)
