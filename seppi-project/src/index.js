@@ -7,6 +7,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { createBrowserHistory } from "history";
 import {BrowserRouter as Router} from "react-router-dom"
 
+// insert Tommy's changes
+
 const history = createBrowserHistory({
         basename: process.env.PUBLIC_URL,
       });

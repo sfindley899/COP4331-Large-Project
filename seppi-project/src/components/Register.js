@@ -1,5 +1,4 @@
 import React from 'react';
-import Login from './Login';
 import 'typeface-roboto';
 import {Link} from "react-router-dom"
 
@@ -36,10 +35,14 @@ const Register =() => {
 
     return(
         <div class="registerDiv" 
-        style={{width: "60%", textAlign: "center", margin: "0 auto"}}>
-                <h1 id = "RegisterHeader" >
-                    Sign up with email</h1><br/>
-                 <div> Already a member?<Link className="btn btn-primary" to="/Login"> Sign In</Link>
+        style={{width: "40%", textAlign: "center", margin: "0 auto"}}>
+                <br/>
+                <br/>
+                <br/>
+                <h1>
+                    Sign up with email
+                </h1><br/>
+                 <div> Already a member?<Link to="/Login" style={{color: "orange"}}> Sign In</Link>
                 </div>
                 <form>
                 <input type="text" 
@@ -93,6 +96,10 @@ const Register =() => {
                 // onClick= {alert('registeration successful')} 
                 className="btn btn-primary mt-3" value = "Create my Account"/>
                 </form>
+                <br/>
+                <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
+                    Go Home
+                </Link>
             </div>
 
     );

@@ -2,12 +2,15 @@ import React from 'react';
 import PageTitle from './PageTitle';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom'
-import Login from './Login'
-import Register from './Register'
+import {AuthContext, UserContext}from '../context'
+import {useContext} from 'react';
 
 const LoginPage = () => {
+
+  // User's login status
+	const [state, setState] = useContext(UserContext);
+
   // Login button handler
   const [show, setShowLogin] = React.useState(false);
   const handleCloseLogin = () => setShowLogin(false);
@@ -44,32 +47,36 @@ const LoginPage = () => {
   };
   const doLogin = async event => {
     event.preventDefault();
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    var obj = {
-      email: data.email.value,
-      password: data.password.value
-    };
+    var obj = {email: data.email,
+                password:data.password
+                };
     var js = JSON.stringify(obj);
-    // alert(js);
+    alert(js);
     try {
-      const response = await fetch(buildPath('api/login'),
-        {
-          method: 'POST',
-          body: js,
-          headers: { 'Content-Type': 'application/json' }
-        });
-
+      const response = await fetch(buildPath('/login'),
+      {
+        method: 'POST',
+        body: js,
+        headers:{Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                }
+                
+      });
+      alert("testing");
       var res = JSON.parse(await response.text());
       alert(res);
       if (res.id <= 0) {
         setMessage('User/Password combination incorrect');
       }
       else {
+        setState(state => ({ ...state, name: res.body.name, email: res.body.email, idToken: res.body.idToken }));
         var user = { firstName: res.firstName, lastName: res.lastName, id: res.id }
         localStorage.setItem('user_data', JSON.stringify(user));
 
         setMessage('');
-        window.location.href = '/CardPage';
+        window.location.href = '/SearchResult';
       }
     }
     catch (e) {
@@ -109,31 +116,81 @@ const handleRegChange = event => {
             Sign Up
               </button>
         </div>
-        <PageTitle />
+        <PageTitle/>
         <form id="searchParameter">
-          <input id="search" type="text" placeholder="Search" /><span className="search" style={{ position: "absolute", backgroundColor: "white", padding: '2px', marginTop: "0.5px" }}><i className="fa fa-search" ></i></span>
+          <input id="search" type="text" placeholder="Search by recipe, ingredient, dish..." />
+          <span className="searchImage" style={{borderRadius: "1px", width: "4%", backgroundSize: "cover", height: "50px",color: "white", position: "absolute", backgroundColor: "orange", padding: '2px', marginTop: "0.5px" }}>
+            <i className="fa fa-search" style={{paddingTop: "8px", fontSize: "30px"}}></i>
+          </span>
         </form>
-        <div className="centered">
-        </div>
+        <br/>
+        <br/>
+        <Link className="btn btn-success mt-2" id = "searchFilter" to="/SearchResult">
+          Advanced Search
+        </Link>
       </div>
       <div className="subBody">
         <div>
-          <div className="Suggestions" style={{ color: 'white' }}>
+          <div className="Suggestions" style={{ color: 'black' }}>
             Suggested Recipes
+          </div>
+          <div class = "Icons">
+                <div class = "leftIcon">
+                  <div class = "leftInfo">
+                    <h2>Try the App</h2>
+                    Get the best experience through the app.
+                    <br/>
+                    <button id = "leftButton">Get the app</button>
+                  </div>
+                </div>
+                <div class ="middleIcon">
+                  <div class = "middleInfo">
+                    <h2>Add your Ingredients</h2>
+                    Refine your recipe search to include the ingredients readily available.
+                    <br/>
+                    <button id = "middleButton">Add to your Pantry</button>
+                  </div>
+                </div>
+                <div class = "rightIcon">
+                 <div class = "rightInfo">
+                    <h2>Find a Recipe</h2>
+                    Search from thousands of recipes based on the items in your inventory.
+                    <br/>
+                    <button id = "rightButton">Search for a Recipe</button>
+                 </div>
+                </div>
+              </div>
+              <div class = "WelcomeTo">
+                <div class = "leftsidePNG"></div>
+                <div class = "rightside">
+                  <h1>Welcome to Seppi's Recipe Family!</h1>
+                  <br/>
+                  <br/>
+                  <div class = "rightsideText1">Whether you are a cooking enthusiast or only have enough time to throw together lunch, Seppi's goal is to provide access to new recipes and connect to a community of other like-minded cooks.</div>
+                  <br/>
+                  <br/>
+                  <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
+                  <button id = "submitEmailButton">Sign Up</button>
+                  <br/>
+                  <br/>
+                  <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
+                </div>
+              </div>
+              <div class = "edamamCredit">
               </div>
         </div>
       </div>
       {/* Login Modal */}
       <Modal show={show} onHide={handleCloseLogin}>
         <Modal.Header closeButton>
-          <Modal.Title>Login To Seppi</Modal.Title>
+          <Modal.Title id = "inner-title">Log In To Seppi</Modal.Title>
         </Modal.Header>
         <Modal.Body >
           <form
             onSubmit={doLogin} className="loginsForm">
             <div className="form-group">
-              <label htmlFor="email">Email address</label>
               <input
+                placeholder="Email"
                 value={data.email}
                 onChange={handleChange}
                 name="email"
@@ -145,8 +202,8 @@ const handleRegChange = event => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
               <input
+                placeholder="Password"
                 value={data.password}
                 onChange={handleChange}
                 name="password"
@@ -156,41 +213,36 @@ const handleRegChange = event => {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-        </button><br />
-            <div className="row">
-              <p> <Link className="col-md-4 mt-4 text-left" to="/ForgotPassword" style={{ color: "blue" }}>
+            <p>
+                <Link className="col-md-4 mt-4 text-left" to="/ForgotPassword" style={{color: "grey", paddingLeft: "320px"}}>
                 Forgot password?{" "}
-              </Link></p>
-              <p className="col-md-8 mt-4 text-right" id="switchToRegister">
+                </Link>
+            </p>
+            <button id = "loginButton" type="submit" className="btn btn-primary">
+              Login
+            </button>
+            <br />
+            <div className="row">
+              <p className="col-md-12 mt-4 text-center" id="switchToRegister">
                 Don't have an account?{" "}
-                <Link className="btn btn-primary" to="/register">
-                  Register
-          </Link>
+                <Link to="/Register" style={{color: "orange"}}>
+                Register{" "}
+                </Link>
               </p>
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseLogin}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCloseLogin}>
-            Save Changes
-          </Button>
-          <span id="loginResult">{message}</span>
-        </Modal.Footer>
       </Modal>
 
 
       {/* Register modal */}
       <Modal show={showreg} onHide={handleCloseRegister} >
         <Modal.Header closeButton>
-          <Modal.Title>Sign up with email</Modal.Title>
+          <Modal.Title id="RegisterHeader">Sign up with email</Modal.Title>
         </Modal.Header>
-        <Modal.Body >
-          <div> Already a member?<Link className="btn btn-primary" to="/Login"> Sign In</Link>
+        <Modal.Body>
+          <div style={{textAlign: "center"}}> 
+            Already a member?<Link to="/Login" style={{color: "orange"}}> Sign In</Link>
           </div>
           <form>
             <input type="text"
@@ -233,7 +285,7 @@ const handleRegChange = event => {
               id="PasswordConfirm"
               name="confirmPassword"
               placeholder="Confirm Password"
-              value={regdata.confrirmPassword}
+              value={regdata.confirmPassword}
               onChange={handleRegChange}
               required />
             <div id="passwordInfo" className="mt-2">
@@ -245,14 +297,6 @@ const handleRegChange = event => {
               className="btn btn-primary mt-3" value="Create my Account" />
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseRegister}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCloseRegister}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   )

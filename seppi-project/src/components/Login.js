@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import LoginToRegister from './LoginToRegister';
 import {Link} from "react-router-dom"
+import {AuthContext, UserContext}from '../context'
+
 const Login=() => {
     const app_name = 'seppi'
 
@@ -18,9 +19,9 @@ const Login=() => {
         email: "",
         password: "",
           };
-  const [data, setData] = React.useState(initialState);
-const   [message, setMessage] = React.useState('')  
-  const handleChange = event => {
+        const [data, setData] = React.useState(initialState);
+        const   [message, setMessage] = React.useState('')  
+    const handleChange = event => {
       setData({
         ...data,
         [event.target.name]: event.target.value
@@ -28,6 +29,7 @@ const   [message, setMessage] = React.useState('')
     };
     const doLogin = async event => {
         event.preventDefault();
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         var obj = {email: data.email.value,
                    password:data.password.value
@@ -39,7 +41,9 @@ const   [message, setMessage] = React.useState('')
             const response = await fetch(buildPath('api/login'),
                 {method:'POST',
                 body:js,
-                headers:{'Content-Type': 'application/json'}
+                headers:{Accept: 'application/json',
+                         'Content-Type': 'application/json'
+                }
             });
 
             var res = JSON.parse(await response.text());
@@ -54,7 +58,7 @@ const   [message, setMessage] = React.useState('')
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
-                window.location.href = '/CardPage';
+                window.location.href = '/SearchResult';
             }
         }
         catch(e)
@@ -71,8 +75,8 @@ const   [message, setMessage] = React.useState('')
         onSubmit={doLogin} className="loginsForm">
         <h1>Login To Seppi</h1>
         <div className="form-group">
-          <label htmlFor="email">Email address</label>
           <input
+            placeholder="Email"
             value={data.email}
             onChange={handleChange}
             name="email"
@@ -84,8 +88,8 @@ const   [message, setMessage] = React.useState('')
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
           <input
+            placeholder="Password"
             value={data.password}
             onChange={handleChange}
             name="password"
@@ -95,21 +99,28 @@ const   [message, setMessage] = React.useState('')
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button><br/>
-        <div className="row">
-      <p> <Link className="col-md-4 mt-4 text-left" to="/ForgotPassword"  style={{color:"blue"}}>
-          Forgot password?{" "}
-          </Link></p>
-        <p className="col-md-8 mt-4 text-right" id="switchToRegister">
-          Don't have an account?{" "}
-          <Link className="btn btn-primary" to="/register">
-            Register
-          </Link>
+        <p>
+            <Link className="col-md-4 mt-4 text-right" to="/ForgotPassword" style={{color: "grey", paddingLeft: "385px"}}>
+            Forgot password?{" "}
+            </Link>
         </p>
-</div>
+            <button id = "loginButton" type="submit" className="btn btn-primary">
+            Login
+            </button>
+            <br />
+            <div className="row">
+        <p className="col-md-12 mt-4 text-center" id="switchToRegister">
+            Don't have an account?{" "}
+            <Link to="/register" style={{color: "orange"}}>
+            Register{" "}
+            </Link>
+        </p>
+        </div>
       </form>
+      <br/>
+        <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
+            Go Home
+        </Link>
       <div>
          <span id="loginResult">{message}</span>
        </div>
