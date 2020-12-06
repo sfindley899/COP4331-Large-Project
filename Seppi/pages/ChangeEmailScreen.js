@@ -28,7 +28,8 @@ const ChangeEmailScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email : email
+				email : email,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 

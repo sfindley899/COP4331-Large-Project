@@ -27,7 +27,8 @@ const ChangeUsernameScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: name
+				name: name,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 
