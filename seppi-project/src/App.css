@@ -40,8 +40,8 @@
 .loginForm {
   max-width: 600px;
   width: 100%;
-  margin: 0 auto; 
-  padding: 9% 20px; 
+  margin: 0 auto;
+  padding: 9% 20px;
 }
 
 /* .registerDiv{
@@ -56,7 +56,7 @@ body {
 }
 
 .MainBody {
-  background-image: url('./images/home_page.jpeg');
+  background-image: url("./images/home_page.jpeg");
   background-color: orange;
   height: 100vh;
   background-position: center;
@@ -64,7 +64,7 @@ body {
   background-size: cover;
 }
 
-.signIn{
+.signIn {
   width: 96%;
   text-align: right;
   padding: 2%;
@@ -77,7 +77,7 @@ body {
   font-weight: bold;
   font-size: 80px;
   line-height: 28px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 1px 2px black;
 }
 
@@ -94,8 +94,8 @@ body {
   text-shadow: 1px 2px black;
 }
 
-#logIN:hover{
-  background-color:black;
+#logIN:hover {
+  background-color: black;
 }
 
 #signUP {
@@ -108,7 +108,7 @@ body {
   transition: 0.3s;
 }
 
-#signUP:hover{
+#signUP:hover {
   border: 3px solid black;
 }
 
@@ -139,7 +139,7 @@ body {
 }
 
 #filterImage {
-  background-image: url('./images/filter.png');
+  background-image: url("./images/filter.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -174,7 +174,7 @@ body {
 
 .leftIcon {
   position: center;
-  background-image: url('./images/grocery1.png');
+  background-image: url("./images/grocery1.png");
   background-position-x: center;
   background-size: 110px;
   height: 30vh;
@@ -203,7 +203,7 @@ body {
 }
 
 .middleIcon {
-  background-image: url('./images/grocery2.png');
+  background-image: url("./images/grocery2.png");
   background-position-x: center;
   background-size: 145px;
   height: 30vh;
@@ -232,7 +232,7 @@ body {
 }
 
 .rightIcon {
-  background-image: url('./images/grocery3.png');
+  background-image: url("./images/grocery3.png");
   background-position-x: center;
   background-size: 160px;
   height: 30vh;
@@ -271,7 +271,7 @@ body {
 }
 
 .leftsidePNG {
-  background-image: url('./images/grocery4.png');
+  background-image: url("./images/grocery4.png");
   background-position-x: left;
   background-position-y: center;
   background-size: 430px;
@@ -319,7 +319,7 @@ body {
 }
 
 .edamamCredit {
-  background-image: url('./images/edamam.png');
+  background-image: url("./images/edamam.png");
   height: 10vh;
   background-repeat: no-repeat;
   background-position-x: 95%;
@@ -369,7 +369,7 @@ body {
   padding: 10px;
 }
 
-#loginFooter{
+#loginFooter {
   display: none;
   font-size: 20px;
   color: white;
@@ -455,7 +455,7 @@ body {
   font-size: 25px;
 }
 
-#passwordInfo{
+#passwordInfo {
   text-align: center;
   width: 100%;
   font-size: 15px;
@@ -473,7 +473,7 @@ body {
   padding: 10px;
 }
 
-#registerFooter{
+#registerFooter {
   display: none;
   font-size: 20px;
   color: white;
@@ -503,7 +503,7 @@ body {
 }
 
 #FavImage {
-  background-image: url('./images/heart.png');
+  background-image: url("./images/heart.png");
   background-position-x: center;
   background-size: 100px;
   height: 70px;
@@ -518,7 +518,7 @@ body {
 }
 
 #AccountImage {
-  background-image: url('./images/user.png');
+  background-image: url("./images/user.png");
   background-position-x: center;
   background-size: 50px;
   height: 55px;
@@ -533,7 +533,7 @@ body {
 }
 
 #ListImage {
-  background-image: url('./images/list.png');
+  background-image: url("./images/list.png");
   background-position-x: center;
   background-size: 60px;
   height: 50px;
@@ -575,7 +575,7 @@ body {
 }
 
 #HeartImage {
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 120px;
   background-repeat: no-repeat;
   width: 50%;
@@ -584,8 +584,7 @@ body {
 }
 
 #biggerHeartImage {
-
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 250px;
   background-repeat: no-repeat;
   height: 150px;
@@ -596,7 +595,7 @@ body {
 #FavBody {
   width: 100%;
   height: 68.2%;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   font-weight: normal;
   font-size: 20px;
 }
