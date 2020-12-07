@@ -46,7 +46,6 @@ const LoginScreen = ({ navigation }) => {
 
 		// 200 is OK response, continue handling user data.
 		let status = await response.status;
-		console.log('status: ' + status);
 		if (status === 200) {
 			let json = JSON.parse(await response.text());
 
@@ -55,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
 			//console.log(await getData('@token'));
 
 			// Set the user's email and display name from the response.
-			setState(state => ({ ...state, name: json.name, email: json.email }));
+			setState(state => ({ ...state, name: json.name, email: json.email, idToken: json.idToken }));
 			//storeData('state', JSON.stringify(state));
 
 			setLoginResult('');

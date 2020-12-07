@@ -27,17 +27,17 @@ const ChangeUsernameScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: name
+				displayName: name,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;	
-		console.log(status);
 		if (status === 200)
 		{
 			let json = JSON.parse(await response.text());
-			setChangeUsernameResult('Successfully changed your display name to ' + json.name + '.');
-			setState(state => ({ ...state, name: json.name }));
+			setChangeUsernameResult('Successfully changed your display name to ' + name + '.');
+			setState(state => ({ ...state, name: name }));
 		}
 		else
 		{

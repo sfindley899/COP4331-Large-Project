@@ -16,7 +16,10 @@ const Toolbar = () => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -37,7 +40,10 @@ const Toolbar = () => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -48,8 +54,30 @@ const Toolbar = () => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
+	};
+
+	const fetchGroceries = async () => {
+		const response = await fetch(buildPath('getGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch groceries.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		setState(state => ({ ...state, list: json}));
 	};
 
 	return (
@@ -89,7 +117,7 @@ const Toolbar = () => {
 				</TouchableOpacity>
 
 				<TouchableOpacity 
-					style={StyleSheet.compose(styles.listsIconContainer, (route.name === 'Grocery Lists') ? {
+					style={StyleSheet.compose(styles.listsIconContainer, (route.name === 'Grocery List') ? {
 							backgroundColor: '#FFFFFF'
 						} : {
 							backgroundColor: '#ECECEC'
@@ -98,7 +126,8 @@ const Toolbar = () => {
 					activeOpacity={0.5} 
 					onPress={() => {
 						setState(state => ({ ...state, currentTab: 'lists' }));
-						console.log(state.currentTab);
+						fetchGroceries();
+						navigation.navigate('Grocery List');
 					}}
 				>
 					<Image style={styles.toolbarImage} source={require('../images/toolbar/lists-icon.png')} />

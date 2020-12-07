@@ -9,13 +9,14 @@ import { buildPath, deviceHeight, deviceWidth } from '../utils';
 
 const ChangeEmailScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
-	const [email, setEmail] = useState(state.email);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [changeEmailResult, setChangeEmailResult] = useState('');
 
 	const changeEmail = async event => {
 		setChangeEmailResult('');
 
-		if (email.length === 0)
+		if (email.trim().length === 0)
 		{
 			setChangeEmailResult('Please input a non-empty email.');
 			return;
@@ -28,12 +29,14 @@ const ChangeEmailScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email : email
+				newEmail : email,
+				password: password,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
+		setPassword('');
 
 		if (status === 200)
 		{
@@ -60,6 +63,14 @@ const ChangeEmailScreen = ({ navigation }) => {
 					placeholder="New Email"
 					value={email}
 					onChangeText={email => setEmail(email)}
+				/>
+
+				<AppTextInput 
+					style={styles.textInput}
+					secureTextEntry={true}
+					placeholder="Verify Password"
+					value={password}
+					onChangeText={password => setPassword(password)}
 				/>
 
 				<View style={styles.buttonGroup}>

@@ -30,7 +30,10 @@ const BarcodeScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -51,7 +54,10 @@ const BarcodeScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -62,7 +68,6 @@ const BarcodeScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
 	};
 
@@ -91,6 +96,7 @@ const BarcodeScreen = ({ navigation }) => {
 				category: categoryText,
 				ingredient: itemName,
 				expiration: expirationText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -129,12 +135,12 @@ const BarcodeScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				code: code
+				code: code,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		// Failure Overlay toast pop-up
 		if (status === 401) {
@@ -149,7 +155,6 @@ const BarcodeScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 
 		// Success overlay pop-up
 		if (json.hints !== undefined & json.hints.length > 0)

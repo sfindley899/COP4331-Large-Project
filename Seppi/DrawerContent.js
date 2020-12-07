@@ -34,7 +34,10 @@ export function DrawerContent(props) {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+            },
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -56,7 +59,10 @@ export function DrawerContent(props) {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -69,6 +75,29 @@ export function DrawerContent(props) {
 		let json = JSON.parse(await response.text());
 		setState(state => ({ ...state, expiring: json.expiring}));
     };
+
+    const fetchGroceries = async () => {
+		const response = await fetch(buildPath('getGrocery'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
+		}).catch(error => console.error(error));
+
+		let status = await response.status;
+		
+		if (status !== 200) {
+			console.log('Could not fetch groceries.');
+			return;
+		}
+
+		let json = JSON.parse(await response.text());
+		setState(state => ({ ...state, list: json}));
+	};
 
     return(
         <View style={{flex:1}}>
@@ -122,8 +151,11 @@ export function DrawerContent(props) {
                                 size={size}
                                 />
                             )}
-                            label="Grocery Lists"
-                            onPress={() => {console.log('lists')}}
+                            label="Grocery List"
+                            onPress={() => {
+                                fetchGroceries();
+                                props.navigation.navigate('Grocery List');
+                            }}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (

@@ -771,7 +771,69 @@
                }
            }
        },
-          "/getUser": {
+       "/addFavorite": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Sets user Allergies",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "When user is signed in call this to get info",
+              "schema": {
+                  "$ref": "#/definitions/ingred"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+              "200":
+              {
+                  "description": "Went through"
+              },
+              "400":
+              {
+                  "description": "Internal Server Error"
+              }
+              }
+          }
+      },
+      "/getFavorites": {
+       "post": {
+         "tags": [
+           "Users"
+         ],
+         "description": "Sets user Allergies",
+         "parameters": [
+           {
+             "name": "user",
+             "in": "body",
+             "description": "When user is signed in call this to get info",
+             "schema": {
+                 "$ref": "#/definitions/ingred"
+             }
+           }
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "responses": {
+             "200":
+             {
+                 "description": "Went through"
+             },
+             "400":
+             {
+                 "description": "Internal Server Error"
+             }
+             }
+         }
+     },
+          "/changeDisplayName": {
   			"post": {
   			  "tags": [
   				"Users"

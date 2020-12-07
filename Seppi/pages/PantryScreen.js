@@ -26,7 +26,10 @@ const PantryScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -37,7 +40,6 @@ const PantryScreen = ({ navigation }) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
 	};
 
@@ -65,7 +67,8 @@ const PantryScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				category: categoryText
+				category: categoryText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 

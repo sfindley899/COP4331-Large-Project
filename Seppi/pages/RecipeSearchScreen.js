@@ -108,7 +108,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 			},
 			body: JSON.stringify({
 				search: searchText,
-				filters: filterText
+				filters: filterText,
+				idToken: state.idToken
 			})
 		})
 		.catch((error) => console.error(error));
@@ -593,12 +594,14 @@ const RecipeSearchScreen = ({ navigation }) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+			body: JSON.stringify({
+				idToken: state.idToken
+			})
 		})
 		.catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
@@ -623,6 +626,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 			}
 		}
 
+		currentItem['idToken'] = state.idToken;
+
 		const response = await fetch(buildPath('addFavorite'), {
 			method: 'POST',
 			headers: {
@@ -633,7 +638,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
@@ -665,16 +669,15 @@ const RecipeSearchScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				uri: currentItem.recipe.uri
+				uri: currentItem.recipe.uri,
+				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
 
 		let status = await response.status;
-		console.log(status);
 
 		if (status === 200)
 		{
-			console.log('removed favorite');
 			let json = JSON.parse(await response.text());
 			setFavoritesData(json.favorites);
 			setRecipeVisible(!recipeVisible);

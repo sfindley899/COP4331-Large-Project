@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@react-native-firebase/auth": "^10.0.0",
+    "@react-native-firebase/auth": "^10.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "start": "node server.js",
     "start-dev": "react-scripts start",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run start-dev"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build && npm run start-dev"
   },
   "eslintConfig": {
     "extends": "react-app"

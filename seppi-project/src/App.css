@@ -49,3 +49,558 @@
   align-items: center;
   justify-content: center;
 } */
+
+body {
+  background-color: orange;
+  height: 340vh;
+}
+
+.MainBody {
+  background-image: url('./images/home_page.jpeg');
+  background-color: orange;
+  height: 100vh;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+.signIn{
+  width: 96%;
+  text-align: right;
+  padding: 2%;
+}
+
+#title {
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 80px;
+  line-height: 28px;
+  color: #FFFFFF;
+  text-shadow: 1px 2px black;
+}
+
+#logIN {
+  background-color: transparent;
+  color: white;
+  transition: 0.3s;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  margin-right: 10px;
+  padding: 10px;
+  text-shadow: 1px 2px black;
+}
+
+#logIN:hover{
+  background-color:black;
+}
+
+#signUP {
+  color: black;
+  font-size: 20px;
+  border-radius: 25px;
+  border: 3px solid white;
+  background-color: white;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+#signUP:hover{
+  border: 3px solid black;
+}
+
+#search {
+  height: 30px;
+  width: 36%;
+  border-radius: 1px;
+  border: white;
+  padding: 25px;
+  font-size: 25px;
+}
+
+#searchParameter {
+  margin-top: 200px;
+  width: 100%;
+  text-align: center;
+}
+
+#searchFilter {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  width: 14%;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  background-color: orange;
+  padding: 10px;
+}
+
+#filterImage {
+  background-image: url('./images/filter.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: black;
+}
+
+.subBody {
+  background-color: white;
+  height: 220vh;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+.Suggestions {
+  height: 80vh;
+  padding: 50px;
+  padding-left: 80px;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.Icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 50vh;
+  margin: 10px auto;
+  position: relative;
+}
+
+.leftIcon {
+  position: center;
+  background-image: url('./images/grocery1.png');
+  background-position-x: center;
+  background-size: 110px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.leftInfo {
+  padding-top: 120px;
+  padding-left: 30px;
+  text-align: center;
+  font-weight: bold;
+  width: 90%;
+}
+
+#leftButton {
+  background-color: none;
+  font-size: 18px;
+  background-color: white;
+  color: orange;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.middleIcon {
+  background-image: url('./images/grocery2.png');
+  background-position-x: center;
+  background-size: 145px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.middleInfo {
+  padding-top: 110px;
+  padding-left: 30px;
+  text-align: center;
+  font-weight: bold;
+  width: 90%;
+}
+
+#middleButton {
+  background-color: none;
+  font-size: 18px;
+  background-color: white;
+  color: orange;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.rightIcon {
+  background-image: url('./images/grocery3.png');
+  background-position-x: center;
+  background-size: 160px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.rightInfo {
+  padding-top: 120px;
+  padding-left: 20px;
+  text-align: center;
+  font-weight: bold;
+  width: 90%;
+}
+
+#rightButton {
+  background-color: none;
+  font-size: 18px;
+  background-color: white;
+  color: orange;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.WelcomeTo {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 80vh;
+  margin: 10px auto;
+  position: relative;
+}
+
+.leftsidePNG {
+  background-image: url('./images/grocery4.png');
+  background-position-x: left;
+  background-position-y: center;
+  background-size: 430px;
+  height: 70vh;
+  width: 40%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.rightside {
+  height: 60vh;
+  width: 55%;
+  padding: 50px;
+  padding-top: 170px;
+  text-align: center;
+}
+
+.rightsideText1 {
+  color: grey;
+}
+
+#submitEmail {
+  height: 30px;
+  width: 60%;
+  padding: 10px;
+  padding-left: 15px;
+  font-size: 20px;
+}
+
+#submitEmailButton {
+  height: 33px;
+  width: 20%;
+  font-size: 20px;
+  color: white;
+  background-color: orange;
+  border: 1px solid white;
+}
+
+.rightsideText2 {
+  color: grey;
+}
+
+.bottom {
+  background-color: orange;
+}
+
+.edamamCredit {
+  background-image: url('./images/edamam.png');
+  height: 10vh;
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: bottom;
+}
+
+#loginArea {
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: 40px;
+  line-height: 40px;
+  color: black;
+}
+
+#inner-title {
+  font-weight: bold;
+  height: 20px;
+  padding-left: 130px;
+  font-size: 30px;
+}
+
+#loginEmail {
+  height: 40px;
+  width: 100%;
+  padding-left: 15px;
+  font-size: 25px;
+}
+
+#loginPassword {
+  height: 40px;
+  width: 100%;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 10px;
+  font-size: 25px;
+}
+
+#loginButton {
+  font-size: 30px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
+#loginFooter{
+  display: none;
+  font-size: 20px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
+#switchToRegister {
+  font-size: 15px;
+}
+#registerLink {
+  width: 15%;
+  font-size: 15px;
+  border-color: white;
+  background-color: white;
+  border: 3px white;
+  color: orange;
+}
+
+#registerArea {
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: 40px;
+  line-height: 20px;
+  color: black;
+}
+
+#RegisterHeader {
+  font-weight: bold;
+  height: 20px;
+  padding-left: 105px;
+  font-size: 30px;
+}
+
+#loginLink {
+  width: 49%;
+  font-size: 22px;
+  text-align: right;
+  border-color: white;
+  background-color: white;
+  border: 3px white;
+  color: orange;
+}
+
+#registerDisplayName {
+  height: 20px;
+  width: 80%;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+#registerEmail {
+  height: 20px;
+  width: 80%;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+#registerPassword {
+  height: 20px;
+  width: 80%;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+#registerPasswordConfirm {
+  height: 20px;
+  width: 80%;
+  padding: 10px;
+  padding-left: 15px;
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+#passwordInfo{
+  text-align: center;
+  width: 100%;
+  font-size: 15px;
+  color: grey;
+}
+
+#registerButton {
+  font-size: 30px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
+#registerFooter{
+  display: none;
+  font-size: 20px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
+#resultSearch {
+  color: grey;
+  height: 30px;
+  width: 80%;
+  border-radius: 1px;
+  border: white;
+  padding: 25px;
+  font-size: 20px;
+}
+
+#FavPageButton {
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  font-size: 15px;
+}
+
+#FavImage {
+  background-image: url('./images/heart.png');
+  background-position-x: center;
+  background-size: 100px;
+  height: 70px;
+  background-repeat: no-repeat;
+}
+
+#AccountSettings {
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  font-size: 15px;
+}
+
+#AccountImage {
+  background-image: url('./images/user.png');
+  background-position-x: center;
+  background-size: 50px;
+  height: 55px;
+  background-repeat: no-repeat;
+}
+
+#List {
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  font-size: 15px;
+}
+
+#ListImage {
+  background-image: url('./images/list.png');
+  background-position-x: center;
+  background-size: 60px;
+  height: 50px;
+  background-repeat: no-repeat;
+}
+
+#FilterArea {
+  height: 400px;
+  width: 20%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#FilterDropDowns {
+  font-weight: normal;
+}
+
+#Results {
+  background-color: grey;
+  width: 80%;
+  height: 710px;
+  display: none;
+}
+
+#FiltersChosen {
+  font-size: 20px;
+  width: 100%;
+}
+
+#NumberOfResults {
+  text-align: left;
+  font-size: 20px;
+}
+
+#FavHeader {
+  margin: 0 auto;
+  width: 100%;
+  align-items: center;
+}
+
+#HeartImage {
+  background-image: url('./images/orangeheart.png');
+  background-size: 120px;
+  background-repeat: no-repeat;
+  width: 50%;
+  height: 120px;
+  background-position-x: 100%;
+}
+
+#biggerHeartImage {
+
+  background-image: url('./images/orangeheart.png');
+  background-size: 250px;
+  background-repeat: no-repeat;
+  height: 150px;
+  background-position-x: center;
+  background-position-y: 50%;
+}
+
+#FavBody {
+  width: 100%;
+  height: 68.2%;
+  background-color: #F2F2F2;
+  font-weight: normal;
+  font-size: 20px;
+}
+
+#listHeader {
+  text-align: center;
+}

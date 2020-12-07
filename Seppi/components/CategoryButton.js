@@ -45,7 +45,10 @@ const CategoryButton = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status = await response.status;
@@ -56,7 +59,6 @@ const CategoryButton = (props) => {
 		}
 
 		let json = JSON.parse(await response.text());
-		console.log(json);
 		setState(state => ({ ...state, expiring: json.expiring}));
 	};
 
@@ -86,7 +88,8 @@ const CategoryButton = (props) => {
 			body: JSON.stringify({
 				category: props.header,
 				ingredient: ingredientText,
-				expiration: expirationText
+				expiration: expirationText,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -106,7 +109,10 @@ const CategoryButton = (props) => {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
-			}
+			},
+            body: JSON.stringify({
+                idToken: state.idToken
+            })
 		}).catch(error => console.error(error));
 
 		let status2 = await response2.status;
@@ -137,7 +143,8 @@ const CategoryButton = (props) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				category: props.header
+				category: props.header,
+				idToken: state.idToken
 			})
 		}).catch(error => console.error(error));
 
@@ -237,6 +244,7 @@ const styles = StyleSheet.create({
 	collapsedContainer: {
 		flexDirection: 'column',
 		width: deviceWidth,
+		height: 'auto',
 	},
 	header: {
 		flexDirection: 'row',
@@ -253,6 +261,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		lineHeight: 24,
 		textAlign: 'left',
+		width: deviceWidth * 0.8,
 		textAlignVertical: 'center',
 		marginLeft: 15,
 	},
