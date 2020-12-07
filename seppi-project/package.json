@@ -30,7 +30,7 @@
     "supertest": "^6.0.1"
   },
   "scripts": {
-    "test": "jest server.test.js",
+    "test": "jest server.test.js --forceExit",
     "build": "react-scripts build",
     "start": "node server.js",
     "start-dev": "react-scripts start",
@@ -38,6 +38,10 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node"
   },
   "browserslist": {
     "production": [

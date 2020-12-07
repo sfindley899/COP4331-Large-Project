@@ -15,6 +15,12 @@ const express = require('express')
 const request = require('supertest')
 const server = require('./server')
 
+// Information used in tests that is gained in previous tests
+let idToken;
+let recipe;
+
+//jest.setTimeout(30000);
+
 // Simple test for sanity
 test('Tests if server is running by checking the /user endpoint', async () => {
     // Sends GET request to /user endpoint
@@ -29,8 +35,10 @@ test('Tests if server is running by checking the /user endpoint', async () => {
 test('Login User with correct credentials and verified email', async () => {
     const res = await request(server).post('/login').send({"email":"lap65222@cuoly.com", "password":"8xkI7cX$oJUnT5fzp3D!xj"})
 
+    // Grabs the idToken to be used in other tests
+    idToken = res.body.idToken;
+
     expect(res.status).toBe(200)
-    expect(res.body.name).toBe(null)
     expect(res.body.email).toBe("lap65222@cuoly.com")
 });
 
@@ -121,14 +129,100 @@ test('Create user with bad fields', async () => {
     expect(res.status).toBe(500)
 });
 
+//test.todo('Update Display Name');
 
+test('Update displayName', async () => {
+    // Generates a random 7 digit string
+    let displayName = Math.random().toString(36).substring(7)
+    const res = await request(server).post('/changeDisplayName').send({"displayName": displayName, "idToken": idToken})
 
-test('A test test', () => {
-    expect(1+1).toBe(2);
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Signout');
+
+test('Signout', async () => {
+    const res = await request(server).post('/signout')
+
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Search Recipe');
+
+// Didnt have any specific checks on the returned data as it is volatile
+// Storing one of the recipes for use in later tests
+test('Search recipe', async () => {
+    const res = await request(server).post('/searchRecipe').send({"idToken": idToken, "search": "chicken"})
+    recipe = res.body.hits[0].recipe;
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Add Favorite Recipe');
+
+// Didnt have any specific checks on the returned data as it is volatile
+test('Add favorite recipe', async () => {
+    const res = await request(server).post('/addFavorite').send({"recipe": recipe, "idToken": idToken})
+
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Delete Favorite Recipe');
+
+// Removes the one added in the previous test which acts as a check on both
+test('Remove favorite recipe', async () => {
+    const res = await request(server).post('/removeFavorite').send({"uri": recipe.uri, "idToken": idToken})
+
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Get Favorite Recipes');
+
+// Should be empty so there is nothing else to check
+test('Get favorite recipes', async () => {
+    const res = await request(server).post('/getFavorites').send({"idToken": idToken})
+
+    expect(res.status).toBe(200)
+});
+
+//test.todo('Add Ingredients');
+
+test('Add ingredients', async () => {
+    const res = await request(server).post('/addIngredient').send({"idToken": idToken, "category": "Refrigerator", "amount": "5", "ingredient": "Brocolli"})
+    expect(res.status).toBe(200)
+    expect(res.body.response).toBe("Added ingredient to database.")
+
+});
+
+//test.todo('Edit Ingredient');
+
+// Edits ingredient added above
+test('Edit ingredient', async () => {
+    const res = await request(server).post('/editIngredient').send({"idToken": idToken, "category": "Refrigerator", "ingredient": "Brocolli", "expiration": "No Expiration", "newIngredient": "Brocollii"})
+    expect(res.status).toBe(200)
+    expect(res.body.response).toBe("Edited ingredient.")
 });
 
 
+//test.todo('Delete Ingredient');
+
+// Removes the ingredient added above
+test('Remove ingredient', async () => {
+    const res = await request(server).post('/removeIngredient').send({"idToken": idToken, "category": "Refrigerator", "ingredient": "Brocollii"})
+    expect(res.status).toBe(200)
+    expect(res.body.response).toBe("Deleted Ingredient.")
+});
+
+//Doesnt exsist
+//test.todo('Sort Ingredients');
+
+// Sanity test for Jest working
+test('Sanity test', () => {
+    expect(1+1).toBe(2);
+});
+
+// Doesnt work properly because firebase has a documented issue with freeing resources
 afterAll(done => {
-    server.close()
+    console.log("closing server")
+    server.close();
     done()
 });
