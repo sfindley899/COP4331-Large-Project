@@ -101,7 +101,7 @@ const [signUpResult, setSignUpResult] = useState('');
 
 const handleRegChange = event => {
     setRegData({
-      ...data,
+      ...regdata,
       [event.target.name]: event.target.value
     });
   };
@@ -112,6 +112,8 @@ const doRegister = async event => {
 
     // Validate input data
 		if (regdata.password !== regdata.confirmPassword) {
+      var password = document.getElementById("registerFooter");
+      password.style.display = "block";
 			setSignUpResult('Passwords don\'t match.');
 			return;
     }

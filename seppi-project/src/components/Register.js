@@ -18,8 +18,8 @@ const Register =() => {
 
     const regState = {
         firstName: "",
-          lastName: "",
-          email: "",
+        lastName: "",
+        email: "",
         password: "",
         confirmPassword: ""      
     };
@@ -40,6 +40,8 @@ const Register =() => {
     
         // Validate input data
             if (regdata.password !== regdata.confirmPassword) {
+                var password = document.getElementById("registerFooter");
+                password.style.display = "block";
                 setSignUpResult('Passwords don\'t match.');
                 return;
         }
@@ -60,20 +62,20 @@ const Register =() => {
         
             let status = await response.status;
             if (status === 200) {
-          var x = document.getElementById("registerFooter");
-          x.style.display = "block";
+                var x = document.getElementById("registerFooter");
+                x.style.display = "block";
                 setSignUpResult('Please confirm your email address by clicking the link we sent you.');
                 return;
         }
             else if (status === 400) {
-          var y = document.getElementById("registerFooter");
-          y.style.display = "block";
+                var y = document.getElementById("registerFooter");
+                y.style.display = "block";
                 setSignUpResult('This email is already registered.');
                 return;
             }
             else {
-          var z = document.getElementById("registerFooter");
-          z.style.display = "block";
+                var z = document.getElementById("registerFooter");
+                z.style.display = "block";
                 setSignUpResult('Failed to create account due to internal server error.');
                 return;
             }
@@ -145,7 +147,7 @@ const Register =() => {
                 <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
                     Go Home
                 </Link>
-                <div id="registerFooter">
+                <div id="registerFooter" style={{backgroundColor: "white", color: "black"}}>
                     {signUpResult}
                 </div>
             </div>
