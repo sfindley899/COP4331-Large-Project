@@ -3,7 +3,7 @@ import PageTitle from './PageTitle';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import { Link } from 'react-router-dom'
-import {AuthContext, UserContext}from '../context'
+import {UserContext}from '../context'
 import {useState, useContext} from 'react';
 
 const LoginPage = () => {
@@ -11,7 +11,6 @@ const LoginPage = () => {
   // User's login status
   const [state, setState] = useContext(UserContext);
   const [loginResult, setLoginResult] = useState('');
-
 
   // Login button handler
   const [show, setShowLogin] = React.useState(false);
@@ -34,12 +33,13 @@ const LoginPage = () => {
     }
   }
 
-  // login state
-  const initialState = {
+  const loginState = {
+    name: "",
     email: "",
     password: "",
   };
-  const [data, setData] = React.useState(initialState);
+
+  const [data, setData] = React.useState(loginState);
   const handleChange = event => {
     setData({
       ...data,
@@ -48,7 +48,9 @@ const LoginPage = () => {
   };
   const doLogin = async event => {
     event.preventDefault();
-  //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    alert(data.email);
+    alert(data.password);
 
     const response = await fetch(buildPath('login'), {
 			method: 'POST',
@@ -88,38 +90,34 @@ const LoginPage = () => {
 		}
   };
   
-// Register state
-  const regState = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: ""      
-};
-const [regdata, setRegData] = React.useState(regState);
+const [regdata, setRegData] = React.useState(UserContext);
 const [signUpResult, setSignUpResult] = useState('');
 
+const registerState = {
+  name: "",
+  email: "",
+  password: ""
+};
+
+const [data2, setData2] = React.useState(registerState);
 const handleRegChange = event => {
-    setRegData({
-      ...regdata,
-      [event.target.name]: event.target.value
-    });
-  };
+  setData2({
+    ...data2,
+    [event.target.name]: event.target.value
+  });
+};
 
 const doRegister = async event => {
     event.preventDefault();
-	//	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     // Validate input data
-		if (regdata.password !== regdata.confirmPassword) {
+		if (data2.password !== data2.confirmPassword) {
       var password = document.getElementById("registerFooter");
       password.style.display = "block";
 			setSignUpResult('Passwords don\'t match.');
 			return;
     }
 
-    let name = regdata.firstName + ' ' + regdata.lastName;
-    
 		const response = await fetch(buildPath('register'), {
 			method: 'POST',
 			headers: {
@@ -127,9 +125,9 @@ const doRegister = async event => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: name,
-				email: regdata.email,
-				password: regdata.password
+				name: data2.name,
+				email: data2.email,
+				password: data2.password
 			})
 		})
     .catch((error) => console.error(error));
@@ -305,18 +303,10 @@ const doRegister = async event => {
           <form  onSubmit={doRegister}>
             <input type="text"
               className="form-control mt-2"
-              id="firstname"
-              placeholder="Firstname"
-              name="firstName"
-              value={regdata.firstName}
-              onChange={handleRegChange}
-              required />
-            <input type="text"
-              className="form-control mt-2"
-              id="lastname"
-              name="lastName"
-              placeholder="Lastname"
-              value={regdata.lastName}
+              id="name"
+              placeholder="Name"
+              name="name"
+              value={data2.name}
               onChange={handleRegChange}
               required />
             <input
@@ -325,7 +315,7 @@ const doRegister = async event => {
               id="email"
               name="email"
               placeholder="Email"
-              value={regdata.email}
+              value={data2.email}
               onChange={handleRegChange}
               required />
             <input
@@ -334,7 +324,7 @@ const doRegister = async event => {
               id="password"
               name="password"
               placeholder="Enter Password"
-              value={regdata.password}
+              value={data2.password}
               onChange={handleRegChange}
               required />
             <input
@@ -343,7 +333,7 @@ const doRegister = async event => {
               id="PasswordConfirm"
               name="confirmPassword"
               placeholder="Confirm Password"
-              value={regdata.confirmPassword}
+              value={data2.confirmPassword}
               onChange={handleRegChange}
               required />
             <div id="passwordInfo" className="mt-2">
