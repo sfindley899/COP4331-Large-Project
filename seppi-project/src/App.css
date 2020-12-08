@@ -619,6 +619,18 @@ body {
   width: 100%;
 }
 
+.SearchForm {
+  width: 200px !important;
+  font: Roboto !important;
+}
+
+.navbar-container {
+  position: sticky;
+  top: 0;
+  min-height: 100%;
+  overflow: auto;
+}
+
 .navbar-brand {
   padding: 0 15px;
   font-weight: bold;
@@ -628,10 +640,9 @@ body {
 
 .filter-box {
   position: absolute;
-  width: 20%;
-  height: 90%;
+  width: 16%;
   left: 31px;
-  top: 95px;
+  top: 110px;
 }
 
 #FilterTitle {
@@ -662,4 +673,15 @@ body {
   letter-spacing: 0.2px;
 
   color: #fa730b;
+}
+
+#FilterDivider {
+  position: absolute;
+  height: 0px;
+  left: 0px;
+  right: 0px;
+  /* top: 492px; */
+
+  /* Black / 10 */
+  border: 1px solid #e8e8e8;
 }

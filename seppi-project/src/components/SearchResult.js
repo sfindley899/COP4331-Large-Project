@@ -5,7 +5,6 @@ import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import {makeStyles, withStyles, ListSubheader, List, ListItem, ListItemText, Collapse, Checkbox, FormControlLabel, FormGroup, createMuiTheme} from '@material-ui/core'
 import {ExpandLess, ExpandMore, CheckBoxOutlineBlank, CheckBox} from '@material-ui/icons'
 import { grey, orange } from '@material-ui/core/colors';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
 const SearchResult =() => {
 
@@ -156,17 +155,6 @@ const SearchResult =() => {
     );
   }
 
-  const theme = createMuiTheme({
-    props: {
-      // Name of the component
-      MuiButtonBase: {
-        // The properties to apply
-        disableRipple: true, // No more ripple, on the whole application 💣!
-        disableTouchRipple: true,
-      }
-    }
-  });
-
   // Filter Folder Styles
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -217,9 +205,10 @@ const SearchResult =() => {
     <div>
 
       {/* Navigation Bar */}
-      <Navbar collapseOnSelect 
+      <Navbar collapseOnSelect
         class= "navbar"
         sticky= "top"
+        top="0"
         expand="sm" 
         variant="dark"
       >
@@ -250,13 +239,14 @@ const SearchResult =() => {
           }
           className={classes.root}
         >
+          <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickMealandCourse}>
             <ListItemText primary="Meal and Course" id="FilterFolder"/>
             {openMealandCourse ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openMealandCourse} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem className={classes.nested}>
                 <FormGroup>
                   <FormControlLabel
                     control={<OrangeCheckbox checked={filterState.dinner} onChange={handleChange} name="dinner" />}
@@ -282,14 +272,14 @@ const SearchResult =() => {
               </ListItem>
             </List>
           </Collapse>
-
+          <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickDishType}>
             <ListItemText primary="Dish Type" id="FilterFolder"/>
             {openDishType ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openDishType} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
+            <ListItem className={classes.nested}>
                 <FormGroup>
                   <FormControlLabel
                     control={<OrangeCheckbox checked={filterState.alcoholcocktail} onChange={handleChange} name="alcoholcocktail" />}
@@ -363,14 +353,14 @@ const SearchResult =() => {
               </ListItem>
             </List>
           </Collapse>
-
+          <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickDietaryConcerns}>
             <ListItemText primary="Dietary Concerns" id="FilterFolder"/>
             {openDietaryConcerns ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openDietaryConcerns} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
+              <ListItem className={classes.nested}>
                 <FormGroup>
                   <FormControlLabel
                     control={<OrangeCheckbox checked={filterState.balanced} onChange={handleChange} name="balanced" />}
@@ -520,34 +510,266 @@ const SearchResult =() => {
               </ListItem>
             </List>
           </Collapse>
-
+          <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickIngredients}>
             <ListItemText primary="Ingredients" id="FilterFolder"/>
             {openIngredients ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openIngredients} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemText primary="Dinner" />
+              <ListItem className={classes.nested}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.chicken} onChange={handleChange} name="chicken" />}
+                    label="Chicken"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.beef} onChange={handleChange} name="beef" />}
+                    label="Beef"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.fishingredient} onChange={handleChange} name="fishingredient" />}
+                    label="Fish"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.pork} onChange={handleChange} name="pork" />}
+                    label="Pork"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.vegetable} onChange={handleChange} name="vegetable" />}
+                    label="Vegetable"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.turkey} onChange={handleChange} name="turkey" />}
+                    label="Turkey"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.apple} onChange={handleChange} name="apple" />}
+                    label="Apple"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.bean} onChange={handleChange} name="bean" />}
+                    label="Bean"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.broccoli} onChange={handleChange} name="broccoli" />}
+                    label="Broccoli"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.cabbage} onChange={handleChange} name="cabbage" />}
+                    label="Cabbage"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.carrot} onChange={handleChange} name="carrot" />}
+                    label="Carrot"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.chocolate} onChange={handleChange} name="chocolate" />}
+                    label="Chocolate"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.citrus} onChange={handleChange} name="citrus" />}
+                    label="Citrus"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.cranberry} onChange={handleChange} name="cranberry" />}
+                    label="Cranberry"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.duck} onChange={handleChange} name="duck" />}
+                    label="Duck"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.eggingredient} onChange={handleChange} name="eggingredient" />}
+                    label="Egg"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.eggplant} onChange={handleChange} name="eggplant" />}
+                    label="Eggplant"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.fruit} onChange={handleChange} name="fruit" />}
+                    label="Fruit"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.greenbean} onChange={handleChange} name="greenbean" />}
+                    label="Green Bean"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.groundbeef} onChange={handleChange} name="groundbeef" />}
+                    label="Ground Beef"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.ham} onChange={handleChange} name="ham" />}
+                    label="Ham"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.kale} onChange={handleChange} name="kale" />}
+                    label="Kale"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.lamb} onChange={handleChange} name="lamb" />}
+                    label="Lamb"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.leafygreen} onChange={handleChange} name="leafygreen" />}
+                    label="Leafy Green"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.lemon} onChange={handleChange} name="lemon" />}
+                    label="Lemon"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.mushroom} onChange={handleChange} name="mushroom" />}
+                    label="Mushroom"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.pasta} onChange={handleChange} name="pasta" />}
+                    label="Pasta"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.potato} onChange={handleChange} name="potato" />}
+                    label="Potato"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.poultry} onChange={handleChange} name="poultry" />}
+                    label="Poultry"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.rice} onChange={handleChange} name="rice" />}
+                    label="Rice"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.salmon} onChange={handleChange} name="salmon" />}
+                    label="Salmon"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.scallop} onChange={handleChange} name="scallop" />}
+                    label="Scallop"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.seafood} onChange={handleChange} name="seafood" />}
+                    label="Seafood"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.shellfishingredient} onChange={handleChange} name="shellfishingredient" />}
+                    label="Shellfish"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.shrimp} onChange={handleChange} name="shrimp" />}
+                    label="Shrimp"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.spinach} onChange={handleChange} name="spinach" />}
+                    label="Spinach"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.sweetpotato} onChange={handleChange} name="sweetpotato" />}
+                    label="Sweet Potato"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.tomato} onChange={handleChange} name="tomato" />}
+                    label="Tomato"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.zucchini} onChange={handleChange} name="zucchini" />}
+                    label="Zucchini"
+                  />
+                </FormGroup>
               </ListItem>
             </List>
           </Collapse>
-
+          <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickCuisine}>
             <ListItemText primary="Cuisine" id="FilterFolder"/>
             {openCuisine ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openCuisine} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemText primary="Dinner" />
+              <ListItem className={classes.nested}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.american} onChange={handleChange} name="american" />}
+                    label="American"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.asian} onChange={handleChange} name="asian" />}
+                    label="Asian"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.british} onChange={handleChange} name="british" />}
+                    label="British"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.caribbean} onChange={handleChange} name="caribbean" />}
+                    label="Caribbean"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.centraleurope} onChange={handleChange} name="centraleurope" />}
+                    label="Central Europe"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.chinese} onChange={handleChange} name="chinese" />}
+                    label="Chinese"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.easterneurope} onChange={handleChange} name="easterneurope" />}
+                    label="Eastern Europe"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.french} onChange={handleChange} name="french" />}
+                    label="French"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.indian} onChange={handleChange} name="indian" />}
+                    label="Indian"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.italian} onChange={handleChange} name="italian" />}
+                    label="Italian"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.japanese} onChange={handleChange} name="japanese" />}
+                    label="Japanese"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.koshercuisine} onChange={handleChange} name="koshercuisine" />}
+                    label="Kosher"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.mediterranean} onChange={handleChange} name="mediterranean" />}
+                    label="Mediterranean"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.mexican} onChange={handleChange} name="mexican" />}
+                    label="Mexican"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.middleeastern} onChange={handleChange} name="middleeastern" />}
+                    label="Middle Eastern"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.nordic} onChange={handleChange} name="nordic" />}
+                    label="Nordic"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.southamerican} onChange={handleChange} name="southamerican" />}
+                    label="South American"
+                  />
+                  <FormControlLabel
+                    control={<OrangeCheckbox checked={filterState.southeastasian} onChange={handleChange} name="southeastasian" />}
+                    label="South East Asian"
+                  />
+                </FormGroup>
               </ListItem>
             </List>
           </Collapse>
+          <div id="FilterDivider"></div>
         </List>
       </div>
       
-
+      {/* Filter Tags */}
+      
 
 
     </div>
