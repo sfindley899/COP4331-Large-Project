@@ -18,16 +18,21 @@ const Login=() => {
             return 'http://localhost:5000/' + route;
         }
     }
+    const loginState = {
+      name: "",
+      email: "",
+      password: "",
+    };
+  
+    const [data, setData] = React.useState(loginState);
     const handleChange = event => {
-      setState({
-        ...state,
+      setData({
+        ...data,
         [event.target.name]: event.target.value
       });
     };
     const doLogin = async event => {
       event.preventDefault();
-    //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
       const response = await fetch(buildPath('login'), {
         method: 'POST',
         headers: {
@@ -35,8 +40,8 @@ const Login=() => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: state.email,
-          password: state.password
+          email: data.email,
+          password: data.password
         })
       })
       .catch((error) => console.error(error));
@@ -75,7 +80,7 @@ const Login=() => {
         <div className="form-group">
           <input
             placeholder="Email"
-            value={state.email}
+            value={data.email}
             onChange={handleChange}
             name="email"
             type="email"
@@ -88,7 +93,7 @@ const Login=() => {
         <div className="form-group">
           <input
             placeholder="Password"
-            value={state.password}
+            value={data.password}
             onChange={handleChange}
             name="password"
             type="password"
