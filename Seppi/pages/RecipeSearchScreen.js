@@ -35,6 +35,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [filterVisible, setFilterVisible] = useState(false);
 	const [recipeVisible, setRecipeVisible] = useState(false);
 	const [currentItem, setCurrentItem] = useState({recipe : {}});
+	const [from, setFrom] = useState(0);
+	const [to, setTo] = useState(10);
 
 	// Meal filters
 	const defaultMealFilters = {
@@ -101,6 +103,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
 
 	const searchRecipe = async () => {
+		console.log(from, to);
+
 		const response = await fetch(buildPath('searchRecipe'), {
 			method: 'POST',
 			headers: {
@@ -110,14 +114,18 @@ const RecipeSearchScreen = ({ navigation }) => {
 			body: JSON.stringify({
 				search: searchText,
 				filters: filterText,
-				idToken: state.idToken
+				idToken: state.idToken,
+				from: from,
+				to: to
 			})
 		})
 		.catch((error) => console.error(error));
 
 		let json = JSON.parse(await response.text());
 
-		setSearchData(json.hits);
+		setSearchData(searchData.concat(json.hits));
+		setFrom(to + 1);
+		setTo(to + 10);
 	};
 
 	function getTags(item) {
@@ -620,7 +628,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const addFavorite = async () => {
 		currentItem.bookmarked = true;
 		for (let i = 0; i < searchData.length; ++i) {
-			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+			if (searchData[i].recipe.shareAs === currentItem.recipe.shareAs) {
 				searchData[i].bookmarked = true;
 				setSearchData(state => searchData);
 				break;
@@ -656,7 +664,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 		// Update search data state.
 		currentItem.bookmarked = false;
 		for (let i = 0; i < searchData.length; ++i) {
-			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+			if (searchData[i].recipe.shareAs === currentItem.recipe.shareAs) {
 				searchData[i].bookmarked = false;
 				setSearchData(state => searchData);
 				break;
@@ -670,7 +678,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				uri: currentItem.recipe.uri,
+				shareAs: currentItem.recipe.shareAs,
 				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
@@ -771,9 +779,9 @@ const RecipeSearchScreen = ({ navigation }) => {
 			>
 				<SearchResult 
 					bookmarked={item.bookmarked}
-					mealType={item.recipe.mealType}
-					cuisineType={item.recipe.cuisineType}
-					dishType={item.recipe.dishType}
+					mealType={(item.recipe.mealType === undefined) ? 'unknown' : item.recipe.mealType}
+					cuisineType={(item.recipe.cuisineType === undefined) ? 'unknown' : item.recipe.cuisineType}
+					dishType={(item.recipe.dishType === undefined) ? 'unknown' : item.recipe.dishType}
 					tags={getTags(item)} 
 					ingredients={item.recipe.ingredientLines} 
 					image={item.recipe.image} 
@@ -784,9 +792,18 @@ const RecipeSearchScreen = ({ navigation }) => {
 	};
 
 	const SearchIcons = () => {
+		const handleSearch = () => {
+			setFrom(0);
+			setTo(10);
+			searchData.length = 0;
+			searchRecipe();
+		};
+
 		return (
 			<View style={{flexDirection: 'row'}}>
-				<TouchableOpacity activeOpacity={0.5} onPress={searchRecipe}>
+				<TouchableOpacity activeOpacity={0.5} 
+					onPress={handleSearch}
+				>
 					<Icon 
 						name="arrow-right"
 						size={28}
@@ -903,14 +920,16 @@ const RecipeSearchScreen = ({ navigation }) => {
 						style={{width: '100%', marginBottom: 200}}
 						data={searchData}
 						renderItem={renderSearchResult}
-						keyExtractor={(item) => item.recipe.uri}
+						keyExtractor={(item, index) => item.recipe.shareAs + index}
+						onEndReached={searchRecipe}
+						onEndReachedThreshold={0.5}
 					/> 
 				) : (
 					<FlatList 
 						style={{width: '100%', marginBottom: 200}}
 						data={favoritesData}
 						renderItem={renderSearchResult}
-						keyExtractor={(item) => item.recipe.uri}
+						keyExtractor={(item, index) => item.recipe.shareAs + index}
 					/>
 				)}
 			</SafeAreaView>

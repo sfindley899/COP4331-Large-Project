@@ -258,16 +258,16 @@ app.post('/addFavorite', async (req, res) => {
     const uid = decodedToken.uid;
 
 
-      let origString = req.body.recipe.uri;
+      let origString = req.body.recipe.shareAs;
       let replacementString = '_S';
-      let uri =  origString.replace(/\//g, replacementString);
+      let shareAs =  origString.replace(/\//g, replacementString);
 
       // Add the recipe JSON object to user's favorites list.
       let userRef = db.collection('users').doc(uid);
-      await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body);
+      await userRef.collection('BookmarkedRecipes').doc(shareAs).set(req.body);
 
       // Return the newly added favorite JSON.
-      const recipeRef = userRef.collection('BookmarkedRecipes').doc(uri);
+      const recipeRef = userRef.collection('BookmarkedRecipes').doc(shareAs);
       const recipeDoc = await recipeRef.get();
 
       if (!recipeDoc.exists) {
@@ -291,14 +291,14 @@ app.post('/removeFavorite', async (req, res) => {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
     const uid = decodedToken.uid;
-      let origString = req.body.uri;
+      let origString = req.body.shareAs;
       let replacementString = '_S';
-      let uri =  origString.replace(/\//g, replacementString);
+      let shareAs =  origString.replace(/\//g, replacementString);
 
       let userRef = db.collection('users').doc(uid);
 
       const favoritesRef = userRef.collection('BookmarkedRecipes');
-      await favoritesRef.doc(uri).delete();
+      await favoritesRef.doc(shareAs).delete();
 
       // Return the new favorite docs as a response.
       const favoritesDocs = await favoritesRef.get();
@@ -351,7 +351,6 @@ app.post('/getFavorites', async (req, res) => {
                     });
 
                   }
-                  console.log(arr);
       const favoritesRef = userRef.collection('BookmarkedRecipes');
       const favoritesDocs = await favoritesRef.get();
       let docs = [];
@@ -389,11 +388,11 @@ app.post('/getFavorites', async (req, res) => {
               recipe.match = match
               recipe.not = not;
               recipe.ratio = ratio;
-              let origString = doc.data().recipe.uri;
+              let origString = doc.data().recipe.shareAs;
               let replacementString = '_S';
-              let uri =  origString.replace(/\//g, replacementString);
+              let shareAs =  origString.replace(/\//g, replacementString);
 
-              userRef.collection('BookmarkedRecipes').doc(uri).update({recipe: recipe});
+              userRef.collection('BookmarkedRecipes').doc(shareAs).update({recipe: recipe});
 
       });
       favoritesDocs.forEach(doc => {
@@ -447,11 +446,10 @@ app.post('/searchRecipe', async (req, res) => {
                   });
 
                 }
-                console.log(arr)
     // Add the favorited URI's to a set.
     let docSet = new Set();
     favoritesDocs.forEach(doc => {
-      docSet.add(doc.data().recipe.uri);
+      docSet.add(doc.data().recipe.shareAs);
     });
 
     var apikey = process.env.RECIPE_API_KEY
@@ -528,7 +526,7 @@ app.post('/searchRecipe', async (req, res) => {
                 data.hits[i].recipe.not = not
                 data.hits[i].recipe.ratio = ratio / total
                 array2.push(array1)
-              if (docSet.has(data.hits[i].recipe.uri)) {
+              if (docSet.has(data.hits[i].recipe.shareAs)) {
                 data.hits[i].bookmarked = true;
               }
             }

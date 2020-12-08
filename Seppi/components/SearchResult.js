@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
 	},
 	topTextContainer: {
 		flexDirection: 'row',
+		flexWrap: 'wrap',
 		width: '100%',
 	},
 });
