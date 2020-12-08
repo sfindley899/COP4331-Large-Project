@@ -29,13 +29,8 @@ const ForgotPassword =() => {
 	const [resetResult, setResetResult] = React.useState('');
 
     const resetPassword = async event => {
-<<<<<<< HEAD
 		event.preventDefault();
 
-=======
-        event.preventDefault();
-        
->>>>>>> b25fb08064b9b5526bafb20d3bbab173ab273872
 		const response = await fetch(buildPath('resetPassword'), {
 			method: 'POST',
 			headers: {
@@ -53,21 +48,15 @@ const ForgotPassword =() => {
 
 		if (status === 200)
 		{
-<<<<<<< HEAD
-=======
             var x = document.getElementById("loginFooter");
             x.style.display = "block";
->>>>>>> b25fb08064b9b5526bafb20d3bbab173ab273872
 			setResetResult('Email to reset your password was sent.');
 			return;
 		}
 		else
 		{
-<<<<<<< HEAD
-=======
             var x = document.getElementById("loginFooter");
             x.style.display = "block";
->>>>>>> b25fb08064b9b5526bafb20d3bbab173ab273872
 			setResetResult('This email is not associated with a Seppi account.');
 			return;
 		}
