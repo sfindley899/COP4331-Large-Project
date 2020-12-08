@@ -22,7 +22,7 @@ const NotSignedIn =() => {
               </form>
             </div>
             <div style={{width: "25%", height: "100px",paddingTop: "5px", textAlign: "center"}}>
-              <button id="FavPageButton" onClick={() => alert("Hello")}>
+              <button id="FavPageButton" onClick={() => console.log("Hello")}>
                 <div id = "FavImage"></div>
                 Favorites
               </button>

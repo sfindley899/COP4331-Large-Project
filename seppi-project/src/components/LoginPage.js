@@ -49,9 +49,6 @@ const LoginPage = () => {
   const doLogin = async event => {
     event.preventDefault();
 
-    alert(data.email);
-    alert(data.password);
-
     const response = await fetch(buildPath('login'), {
 			method: 'POST',
 			headers: {
@@ -64,6 +61,7 @@ const LoginPage = () => {
 			})
 		})
     .catch((error) => console.error(error));
+
     let status = await response.status;
     if (status === 200) {
       var res = JSON.parse(await response.text());
