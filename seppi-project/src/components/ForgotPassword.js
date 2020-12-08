@@ -29,8 +29,8 @@ const ForgotPassword =() => {
 	const [resetResult, setResetResult] = React.useState('');
 
     const resetPassword = async event => {
-        event.preventDefault();
-        
+		event.preventDefault();
+
 		const response = await fetch(buildPath('resetPassword'), {
 			method: 'POST',
 			headers: {
