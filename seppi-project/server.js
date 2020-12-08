@@ -136,7 +136,7 @@ app.post('/register', (req, res) => {
   });
 
   app.post('/resetPassword', (req, res) => {
-    
+
     var auth = firebase.auth();
     var emailAddress = "";
     if (req.body.email !== undefined)
@@ -468,7 +468,7 @@ app.post('/searchRecipe', async (req, res) => {
     }
     if (req.body.to != null)
     {
-        to = req.body.from;
+        to = req.body.to;
     }
     /* or if you want to send page and size of each page. where page 0 is starting.
     page = req.body.page;
