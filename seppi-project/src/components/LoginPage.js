@@ -180,9 +180,35 @@ const doRegister = async event => {
       </div>
       <div className="subBody">
         <div>
-          <div className="Suggestions" style={{ color: 'black' }}>
-            Suggested Recipes
+
+
+        <div class="SuggestionsHeading">
+          Suggested Recipes
+          <br/>
+          <br/>
+          <div class="Suggestions">
+                <div class = "leftPicture">
+                  <div class = "leftDescription">
+                    <h2>Spring Chicken Recipe</h2>
+                    <p id="grayText">You have the ingredients: Chicken, Onion</p>
+                    <p id="grayText">You are missing the ingredients: Basil, Pasta</p>
+                  </div> 
+                </div>
+                <div class = "middlePicture">
+                  <div class = "middleDescription">
+                    <h2>Test Title</h2>
+                    <p id="grayText">Don't eat my cat</p>
+                  </div> 
+                </div>
+                <div class = "rightPicture">
+                  <div class = "rightDescription">
+                    <h2>Test Title</h2>
+                    <p id="grayText">Test Description Right</p>
+                  </div> 
+                </div>
           </div>
+        </div>
+
           <div class = "Icons">
                 <div class = "leftIcon">
                   <div class = "leftInfo">
