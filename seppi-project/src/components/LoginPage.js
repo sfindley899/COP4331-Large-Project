@@ -49,9 +49,6 @@ const LoginPage = () => {
   const doLogin = async event => {
     event.preventDefault();
 
-    alert(data.email);
-    alert(data.password);
-
     const response = await fetch(buildPath('login'), {
 			method: 'POST',
 			headers: {
@@ -64,6 +61,7 @@ const LoginPage = () => {
 			})
 		})
     .catch((error) => console.error(error));
+
     let status = await response.status;
     if (status === 200) {
       var res = JSON.parse(await response.text());
@@ -221,7 +219,7 @@ const doRegister = async event => {
                   <br/>
                   <br/>
                   <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
-                  <button id = "submitEmailButton">Sign Up</button>
+                  <button id = "submitEmailButton" onClick={handleShowRegister} >Sign Up</button>
                   <br/>
                   <br/>
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
