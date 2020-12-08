@@ -17,6 +17,7 @@ const Register =() => {
     }
 
     const regState = {
+        name: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -45,7 +46,8 @@ const Register =() => {
                 setSignUpResult('Passwords don\'t match.');
                 return;
         }
-        
+            let name = regdata.firstName + " " + regdata.lastName;
+
             const response = await fetch(buildPath('register'), {
                 method: 'POST',
                 headers: {
@@ -53,7 +55,7 @@ const Register =() => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: regdata.name,
+                    name: name,
                     email: regdata.email,
                     password: regdata.password
                 })
@@ -61,6 +63,7 @@ const Register =() => {
         .catch((error) => console.error(error));
         
             let status = await response.status;
+            let json = JSON.parse(await response.text());
             if (status === 200) {
                 var x = document.getElementById("registerFooter");
                 x.style.display = "block";

@@ -117,6 +117,8 @@ const doRegister = async event => {
 			setSignUpResult('Passwords don\'t match.');
 			return;
     }
+
+    let name = regdata.firstName + ' ' + regdata.lastName;
     
 		const response = await fetch(buildPath('register'), {
 			method: 'POST',
@@ -125,7 +127,7 @@ const doRegister = async event => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: regdata.name,
+				name: name,
 				email: regdata.email,
 				password: regdata.password
 			})
