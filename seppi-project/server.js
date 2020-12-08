@@ -71,10 +71,10 @@ app.post('/register', (req, res) => {
       diet: '',
     });
 
-    return res.status(200).send(JSON.stringify({response:"Register successful email verification sent to " + req.body.email}));
+    return res.status(200).json({response:"Register successful email verification sent to " + req.body.email, status:200});
   })
   .catch(function(error) {
-    return res.status(400).send(JSON.stringify({response:error.message}));
+    return res.status(400).json({response:error.message, status: 400});
   });
 
 
@@ -93,12 +93,12 @@ app.post('/register', (req, res) => {
                       console.log("email not verified resending email");
 
                       user.sendEmailVerification().then(function() {
-                          return res.status(401).send(JSON.stringify({response:"email not verified"}));
+                          return res.status(401).json({response: 'email not verified', status: 401});
 
                  }).catch(function(error) {
                    // An error happened.
                    // this probably happens from too many requests to send email verification
-                   return res.status(401).send(JSON.stringify({response:error}));
+                   return res.status(401).json({response:error.message, status: 401});
                  });
 
                   }
@@ -121,7 +121,7 @@ app.post('/register', (req, res) => {
                   // user not signed in
                 } else {
                   // No user is signed in.
-                    return res.status(400).send(JSON.stringify({response:"No User"}));
+                    return res.status(400).json({response:"No User", status: 400});
                 }
           }
           // catches when sign in has problems.
@@ -129,22 +129,27 @@ app.post('/register', (req, res) => {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        return res.status(400).send(JSON.stringify({response:error.message}));
+        return res.status(400).json({response:error.message, status: 400});
      });
  }
 
   });
 
   app.post('/resetPassword', (req, res) => {
-      var auth = firebase.auth();
 
-    var emailAddress = req.body.email;
+    var auth = firebase.auth();
+    var emailAddress = "";
+    if (req.body.email !== undefined)
+    {
+      emailAddress = req.body.email.replace(/[|&;$%"<>()+,]/g, "");
+    }
+
 
     auth.sendPasswordResetEmail(emailAddress).then(function() {
-        return res.status(200).send(JSON.stringify({response:"email ver sent"}));
+        return res.status(200).json({response:"email ver sent", status: 200});
         // Email sent.
   }).catch(function(error) {
-      return res.status(400).send(JSON.stringify({response:error}));
+      return res.status(400).json({response: error.message, status: 400});
 
   })
 });
@@ -253,16 +258,16 @@ app.post('/addFavorite', async (req, res) => {
     const uid = decodedToken.uid;
 
 
-      let origString = req.body.recipe.uri;
+      let origString = req.body.recipe.shareAs;
       let replacementString = '_S';
-      let uri =  origString.replace(/\//g, replacementString);
+      let shareAs =  origString.replace(/\//g, replacementString);
 
       // Add the recipe JSON object to user's favorites list.
       let userRef = db.collection('users').doc(uid);
-      await userRef.collection('BookmarkedRecipes').doc(uri).set(req.body);
+      await userRef.collection('BookmarkedRecipes').doc(shareAs).set(req.body);
 
       // Return the newly added favorite JSON.
-      const recipeRef = userRef.collection('BookmarkedRecipes').doc(uri);
+      const recipeRef = userRef.collection('BookmarkedRecipes').doc(shareAs);
       const recipeDoc = await recipeRef.get();
 
       if (!recipeDoc.exists) {
@@ -286,14 +291,14 @@ app.post('/removeFavorite', async (req, res) => {
         return res.status(400).send(JSON.stringify({response : 'No user'}));
     }
     const uid = decodedToken.uid;
-      let origString = req.body.uri;
+      let origString = req.body.shareAs;
       let replacementString = '_S';
-      let uri =  origString.replace(/\//g, replacementString);
+      let shareAs =  origString.replace(/\//g, replacementString);
 
       let userRef = db.collection('users').doc(uid);
 
       const favoritesRef = userRef.collection('BookmarkedRecipes');
-      await favoritesRef.doc(uri).delete();
+      await favoritesRef.doc(shareAs).delete();
 
       // Return the new favorite docs as a response.
       const favoritesDocs = await favoritesRef.get();
@@ -346,7 +351,6 @@ app.post('/getFavorites', async (req, res) => {
                     });
 
                   }
-                  console.log(arr);
       const favoritesRef = userRef.collection('BookmarkedRecipes');
       const favoritesDocs = await favoritesRef.get();
       let docs = [];
@@ -384,11 +388,11 @@ app.post('/getFavorites', async (req, res) => {
               recipe.match = match
               recipe.not = not;
               recipe.ratio = ratio;
-              let origString = doc.data().recipe.uri;
+              let origString = doc.data().recipe.shareAs;
               let replacementString = '_S';
-              let uri =  origString.replace(/\//g, replacementString);
+              let shareAs =  origString.replace(/\//g, replacementString);
 
-              userRef.collection('BookmarkedRecipes').doc(uri).update({recipe: recipe});
+              userRef.collection('BookmarkedRecipes').doc(shareAs).update({recipe: recipe});
 
       });
       favoritesDocs.forEach(doc => {
@@ -442,11 +446,10 @@ app.post('/searchRecipe', async (req, res) => {
                   });
 
                 }
-                console.log(arr)
     // Add the favorited URI's to a set.
     let docSet = new Set();
     favoritesDocs.forEach(doc => {
-      docSet.add(doc.data().recipe.uri);
+      docSet.add(doc.data().recipe.shareAs);
     });
 
     var apikey = process.env.RECIPE_API_KEY
@@ -463,7 +466,7 @@ app.post('/searchRecipe', async (req, res) => {
     }
     if (req.body.to != null)
     {
-        to = req.body.from;
+        to = req.body.to;
     }
     /* or if you want to send page and size of each page. where page 0 is starting.
     page = req.body.page;
@@ -509,7 +512,6 @@ app.post('/searchRecipe', async (req, res) => {
                         {
                             y = 1;
                             ratio++;
-                            total++;
                             match.push(data.hits[i].recipe.ingredients[j].food)
                         }
                     }
@@ -524,7 +526,7 @@ app.post('/searchRecipe', async (req, res) => {
                 data.hits[i].recipe.not = not
                 data.hits[i].recipe.ratio = ratio / total
                 array2.push(array1)
-              if (docSet.has(data.hits[i].recipe.uri)) {
+              if (docSet.has(data.hits[i].recipe.shareAs)) {
                 data.hits[i].bookmarked = true;
               }
             }
@@ -1156,16 +1158,86 @@ router.route('/register')
 router.route('/login')
   .post();
 
-router.route('/userInfo')
-    .post();
-
 router.route('/changeEmail')
-     .post();
+	.post();
+
+router.route('/resendEmailVerification')
+	.post();
+
+router.route('/searchRecipe')
+	.post();
+
+router.route('/addIngredient')
+	.post();
+
+router.route('/removeIngredient')
+	.post();
+
+router.route('/editIngredient')
+	.post();
+
+router.route('/addCategory')
+	.post();
+
+router.route('/removeCategory')
+	.post();
+
+router.route('/getCategories')
+	.post();
+
+router.route('/deleteIngredient')
+	.post();
+
+router.route('/getGrocery')
+	.post();
+
+router.route('/deleteGrocery')
+	.post();
+
+router.route('/addGrocery')
+	.post();
+
+router.route('/addGroceryArray')
+	.post();
+
+router.route('/updateGrocery')
+	.post();
+
+router.route('/lookupBarcode')
+	.post();
+
+router.route('/getExpiringIngredients')
+	.post();
+
+
+router.route('/getUser')
+	.post();
+
+router.route('/changeDisplayName')
+	.post();
+
+router.route('/userInfo')
+	.post();
+
+router.route('/userSet')
+	.post();
+
+router.route('/addFavorite')
+	.post();
+
+router.route('/getFavorites')
+	.post();
+
+router.route('/removeFavorite')
+    .post();
 
 router.route('/signout')
     .post();
 
 router.route('/resetPassword')
+	.post();
+
+router.route('/signout')
     .post();
 
 const server = app.listen(port, () => {

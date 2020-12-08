@@ -16,37 +16,32 @@ const Register =() => {
         }
     }
 
-    const regState = {
+    const registerState = {
         name: "",
-        firstName: "",
-        lastName: "",
         email: "",
         password: "",
-        confirmPassword: ""      
     };
 
-    const [regdata, setRegData] = React.useState(regState);
+    const [regdata, setRegData] = React.useState(UserContext);
     const [signUpResult, setSignUpResult] = useState('');
-    
+    const [data2, setData2] = React.useState(registerState);
+
     const handleRegChange = event => {
-        setRegData({
-          ...regdata,
+        setData2({
+          ...data2,
           [event.target.name]: event.target.value
         });
       };
 
     const doRegister = async event => {
         event.preventDefault();
-        //	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
         // Validate input data
-            if (regdata.password !== regdata.confirmPassword) {
+            if (data2.password !== data2.confirmPassword) {
                 var password = document.getElementById("registerFooter");
                 password.style.display = "block";
                 setSignUpResult('Passwords don\'t match.');
                 return;
         }
-            let name = regdata.firstName + " " + regdata.lastName;
 
             const response = await fetch(buildPath('register'), {
                 method: 'POST',
@@ -55,9 +50,9 @@ const Register =() => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: name,
-                    email: regdata.email,
-                    password: regdata.password
+                    name: data2.name,
+                    email: data2.email,
+                    password: data2.password
                 })
             })
         .catch((error) => console.error(error));
@@ -98,18 +93,10 @@ const Register =() => {
                 <form onSubmit={doRegister}>
                 <input type="text" 
                 className="form-control mt-2" 
-                id="firstname" 
-                placeholder="Firstname"
-                name="firstName"
-                value={regdata.firstName}
-                onChange={handleRegChange}
-                required/>
-                <input type="text" 
-                className="form-control mt-2" 
-                id="lastname" 
-                name="lastName"
-                placeholder="Lastname"
-                value={regdata.lastName}
+                id="name" 
+                placeholder="Name"
+                name="name"
+                value={data2.name}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -118,7 +105,7 @@ const Register =() => {
                 id="email" 
                 name="email"
                 placeholder="Email" 
-                value={regdata.email}
+                value={data2.email}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -127,7 +114,7 @@ const Register =() => {
                 id="password" 
                 name="password"
                 placeholder="Enter Password"
-                value={regdata.password}
+                value={data2.password}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -136,7 +123,7 @@ const Register =() => {
                 id="PasswordConfirm" 
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                value={regdata.confrirmPassword}
+                value={data2.confrirmPassword}
                 onChange={handleRegChange}
                 required/>
                 <div id = "passwordInfo" className="mt-2">
