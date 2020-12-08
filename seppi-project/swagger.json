@@ -430,6 +430,37 @@
   				  }
   			  }
   		  },
+          "/searchRecipeTop": {
+  			"post": {
+  			  "tags": [
+  				"Recipe"
+  			  ],
+  			  "description": "Changes user email",
+  			  "parameters": [
+  				{
+  				  "name": "search",
+  				  "in": "body",
+  				  "description": "User's email we want to change for the old one",
+  				  "schema": {
+  					"$ref": "#/definitions/searchRecipe"
+  				  }
+  				}
+  			  ],
+  			  "produces": [
+  				"application/json"
+  			  ],
+  			  "responses": {
+  				  "200":
+  				  {
+  					  "description": "Email changed need to verify"
+  				  },
+  				  "400":
+  				  {
+  					  "description": "Internal Server Error"
+  				  }
+  				  }
+  			  }
+  		  },
           "/userInfo": {
   			"post": {
   			  "tags": [
