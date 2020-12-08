@@ -603,3 +603,63 @@ body {
 #listHeader {
   text-align: center;
 }
+
+.navbar {
+  background-color: #fa730b;
+  height: 100;
+}
+
+#SearchSubmitButton {
+  background-color: #f9a00d;
+  border: #f9a00d;
+}
+
+#SearchBar {
+  justify-content: center;
+  width: 100%;
+}
+
+.navbar-brand {
+  padding: 0 15px;
+  font-weight: bold;
+  font: Roboto;
+  font-size: 2.25rem !important;
+}
+
+.filter-box {
+  position: absolute;
+  width: 20%;
+  height: 90%;
+  left: 31px;
+  top: 95px;
+}
+
+#FilterTitle {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 32px;
+
+  /* or 246% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: rgba(55, 63, 65, 0.85);
+}
+
+#FilterFolder {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 32px;
+
+  /* identical to box height, or 320% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: #fa730b;
+}
