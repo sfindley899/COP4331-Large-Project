@@ -3,13 +3,14 @@ import PageTitle from './PageTitle';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import { Link } from 'react-router-dom'
-import {UserContext}from '../context'
-import {useState, useContext} from 'react';
+import UserContext from '../context'
+import {useState} from 'react';
+import { useCookies } from 'react-cookie';
 
 const LoginPage = () => {
 
   // User's login status
-  const [state, setState] = useContext(UserContext);
+  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
   const [loginResult, setLoginResult] = useState('');
 
   // Login button handler
@@ -65,8 +66,10 @@ const LoginPage = () => {
     let status = await response.status;
     if (status === 200) {
       var res = JSON.parse(await response.text());
-      setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
-      window.location.href = '/SearchResult';
+
+      setCookie('name', res.name, {path: '/'});
+      setCookie('email', res.email, {path: '/'});
+      setCookie('idToken', res.idToken, {path: '/'});
     }
     else if (status === 400) {
       var x = document.getElementById("loginFooter");
@@ -85,7 +88,8 @@ const LoginPage = () => {
       z.style.display = "block";
 			setLoginResult('Failed to login to account due to internal server error.');
 			return;
-		}
+    }
+    window.location.href = '/SearchResult';
   };
   
 const [regdata, setRegData] = React.useState(UserContext);
