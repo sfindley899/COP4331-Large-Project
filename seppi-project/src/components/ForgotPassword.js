@@ -29,8 +29,8 @@ const ForgotPassword =() => {
 	const [resetResult, setResetResult] = React.useState('');
 
     const resetPassword = async event => {
-		event.preventDefault();
-
+        event.preventDefault();
+        
 		const response = await fetch(buildPath('resetPassword'), {
 			method: 'POST',
 			headers: {
@@ -48,11 +48,15 @@ const ForgotPassword =() => {
 
 		if (status === 200)
 		{
+            var x = document.getElementById("loginFooter");
+            x.style.display = "block";
 			setResetResult('Email to reset your password was sent.');
 			return;
 		}
 		else
 		{
+            var x = document.getElementById("loginFooter");
+            x.style.display = "block";
 			setResetResult('This email is not associated with a Seppi account.');
 			return;
 		}
@@ -67,7 +71,10 @@ const ForgotPassword =() => {
                 <p id="forgot-pass-prompt" style={{fontSize: "20px", width: "40%", margin: "0 auto"}}>
                 Please enter your email address below and we will send you a link and instructions to reset your password.
                 </p>
-                <input type="text" id="Email" className="form-control" style={{width: "40%", margin: "0 auto", fontSize: "25px"}} placeholder="Email" required/><br />
+                <input onChange={handleChange} value={text.email} name="email" type="email" id="Email" className="form-control" style={{width: "40%", margin: "0 auto", fontSize: "25px"}} placeholder="Email" required/><br />
+                 <div id="loginFooter">
+                    {resetResult}
+                </div>
                 <button id = "forgot" className="btn btn-success mt-2" style={{height: "50px", fontSize: "25px", backgroundColor: "orange", borderColor: "transparent", borderRadius: "10px", width: "40%"}}>
                     Reset Password
                 </button>
