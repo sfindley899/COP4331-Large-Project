@@ -27,11 +27,11 @@ test('Tests if server is running by checking the /user endpoint', async () => {
 //test.todo('Login User Endpoint');
 
 test('Login User with correct credentials and verified email', async () => {
-    const res = await request(server).post('/login').send({"email":"lap65222@cuoly.com", "password":"8xkI7cX$oJUnT5fzp3D!xj"})
+    const res = await request(server).post('/login').send({"email":"kaworet113@menece.com", "password":"8xkI7cX$oJUnT5fzp3D!xj"})
 
     expect(res.status).toBe(200)
-    expect(res.body.name).toBe(null)
-    expect(res.body.email).toBe("lap65222@cuoly.com")
+    expect(res.body.name).toBe("kaworet113")
+    expect(res.body.email).toBe("kaworet113@menece.com")
 });
 
 test('Login User with correct credentials with an unverified email', async () => {
