@@ -112,11 +112,7 @@ const doRegister = async event => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-<<<<<<< HEAD
-				name: regdata.Name,
-=======
 				name: name,
->>>>>>> 9c2f51c10c9fac1327c4c33361086f63bf1d9541
 				email: regdata.email,
 				password: regdata.password
 			})

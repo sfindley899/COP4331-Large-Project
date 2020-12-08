@@ -16,20 +16,13 @@ const Register =() => {
         }
     }
 
-<<<<<<< HEAD
-    const [regdata, setRegData] = React.useState(UserContext);
-=======
     const regState = {
         name: "",
-        firstName: "",
-        lastName: "",
         email: "",
         password: "",
-        confirmPassword: ""      
     };
 
     const [regdata, setRegData] = React.useState(regState);
->>>>>>> 9c2f51c10c9fac1327c4c33361086f63bf1d9541
     const [signUpResult, setSignUpResult] = useState('');
     
     const handleRegChange = event => {
