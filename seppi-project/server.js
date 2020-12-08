@@ -514,7 +514,6 @@ app.post('/searchRecipe', async (req, res) => {
                         {
                             y = 1;
                             ratio++;
-                            total++;
                             match.push(data.hits[i].recipe.ingredients[j].food)
                         }
                     }
