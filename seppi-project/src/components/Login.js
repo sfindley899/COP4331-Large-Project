@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState, useContext} from 'react';
 import {Link} from "react-router-dom"
 import {UserContext}from '../context'
-import {AuthContext, useContext} from 'react';
 
 const Login=() => {
     const app_name = 'seppi'
     // User's login status
     const [state, setState] = useContext(UserContext);
     const [loginResult, setLoginResult] = useState('');
-
 
     const buildPath=(route)=> {
         if (process.env.NODE_ENV === 'production') 
@@ -20,14 +18,9 @@ const Login=() => {
             return 'http://localhost:5000/' + route;
         }
     }
-    const initialState = {
-        email: "",
-        password: "",
-          };
-        const [data, setData] = React.useState(initialState);
     const handleChange = event => {
-      setData({
-        ...data,
+      setState({
+        ...state,
         [event.target.name]: event.target.value
       });
     };
@@ -42,8 +35,8 @@ const Login=() => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: data.email,
-          password: data.password
+          email: state.email,
+          password: state.password
         })
       })
       .catch((error) => console.error(error));
@@ -82,7 +75,7 @@ const Login=() => {
         <div className="form-group">
           <input
             placeholder="Email"
-            value={data.email}
+            value={state.email}
             onChange={handleChange}
             name="email"
             type="email"
@@ -95,7 +88,7 @@ const Login=() => {
         <div className="form-group">
           <input
             placeholder="Password"
-            value={data.password}
+            value={state.password}
             onChange={handleChange}
             name="password"
             type="password"

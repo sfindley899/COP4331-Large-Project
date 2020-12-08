@@ -16,15 +16,7 @@ const Register =() => {
         }
     }
 
-    const regState = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: ""      
-    };
-
-    const [regdata, setRegData] = React.useState(regState);
+    const [regdata, setRegData] = React.useState(UserContext);
     const [signUpResult, setSignUpResult] = useState('');
     
     const handleRegChange = event => {
@@ -95,18 +87,10 @@ const Register =() => {
                 <form onSubmit={doRegister}>
                 <input type="text" 
                 className="form-control mt-2" 
-                id="firstname" 
-                placeholder="Firstname"
-                name="firstName"
-                value={regdata.firstName}
-                onChange={handleRegChange}
-                required/>
-                <input type="text" 
-                className="form-control mt-2" 
-                id="lastname" 
-                name="lastName"
-                placeholder="Lastname"
-                value={regdata.lastName}
+                id="name" 
+                placeholder="Name"
+                name="Name"
+                value={regdata.name}
                 onChange={handleRegChange}
                 required/>
                 <input 

@@ -3,7 +3,7 @@ import PageTitle from './PageTitle';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import { Link } from 'react-router-dom'
-import {AuthContext, UserContext}from '../context'
+import {UserContext}from '../context'
 import {useState, useContext} from 'react';
 
 const LoginPage = () => {
@@ -11,7 +11,6 @@ const LoginPage = () => {
   // User's login status
   const [state, setState] = useContext(UserContext);
   const [loginResult, setLoginResult] = useState('');
-
 
   // Login button handler
   const [show, setShowLogin] = React.useState(false);
@@ -33,22 +32,16 @@ const LoginPage = () => {
       return 'http://localhost:5000/' + route;
     }
   }
-
-  // login state
-  const initialState = {
-    email: "",
-    password: "",
-  };
-  const [data, setData] = React.useState(initialState);
   const handleChange = event => {
-    setData({
-      ...data,
+    setState({
+      ...state,
       [event.target.name]: event.target.value
     });
   };
   const doLogin = async event => {
     event.preventDefault();
   //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      alert(state.email);
 
     const response = await fetch(buildPath('login'), {
 			method: 'POST',
@@ -57,8 +50,8 @@ const LoginPage = () => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: data.email,
-				password: data.password
+				email: state.email,
+				password: state.password
 			})
 		})
     .catch((error) => console.error(error));
@@ -88,15 +81,7 @@ const LoginPage = () => {
 		}
   };
   
-// Register state
-  const regState = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: ""      
-};
-const [regdata, setRegData] = React.useState(regState);
+const [regdata, setRegData] = React.useState(UserContext);
 const [signUpResult, setSignUpResult] = useState('');
 
 const handleRegChange = event => {
@@ -125,7 +110,7 @@ const doRegister = async event => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				name: regdata.name,
+				name: regdata.Name,
 				email: regdata.email,
 				password: regdata.password
 			})
@@ -242,7 +227,7 @@ const doRegister = async event => {
             <div className="form-group">
               <input
                 placeholder="Email"
-                value={data.email}
+                value={state.email}
                 onChange={handleChange}
                 name="email"
                 type="email"
@@ -255,7 +240,7 @@ const doRegister = async event => {
             <div className="form-group">
               <input
                 placeholder="Password"
-                value={data.password}
+                value={state.password}
                 onChange={handleChange}
                 name="password"
                 type="password"
@@ -303,18 +288,10 @@ const doRegister = async event => {
           <form  onSubmit={doRegister}>
             <input type="text"
               className="form-control mt-2"
-              id="firstname"
-              placeholder="Firstname"
-              name="firstName"
-              value={regdata.firstName}
-              onChange={handleRegChange}
-              required />
-            <input type="text"
-              className="form-control mt-2"
-              id="lastname"
-              name="lastName"
-              placeholder="Lastname"
-              value={regdata.lastName}
+              id="name"
+              placeholder="Name"
+              name="Name"
+              value={regdata.Name}
               onChange={handleRegChange}
               required />
             <input
