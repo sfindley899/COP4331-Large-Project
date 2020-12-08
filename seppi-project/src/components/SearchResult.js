@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
-
+import AccountButton from './AccountButton';
+import { useCookies } from 'react-cookie';
 
 const SearchResult =() => {
-
+  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+  //const [state, setState] = React.useContext(UserContext);
   const [show, setList] = React.useState(false);
+  const [showAccount, setShowAccount] = React.useState(false);
+  const [accountModalPath, setAccountModalPath] = React.useState('');
   const handleCloseList = () => setList(false);
   const handleShowList = () => setList(true);
+  const handleShowAccount = () => setShowAccount(!showAccount);
+
+  const app_name = 'seppi'
+  const buildPath = (route) => {
+    if (process.env.NODE_ENV === 'production') {
+      return 'https://' + app_name + '.herokuapp.com/' + route;
+    }
+    else {
+      return 'http://localhost:5000/' + route;
+    }
+  }
 
   document.body.style.height = "100vh";
 
@@ -32,6 +47,148 @@ const SearchResult =() => {
     window.location.href = '/NotSignedIn';
   }
 
+  const handleBackButton = () => {
+    setAccountModalPath("");
+  }
+
+  const renderAccountModalTitle = () => {
+    if (accountModalPath === "Change Account Information") {
+      return (
+        <div class="accountModalTitle">
+              <div class="modal-account-top-bar">
+                <button onClick={handleBackButton} class="btn">
+                  <img src={require('../images/left-arrow.png')}/>
+                </button>
+              </div>
+              <span class="modal-title-text">Account Information</span>
+              <span class="modal-subtitle-text">Update Account Information</span>
+        </div>
+      );
+    }
+    else if (accountModalPath === "") {
+      return (
+        <div class="accountModalTitle">
+          <div class="accountModalTitle">
+            <span id="helloText" class="modal-title-text">
+              Hello, {cookies.name}!
+            </span>
+            <span id="emailText" class="modal-subtitle-text">
+              {cookies.email}
+            </span>
+          </div>
+          <span class="modal-subtitle-text">Navigate To</span>
+        </div>
+      );
+    }
+  };
+
+  const accountState = {
+    displayName: ""
+  };
+
+  const [data, setData] = React.useState(accountState);
+  const [nameText, setNameText] = useState('');
+  const [changeAccountInfoResult, setChangeAccountInfoResult] = React.useState('');
+
+  const handleChange = event => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const changeAccountInfo = async event => {
+    event.preventDefault();
+
+    let name = document.getElementById('inputAccountName').value
+
+    const response = await fetch(buildPath('changeDisplayName'), {
+      method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+        idToken: cookies.idToken,
+        displayName: name
+			})
+    }).catch(error => console.error(error));
+
+    let status = await response.status;
+    let json = JSON.parse(await response.text());
+
+    if (status === 200) {
+      setCookie('name', name, {path: '/'});
+    }
+    else {
+      setChangeAccountInfoResult('Failed to change account info.');
+      return;
+    }
+
+    setChangeAccountInfoResult('Successfully changed account information.');
+  }
+
+  const signOut = async event => {
+    event.preventDefault();
+
+    const response = await fetch(buildPath('signout'), {
+      method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+    }).catch(error => console.error(error));
+
+    let status = await response.status;
+
+    if (status !== 200) {
+      console.log("Failed to sign out");
+      return;
+    }
+
+    window.location.href = '/LoginPage';
+  };
+
+  const renderAccountModalBody = () => {
+    if (accountModalPath === "") {
+      return (
+        <div>
+          <AccountButton
+            title="Change Account Information"
+            onClick={() => setAccountModalPath("Change Account Information")}
+          />
+          <AccountButton
+            title="Sign Out"
+            onClick={signOut}
+          />
+        </div>
+      );
+    }
+    else if (accountModalPath === "Change Account Information") {
+      return (
+        <div class="accountModalTitle">
+          <form onSubmit={changeAccountInfo} className="loginsForm">
+            <input 
+              type="text"
+              placeholder="Display Name"
+              name="inputAccountName" 
+              id="inputAccountName"
+              className="form-control account-input"
+              required
+            />
+           <div id="accountInfoResult">
+             {changeAccountInfoResult}
+           </div>
+
+           <button id = "editAccountButton" type="submit" className="btn btn-primary">
+              Edit Account Info
+            </button>
+          </form>
+        </div>
+      );
+    }
+  };
+
   return(
     <div style={{margin: "0 auto", height: "100vh"}}>
         <div style={{width: "100%", height: "100px", backgroundColor: "#FA730B"}}>
@@ -52,7 +209,10 @@ const SearchResult =() => {
                 <div id = "FavImage"></div>
                 Favorites
               </button>
-              <button id="AccountSettings">
+              <button 
+                id="AccountSettings"
+                onClick={handleShowAccount}
+               >
                 <div id = "AccountImage"></div>
                 Account
               </button>
@@ -105,6 +265,18 @@ const SearchResult =() => {
           <form>
             
           </form>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showAccount} onHide={handleShowAccount}>
+        <Modal.Header className="justify-content-center">
+          <Modal.Title>
+            {renderAccountModalTitle()}
+          </Modal.Title>
+
+        </Modal.Header> 
+        <Modal.Body>
+          {renderAccountModalBody()}
         </Modal.Body>
       </Modal>
     </div>
