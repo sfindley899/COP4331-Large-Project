@@ -223,7 +223,7 @@ const doRegister = async event => {
                   <br/>
                   <br/>
                   <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
-                  <button id = "submitEmailButton">Sign Up</button>
+                  <button id = "submitEmailButton" onClick={handleShowRegister} >Sign Up</button>
                   <br/>
                   <br/>
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
