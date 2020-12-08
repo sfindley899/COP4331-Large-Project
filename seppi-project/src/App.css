@@ -57,7 +57,7 @@ body {
 
 .MainBody {
   background-image: url('./images/home_page.jpeg');
-  background-color: orange;
+  background-color: #f8f9f9;
   height: 100vh;
   background-position: center;
   background-repeat: repeat;
