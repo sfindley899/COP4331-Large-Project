@@ -589,7 +589,7 @@ app.post('/searchRecipeTop', async (req, res) => {
 
     var apikey = process.env.RECIPE_API_KEY
     var app_id = process.env.RECIPE_APP_ID
-    var url = 'https://api.edamam.com/search?q=' + 'chicken';
+    var url = 'https://api.edamam.com/search?q=' + req.body.search;
 
     if (req.body.filters !== undefined && req.body.filters !== null)
       url += '&' + req.body.filters;
