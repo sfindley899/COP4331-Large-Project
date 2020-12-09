@@ -158,7 +158,7 @@ const doRegister = async event => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(to top, rgba(114, 51, 51, 0) 10%, rgba(0, 100, 0, 2)), url("../images/home_page.jpeg")`, backgroundRepeat: 'no-repeat', width: '100%', height: '650px', backgroundSize: "cover"
+      backgroundImage: `linear-gradient(to top, rgba(114, 51, 51, 0) 10%, rgba(0, 100, 0, 2)), url("../images/home_page.png")`, backgroundRepeat: 'no-repeat', width: '100%', height: '650px', backgroundSize: "cover"
     }}>
       <div className="MainBody">
         <div className="signIn">
@@ -179,11 +179,7 @@ const doRegister = async event => {
         </form>
         <br/>
         <br/>
-<<<<<<< HEAD
         <Link className="btn btn-success mt-2" id = "searchFilter" to="/SearchResults">
-=======
-        <Link className="btn btn-success mt-2" id = "searchFilter">
->>>>>>> origin/develop
           Advanced Search
         </Link>
       </div>

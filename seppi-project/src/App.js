@@ -6,16 +6,11 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import CardPage from './components/CardPage';
-<<<<<<< HEAD
 import SearchResults from './components/SearchResults';
-import NotSignedIn from './components/NotSignedIn';
-=======
-import SearchResult from './components/SearchResult';
 import FavoriteRecipes from './components/FavoriteRecipes';
 import { CookiesProvider } from 'react-cookie';
 import UserContext from './context';
 
->>>>>>> origin/develop
 import {
   HashRouter as Router,
   Switch,
@@ -38,22 +33,6 @@ function App() {
   });
 
   return (
-<<<<<<< HEAD
-    <div className="App">
- {/* <Router>      */}
-<Switch>
-   <Route  path="/CardPage"><CardPage/></Route>
-   <Route  path="/ForgotPassword"><ForgotPassword/></Route>
-   <Route  path="/Register"><Register/></Route>
-   <Route  path="/Login"><Login/></Route>
-   <Route  path="/SearchResults"><SearchResults/></Route>
-   <Route  path="/NotSignedIn"><NotSignedIn/></Route>
-<LoginPage path="/"/>
-  
-</Switch>
-{/* </Router> */}
-          </div>
-=======
       <UserContext.Provider value={[state, setState]}>
       <CookiesProvider>
       <div className="App">
@@ -63,7 +42,7 @@ function App() {
             <Route  path="/ForgotPassword"><ForgotPassword/></Route>
             <Route  path="/Register"><Register/></Route>
             <Route  path="/Login"><Login/></Route>
-            <Route  path="/SearchResult"><SearchResult/></Route>
+            <Route  path="/SearchResults"><SearchResults/></Route>
             <Route  path="/FavoriteRecipes"><FavoriteRecipes/></Route>
           <LoginPage path="/"/>
 
@@ -72,7 +51,6 @@ function App() {
       </div>
       </CookiesProvider>
       </UserContext.Provider>
->>>>>>> origin/develop
   );
 }
 
