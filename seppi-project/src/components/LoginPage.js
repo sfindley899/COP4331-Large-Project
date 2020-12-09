@@ -309,20 +309,7 @@ const getRecipe = async event => {
           </Form>
 
           <div class="container">
-            <Button
-              variant="light"
-              className="btn btn-success mt-2"
-              id="searchFilter"
-              to="/SearchResult"
-            >
-              <span style={{ fontWeight: "500", textAlign: "center" }}>
-                {" "}
-                Advanced Search <img
-                  src="../images/filter.png"
-                  width="20"
-                />{" "}
-              </span>
-            </Button>
+           
           </div>
         </div>
       </div>
