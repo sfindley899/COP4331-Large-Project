@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'typeface-roboto';
-import Modal from 'react-bootstrap/Modal'
-import Nav from 'react-bootstrap/Nav'
-import AccountButton from './AccountButton';
+import {Link} from "react-router-dom"
 import { useCookies } from 'react-cookie';
+import Modal from 'react-bootstrap/Modal'
+import AccountButton from './AccountButton';
 
-const SearchResult =() => {
+const FavoriteRecipes =() => {
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
@@ -14,6 +14,7 @@ const SearchResult =() => {
   const handleCloseList = () => setList(false);
   const handleShowList = () => setList(true);
   const handleShowAccount = () => setShowAccount(!showAccount);
+  document.body.style.height = "100vh";
 
   const app_name = 'seppi'
   const buildPath = (route) => {
@@ -23,28 +24,6 @@ const SearchResult =() => {
     else {
       return 'http://localhost:5000/' + route;
     }
-  }
-
-  document.body.style.height = "100vh";
-
-  const openFavorites = event => {
-    {/*Function to produce object inside Results div depending on if the user is logged in or not*/}
-
-    return(
-      <div></div>
-    );
-  }
-
-  const displayResults = event => {
-    document.getElementById("Results").style.display = "block";
-  }
-
-  const hideResults = event => {
-    document.getElementById("Results").style.display = "none";
-  }
-
-  const tempFavButton = event => {
-    window.location.href = '/FavoriteRecipes';
   }
 
   const handleBackButton = () => {
@@ -198,18 +177,15 @@ const SearchResult =() => {
               </form>
             </div>
             <div style={{width: "25%", height: "100px",paddingTop: "5px", textAlign: "center"}}>
-              <button id="FavPageButton" onClick={() => tempFavButton()}>
+              <button id="FavPageButton" onClick={() => console.log("Hello")}>
                 <div id = "FavImage"></div>
                 Favorites
               </button>
-              <button 
-                id="AccountSettings"
-                onClick={handleShowAccount}
-               >
+              <button onClick={handleShowAccount} id="AccountSettings">
                 <div id = "AccountImage"></div>
                 Account
               </button>
-              <button id="List" onClick={handleShowList}>
+              <button id="List">
                 <div id="ListImage"></div>
                 Lists
               </button>
@@ -217,63 +193,36 @@ const SearchResult =() => {
           </div>
         </div>
         <br/>
-        <div className="row" style={{width: "100%"}}>
-          <div id="FilterArea">
-            <br/>
-            Filter By<br/>
-            <div id="FilterDropDowns">
-              Filter dropdowns go here
-              <button onClick={() => displayResults()}>Display Search Results</button>
-              <button onClick={() => hideResults()}>Hide Search Results</button>
-            </div>
-          </div>
-          {/*Idea is to have contents in Results hidden and not computed till a Search is made, also hide when Favorite Button Clicked*/}
-          <div id="Results">
-            <div>
-              <div className="row" id="FiltersChosen">
-                <button>Filters Chosen here</button>
-              </div>
-              <div id="NumberOfResults">
-                Number of results here
-              </div>
-            <br/>
-            </div>
-            Recipes here
-          </div>
+        <div id="FavHeader" className="row">
+            <div id="HeartImage"></div>
+            <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
         </div>
-        <Modal show={show} onHide={handleCloseList}>
-        <Modal.Header className="justify-content-center">
-          <Modal.Title>
-            <Nav id ="listHeader">
-              <Nav.Item>
-                <Nav.Link role="tab">Pantry</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link role="tab">Grocery</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body >
-          <form>
-            
-          </form>
-        </Modal.Body>
-      </Modal>
+        <br/>
+        <div id="FavBody">
+            <div id="biggerHeartImage"></div>
+            <h1>You are just a step away from your favorite recipes!</h1>
+            You need to be signed on into Seppi to view your favorites. Keep track of the recipes you love or want to view later.
+            <br/>
+            <br/>
+            <div style={{fontWeight: "bold"}}>
+                <Link to="/Login" style={{color: "#FA730B"}}> Sign in</Link>{" "}
+                to view your Favorites
+            </div>
+        </div>
 
-      <Modal show={showAccount} onHide={handleShowAccount}>
-        <Modal.Header className="justify-content-center">
-          <Modal.Title>
-            {renderAccountModalTitle()}
-          </Modal.Title>
+        <Modal show={showAccount} onHide={handleShowAccount}>
+          <Modal.Header className="justify-content-center">
+            <Modal.Title>
+              {renderAccountModalTitle()}
+            </Modal.Title>
 
-        </Modal.Header> 
-        <Modal.Body>
-          {renderAccountModalBody()}
-        </Modal.Body>
+          </Modal.Header> 
+          <Modal.Body>
+            {renderAccountModalBody()}
+          </Modal.Body>
       </Modal>
     </div>
   );
 };
 
-export default SearchResult;
+export default FavoriteRecipes;
