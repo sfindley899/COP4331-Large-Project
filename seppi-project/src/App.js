@@ -8,6 +8,7 @@ import ForgotPassword from './components/ForgotPassword';
 import CardPage from './components/CardPage';
 import SearchResult from './components/SearchResult';
 import NotSignedIn from './components/NotSignedIn';
+
 import {
   HashRouter as Router,
   Switch,
@@ -21,7 +22,7 @@ import {
 function App() {
   return (
     <div className="App">
- {/* <Router>      */}
+<Router>     
 <Switch>
    <Route  path="/CardPage"><CardPage/></Route>
    <Route  path="/ForgotPassword"><ForgotPassword/></Route>
@@ -29,10 +30,15 @@ function App() {
    <Route  path="/Login"><Login/></Route>
    <Route  path="/SearchResult"><SearchResult/></Route>
    <Route  path="/NotSignedIn"><NotSignedIn/></Route>
+
 <LoginPage path="/"/>
-  
+
+
+
 </Switch>
-{/* </Router> */}
+
+</Router>
+
           </div>
   );
 }

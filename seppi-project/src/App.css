@@ -51,8 +51,7 @@
 } */
 
 body {
-  background-color: orange;
-  height: 340vh;
+  background-color: #f8f9f9;
 }
 
 .MainBody {
@@ -75,10 +74,10 @@ body {
   font-family: Roboto;
   font-style: normal;
   font-weight: bold;
-  font-size: 80px;
+  font-size: 84px;
   line-height: 28px;
   color: #FFFFFF;
-  text-shadow: 1px 2px black;
+  text-shadow: 1px 0.5px 0.5px rgba(0,0,0, 0.5);
 }
 
 #logIN {
@@ -86,21 +85,24 @@ body {
   color: white;
   transition: 0.3s;
   font-size: 20px;
-  font-weight: bold;
-  border: none;
+  border: 3px solid white;
   border-radius: 25px;
+  font-weight: 500;
   margin-right: 10px;
+  border: 3px solid white;
+  padding-left: 20px;
+  padding-right: 20px;
   padding: 10px;
-  text-shadow: 1px 2px black;
 }
 
 #logIN:hover{
-  background-color:black;
+  background-color:rgba(0,0,0, 0.5);
 }
 
 #signUP {
   color: black;
   font-size: 20px;
+  font-weight: 500;
   border-radius: 25px;
   border: 3px solid white;
   background-color: white;
@@ -109,7 +111,7 @@ body {
 }
 
 #signUP:hover{
-  border: 3px solid black;
+  border: 3px solid rgba(0,0,0, 0.7);
 }
 
 #search {
@@ -123,7 +125,11 @@ body {
 
 #searchParameter {
   margin-top: 200px;
-  width: 100%;
+  width: 50%;
+  top:0%;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
   text-align: center;
 }
 
@@ -135,7 +141,7 @@ body {
   border-radius: 15px;
   border: 1px solid transparent;
   background-color: orange;
-  padding: 10px;
+  padding: 0.4rem;
 }
 
 #filterImage {
@@ -148,144 +154,64 @@ body {
 
 .subBody {
   background-color: white;
-  height: 220vh;
+  height: 70vh;
+  display: block;
   background-position: center;
   background-repeat: repeat;
   background-size: cover;
+  min-height:'768px',
 }
 
-.Suggestions {
-  height: 80vh;
-  padding: 50px;
-  padding-left: 80px;
-  font-size: 40px;
-  font-weight: bold;
-}
 
 .Icons {
+  margin-top: 100px;
   display: flex;
+  position: relative;
+  overflow-y: none;
+  flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  height: 50vh;
-  margin: 10px auto;
-  position: relative;
-}
-
-.leftIcon {
-  position: center;
-  background-image: url('./images/grocery1.png');
-  background-position-x: center;
-  background-size: 110px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.leftInfo {
-  padding-top: 120px;
-  padding-left: 30px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#leftButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.middleIcon {
-  background-image: url('./images/grocery2.png');
-  background-position-x: center;
-  background-size: 145px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.middleInfo {
-  padding-top: 110px;
-  padding-left: 30px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#middleButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.rightIcon {
-  background-image: url('./images/grocery3.png');
-  background-position-x: center;
-  background-size: 160px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.rightInfo {
-  padding-top: 120px;
-  padding-left: 20px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#rightButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
+  min-height: 500px
 }
 
 .WelcomeTo {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  height: 80vh;
-  margin: 10px auto;
-  position: relative;
+  min-height:700px;
+  position:relative;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 21.28%);
 }
 
 .leftsidePNG {
   background-image: url('./images/grocery4.png');
-  background-position-x: left;
-  background-position-y: center;
-  background-size: 430px;
-  height: 70vh;
+  background-size: 25rem;
+  top:55%;
+  display: block;
+  overflow:hidden;
+  bottom:60%;
+  position: relative;
+  left: 55%;
+  margin-bottom: -8rem;
+  margin-right: 10rem;
+  margin-top:175px;
+  margin-left:-8rem;
+  padding-left: 200px;
+  right:55%;
+  left:15%;
+  height: 480px;
   width: 40%;
-  padding: 50px;
   background-repeat: no-repeat;
 }
 
 .rightside {
-  height: 60vh;
+  height: 60%;
   width: 55%;
   padding: 50px;
   padding-top: 170px;
+  padding-right: 200px;
   text-align: center;
 }
 
@@ -314,16 +240,9 @@ body {
   color: grey;
 }
 
-.bottom {
-  background-color: orange;
-}
 
 .edamamCredit {
   background-image: url('./images/edamam.png');
-  height: 10vh;
-  background-repeat: no-repeat;
-  background-position-x: 95%;
-  background-position-y: bottom;
 }
 
 #loginArea {
