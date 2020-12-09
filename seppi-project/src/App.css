@@ -40,8 +40,8 @@
 .loginForm {
   max-width: 600px;
   width: 100%;
-  margin: 0 auto; 
-  padding: 9% 20px; 
+  margin: 0 auto;
+  padding: 9% 20px;
 }
 
 /* .registerDiv{
@@ -55,7 +55,7 @@ body {
 }
 
 .MainBody {
-  background-image: url('./images/home_page.jpeg');
+  background-image: url("./images/home_page.jpeg");
   background-color: #f8f9f9;
   height: 100vh;
   background-position: center;
@@ -63,7 +63,7 @@ body {
   background-size: cover;
 }
 
-.signIn{
+.signIn {
   width: 96%;
   text-align: right;
   padding: 2%;
@@ -145,7 +145,7 @@ body {
 }
 
 #filterImage {
-  background-image: url('./images/filter.png');
+  background-image: url("./images/filter.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -288,7 +288,18 @@ body {
   padding: 10px;
 }
 
-#loginFooter{
+#editAccountButton {
+  font-size: 20px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  padding: 10px;
+}
+
+#loginFooter {
   display: none;
   font-size: 20px;
   color: black;
@@ -373,7 +384,7 @@ body {
   font-size: 25px;
 }
 
-#passwordInfo{
+#passwordInfo {
   text-align: center;
   width: 100%;
   font-size: 15px;
@@ -391,7 +402,7 @@ body {
   padding: 10px;
 }
 
-#registerFooter{
+#registerFooter {
   display: none;
   font-size: 20px;
   color: black;
@@ -420,7 +431,7 @@ body {
 }
 
 #FavImage {
-  background-image: url('./images/heart.png');
+  background-image: url("./images/heart.png");
   background-position-x: center;
   background-size: 100px;
   height: 70px;
@@ -435,7 +446,7 @@ body {
 }
 
 #AccountImage {
-  background-image: url('./images/user.png');
+  background-image: url("./images/user.png");
   background-position-x: center;
   background-size: 50px;
   height: 55px;
@@ -450,10 +461,11 @@ body {
 }
 
 #ListImage {
-  background-image: url('./images/list.png');
+  background-image: url("./images/list.png");
   background-position-x: center;
   background-size: 60px;
   height: 50px;
+  width: 50px;
   background-repeat: no-repeat;
 }
 
@@ -491,8 +503,23 @@ body {
   align-items: center;
 }
 
+#FavContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#FavoritesRows {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
 #HeartImage {
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 120px;
   background-repeat: no-repeat;
   width: 50%;
@@ -501,8 +528,7 @@ body {
 }
 
 #biggerHeartImage {
-
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 250px;
   background-repeat: no-repeat;
   height: 150px;
@@ -513,11 +539,177 @@ body {
 #FavBody {
   width: 100%;
   height: 68.2%;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   font-weight: normal;
   font-size: 20px;
 }
 
 #listHeader {
   text-align: center;
+}
+
+.navbar {
+  background-color: #fa730b;
+  height: 100;
+}
+
+#SearchSubmitButton {
+  background-color: #f9a00d;
+  border: #f9a00d;
+}
+
+#SearchBar {
+  justify-content: center;
+  width: 100%;
+}
+
+.SearchForm {
+  width: 200px !important;
+  font: Roboto !important;
+}
+
+.navbar-container {
+  position: sticky;
+  top: 0;
+  min-height: 100%;
+  overflow: auto;
+}
+
+.navbar-brand {
+  padding: 0 15px;
+  font-weight: bold;
+  font: Roboto;
+  font-size: 2.25rem !important;
+}
+
+.filter-container {
+  position: absolute;
+  width: 16%;
+  left: 31px;
+  top: 110px;
+}
+
+#FilterTitle {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 32px;
+
+  /* or 246% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: rgba(55, 63, 65, 0.85);
+}
+
+#FilterFolder {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 32px;
+
+  /* identical to box height, or 320% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: #fa730b;
+}
+
+#FilterDivider {
+  position: absolute;
+  height: 0px;
+  left: 0px;
+  right: 0px;
+  /* top: 492px; */
+
+  /* Black / 10 */
+  border: 1px solid #e8e8e8;
+}
+
+.recipe-result-container {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  left: 19%;
+  top: 15%;
+
+  background: #e7923183;
+}
+.accountModalTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+c .modal-title-text {
+  text-align: center;
+  top: 41px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 42px;
+  padding: 30px 30px;
+}
+
+#seppiButton:hover {
+  cursor: pointer;
+}
+
+#helloText {
+  text-align: center;
+  top: 41px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 42px;
+  padding-top: 20px;
+}
+
+#emailText {
+  padding: 0px;
+  text-align: center;
+  top: 41px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 42px;
+  padding-bottom: 40px;
+}
+
+.modal-subtitle-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 18px;
+  display: flex;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.modal-account-top-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-right: 200px;
+  width: 100%;
+}
+
+#accountInfoResult {
+  display: block;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.account-input {
+  margin-top: 25;
+  margin-bottom: 25px;
 }

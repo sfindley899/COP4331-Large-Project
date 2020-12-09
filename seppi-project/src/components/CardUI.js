@@ -82,7 +82,6 @@ function CardUI()
         }
         catch(e)
         {
-            alert(e.toString());
             setResults(e.toString());
         }
     };

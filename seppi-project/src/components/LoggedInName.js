@@ -9,7 +9,6 @@ function LoggedInName()
     {
 	    event.preventDefault();
 		
-        alert('doLogout');
     };    
 
     return(

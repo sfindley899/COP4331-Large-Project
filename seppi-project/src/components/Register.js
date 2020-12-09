@@ -1,8 +1,9 @@
 import React from 'react';
 import 'typeface-roboto';
 import {Link} from "react-router-dom"
-import {AuthContext, UserContext}from '../context'
+import UserContext from '../context'
 import {useState, useContext} from 'react';
+import {useCookies} from 'react-cookie';
 
 const Register =() => {
    

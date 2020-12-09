@@ -1,11 +1,11 @@
 import React, {useState, useContext} from 'react';
 import {Link} from "react-router-dom"
-import {UserContext}from '../context'
+import { useCookies } from 'react-cookie';
 
 const Login=() => {
     const app_name = 'seppi'
     // User's login status
-    const [state, setState] = useContext(UserContext);
+    const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
     const [loginResult, setLoginResult] = useState('');
 
     const buildPath=(route)=> {
@@ -48,8 +48,10 @@ const Login=() => {
       let status = await response.status;
       if (status === 200) {
         var res = JSON.parse(await response.text());
-        setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
-        window.location.href = '/SearchResult';
+        setCookie('name', res.name, {path: '/'});
+        setCookie('email', res.email, {path: '/'});
+        setCookie('idToken', res.idToken, {path: '/'});
+        window.location.href = '/SearchResults';
       }
       else if (status === 400) {
         var x = document.getElementById("loginFooter");

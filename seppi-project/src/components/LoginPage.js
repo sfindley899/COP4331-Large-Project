@@ -4,16 +4,16 @@ import "typeface-roboto";
 import Modal from "react-bootstrap/Modal";
 import { Button, Form, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { UserContext } from "../context";
 import { useState, useContext } from "react";
 import Grocery1 from '../images/grocery1.png';
 import Grocery2 from '../images/grocery2.png';
 import Grocery3 from '../images/grocery3.png';
+import { useCookies } from 'react-cookie';
 
 const LoginPage = () => {
   // User's login status
-  const [state, setState] = useContext(UserContext);
-  const [loginResult, setLoginResult] = useState("");
+  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
+  const [loginResult, setLoginResult] = useState('');
 
   // Login button handler
   const [show, setShowLogin] = React.useState(false);
@@ -51,31 +51,29 @@ const LoginPage = () => {
   const doLogin = async (event) => {
     event.preventDefault();
 
-    alert(data.email);
-    alert(data.password);
+    const response = await fetch(buildPath('login'), {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: data.email,
+				password: data.password
+			})
+		})
+    .catch((error) => console.error(error));
 
-    const response = await fetch(buildPath("login"), {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    }).catch((error) => console.error(error));
     let status = await response.status;
     if (status === 200) {
       var res = JSON.parse(await response.text());
-      setState((state) => ({
-        ...state,
-        name: res.name,
-        email: res.email,
-        idToken: res.idToken,
-      }));
-      window.location.href = "/SearchResult";
-    } else if (status === 400) {
+
+      setCookie('name', res.name, {path: '/'});
+      setCookie('email', res.email, {path: '/'});
+      setCookie('idToken', res.idToken, {path: '/'});
+      setCookie('favorites', {}, {path: '/'});
+    }
+    else if (status === 400) {
       var x = document.getElementById("loginFooter");
       x.style.display = "block";
       setLoginResult("Email/Password combination is incorrect.");
@@ -88,14 +86,12 @@ const LoginPage = () => {
     } else {
       var z = document.getElementById("loginFooter");
       z.style.display = "block";
-      setLoginResult(
-        "Failed to login to account due to internal server error."
-      );
-      return;
+			setLoginResult('Failed to login to account due to internal server error.');
+			return;
     }
+    window.location.href = '/SearchResults';
   };
 
-  const [regdata, setRegData] = React.useState(UserContext);
   const [signUpResult, setSignUpResult] = useState("");
 
   const registerState = {
@@ -339,6 +335,7 @@ const LoginPage = () => {
                 outline: 'none !important',
                 outlineOffset: 'none !important'
               }}
+              onChange={handleShowLogin}
             >
               Add to your Pantry
             </Button>
@@ -420,8 +417,7 @@ const LoginPage = () => {
 
               <Button
                 variant="light"
-                to="/Register"
-                type="submit"
+                type="submit" onChange={handleShowRegister}
                 className="mb-2 background-orange"
                 style={{
                   background: "orange",

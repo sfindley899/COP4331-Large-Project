@@ -1,0 +1,22 @@
+#buttonContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: space-between;
+	width: 100%;
+	border-top-color: rgba(0, 0, 0, 0.25);
+	border-bottom-color: rgba(0, 0, 0, 0.25);
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	padding: 20px;
+}
+
+.button-text {
+	font-family: Roboto;
+	font-size: 18px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
