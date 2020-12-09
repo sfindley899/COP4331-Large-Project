@@ -159,11 +159,10 @@ body {
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
-  width: 100%;
+  width: 60%;
   height: 50vh;
   margin: 10px auto;
   position: relative;
-  background-color: powderblue;
 }
 
 .SuggestionsHeading {

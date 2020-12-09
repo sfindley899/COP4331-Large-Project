@@ -2,9 +2,10 @@
 	display: flex;
 	flex-direction: column;
 	max-width: fit-content;
+	width: 300px;
 	justify-content: center;
-	align-items: center;
-	background-color: peru;
+	align-items: inherit;
+	/* make-it-look-good: true; */
 }
 
 .recipe:hover {
@@ -18,13 +19,13 @@
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 21px;
-	width: 200px;
+	width: 230px;
 	text-align: center;
 }
 
 .recipe-image {
-	width: 200px;
-	height: 150px;
+	width: 250px;
+	height: 200px;
 	border-radius: 16px;
 }
 
@@ -38,4 +39,5 @@
 	font-size: 16px;
 	display: flex;
 	flex-direction: column;
+	
 }
