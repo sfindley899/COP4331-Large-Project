@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import AccountButton from './AccountButton';
 import { useCookies } from 'react-cookie';
+import UserContext from '../context';
 
-const SearchResult =() => {
-  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+const SearchResult = () => {
+  const [state, setState] = useContext(UserContext);
+  const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
   const [accountModalPath, setAccountModalPath] = React.useState('');
@@ -34,6 +36,31 @@ const SearchResult =() => {
       <div></div>
     );
   }
+
+  const fetchFavorites = async () => {
+    const response = await fetch(buildPath('getFavorites'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          idToken: cookies.idToken,
+        })
+    }).catch(error => console.error(error));
+
+    let status = await response.status;
+
+    if (status !== 200) {
+      console.log('Could not fetch favorites.');
+      return;
+    }
+
+    let json = JSON.parse(await response.text());
+    setState(state => ({ ...state, favorites: json.favorites}));
+
+    //setCookie('favorites', json.favorites, {path: '/'});
+  };
 
   const displayResults = event => {
     document.getElementById("Results").style.display = "block";
@@ -130,6 +157,11 @@ const SearchResult =() => {
       console.log("Failed to sign out");
       return;
     }
+
+    removeCookie('name');
+    removeCookie('email');
+    removeCookie('idToken');
+    removeCookie('favorites');
 
     window.location.href = '/LoginPage';
   };

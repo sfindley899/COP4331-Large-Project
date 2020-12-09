@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'typeface-roboto';
 import {Link} from "react-router-dom"
 import { useCookies } from 'react-cookie';
 import Modal from 'react-bootstrap/Modal'
 import AccountButton from './AccountButton';
+import Recipe from './Recipe';
+import UserContext from '../context';
 
-const FavoriteRecipes =() => {
-  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+const FavoriteRecipes = () => {
+  const [favorites, setFavorites] = useState([]);
+  const [state, setState] = useContext(UserContext);
+  const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
   const [accountModalPath, setAccountModalPath] = React.useState('');
@@ -110,6 +114,11 @@ const FavoriteRecipes =() => {
       return;
     }
 
+    removeCookie('name');
+    removeCookie('email');
+    removeCookie('idToken');
+    removeCookie('favorites');
+
     window.location.href = '/LoginPage';
   };
 
@@ -161,6 +170,34 @@ const FavoriteRecipes =() => {
     }
   };
 
+  const fetchFavorites = async () => {
+    const response = await fetch(buildPath('getFavorites'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          idToken: cookies.idToken,
+        })
+    }).catch(error => console.error(error));
+
+    let status = await response.status;
+
+    if (status !== 200) {
+      console.log('Could not fetch favorites.');
+      return;
+    }
+
+    let json = JSON.parse(await response.text());
+    setFavorites(json.favorites);
+    //setState(state => ({ ...state, favorites: json.favorites}));
+  };
+
+  useEffect(() => {    
+     fetchFavorites();
+  }, []);
+
   return(
     <div style={{margin: "0 auto", height: "100vh"}}>
         <div style={{width: "100%", height: "100px", backgroundColor: "#FA730B"}}>
@@ -178,7 +215,7 @@ const FavoriteRecipes =() => {
             </div>
             <div style={{width: "25%", height: "100px",paddingTop: "5px", textAlign: "center"}}>
               <button id="FavPageButton" onClick={() => console.log("Hello")}>
-                <div id = "FavImage"></div>
+                <div onClick={fetchFavorites} id = "FavImage"></div>
                 Favorites
               </button>
               <button onClick={handleShowAccount} id="AccountSettings">
@@ -193,22 +230,17 @@ const FavoriteRecipes =() => {
           </div>
         </div>
         <br/>
-        <div id="FavHeader" className="row">
-            <div id="HeartImage"></div>
-            <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
-        </div>
-        <br/>
-        <div id="FavBody">
-            <div id="biggerHeartImage"></div>
-            <h1>You are just a step away from your favorite recipes!</h1>
-            You need to be signed on into Seppi to view your favorites. Keep track of the recipes you love or want to view later.
-            <br/>
-            <br/>
-            <div style={{fontWeight: "bold"}}>
-                <Link to="/Login" style={{color: "#FA730B"}}> Sign in</Link>{" "}
-                to view your Favorites
+        <div id="FavContainer">
+            <div id="FavHeader" className="row">
+              <div id="HeartImage"></div>
+              <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
+            </div>
+
+             <div id="FavoritesRows">
+                {favorites !== undefined ? favorites.map((item) => <Recipe link={item.recipe.url} label={item.recipe.label} image={item.recipe.image}/>) : <div></div>}
             </div>
         </div>
+        <br/>
 
         <Modal show={showAccount} onHide={handleShowAccount}>
           <Modal.Header className="justify-content-center">

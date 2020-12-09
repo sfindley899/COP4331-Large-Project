@@ -10,7 +10,7 @@ import { useCookies } from 'react-cookie';
 const LoginPage = () => {
 
   // User's login status
-  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [loginResult, setLoginResult] = useState('');
 
   // Login button handler
@@ -70,6 +70,7 @@ const LoginPage = () => {
       setCookie('name', res.name, {path: '/'});
       setCookie('email', res.email, {path: '/'});
       setCookie('idToken', res.idToken, {path: '/'});
+      setCookie('favorites', {}, {path: '/'});
     }
     else if (status === 400) {
       var x = document.getElementById("loginFooter");
@@ -255,7 +256,7 @@ const getRecipe = async event => {
         </form>
         <br/>
         <br/>
-        <Link className="btn btn-success mt-2" id = "searchFilter" to="/SearchResult">
+        <Link className="btn btn-success mt-2" id = "searchFilter">
           Advanced Search
         </Link>
       </div>
