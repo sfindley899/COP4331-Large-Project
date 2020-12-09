@@ -9,6 +9,11 @@ const Recipe = (props) => {
 				<img class="recipe-image" src={props.image} />
 			</div>
 			<span class="recipe-label">{props.label}</span>
+            <div class="match-container">
+				Matching Ingredients: {" "}
+				{props.match.map((item)=><span>{item}</span>).length} <br/>
+                Missing Ingredients: {"\n"}  {props.not.map((item)=><span>{item}</span>).length}
+			</div>
 		</div>
 	);
 };

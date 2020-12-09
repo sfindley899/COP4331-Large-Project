@@ -1,16 +1,22 @@
-import React from "react";
-import PageTitle from "./PageTitle";
-import "typeface-roboto";
-import Modal from "react-bootstrap/Modal";
+import React, {useEffect} from 'react';
+import PageTitle from './PageTitle';
+import 'typeface-roboto';
+import Modal from 'react-bootstrap/Modal'
 import { Button, Form, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { Link } from 'react-router-dom'
+import UserContext from '../context'
+import {useState} from 'react';
 import Grocery1 from '../images/grocery1.png';
 import Grocery2 from '../images/grocery2.png';
 import Grocery3 from '../images/grocery3.png';
 import { useCookies } from 'react-cookie';
+import Recipe from './Recipe'
 
 const LoginPage = () => {
+  useEffect(() => {
+    getRecipe();
+ }, []);
+
   // User's login status
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [loginResult, setLoginResult] = useState('');
@@ -25,8 +31,10 @@ const LoginPage = () => {
   const handleCloseRegister = () => setShowRegister(false);
   const handleShowRegister = () => setShowRegister(true);
 
+  const [suggestions, setSuggestion] = useState([]);
+
   // doLogin function
-  const app_name = "seppi";
+  const app_name = 'seppi'
   const buildPath = (route) => {
     if (process.env.NODE_ENV === "production") {
       return "https://" + app_name + ".herokuapp.com/" + route;
@@ -153,6 +161,86 @@ const LoginPage = () => {
     }
   };
 
+
+/*
+const recipeStuff = {
+  label: "",
+  image: "",
+  ingredients: ""
+};
+*/
+
+const getRecipe = async event => {
+
+  let arr = [];
+
+  //Each response gets two recipes
+  const response = await
+   fetch(buildPath('searchRecipeTop'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        search: 'chicken',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
+    })
+
+  })
+
+  let json = JSON.parse(await response.text());
+  arr.push(json);
+
+  const response1 = await
+   fetch(buildPath('searchRecipeTop'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        search: 'vegetables',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
+    })
+
+  })
+
+  json = JSON.parse(await response1.text());
+  arr.push(json);
+
+  const response2 = await
+   fetch(buildPath('searchRecipeTop'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        search: 'pasta',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
+    })
+
+  })
+
+  json = JSON.parse(await response2.text());
+  arr.push(json);
+
+  setSuggestion(arr);
+
+  //alert(JSON.stringify(arr[2].hits.top));
+
+};
+
+
+
+
   return (
 
     <div class="bg-contain"
@@ -238,155 +326,68 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-      <div className="subBody" style={{ color: 'black' }}>
-		<p style={{height: '100vh', padding: '50px', paddingLeft:'80px', fontSize:'40px', fontWeight:'bold'}}>	
-    Suggested Recipes</p> 
-    </div>
-      <div class="container" class="Icons">
-        <div
-          style={{
-            position: "center",
-            backgroundImage:  `url(${Grocery1})`,
-            backgroundPositionX: "center",
-            backgroundSize: "110px",
-            overflow:'none',
-            height: "30vh",
-            width: "30%",
-            padding: "50px",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div
-            style={{
-              paddingTop: "120px",
-              paddingLeft: "30px",
-              textAlign: "center",
-              fontWeight: "bold",
-              width: "90%",
-            }}
-          >
-            <h2 style={{ fontWeight: "bold", opacity: 0.9,
- textAlign: "center" }}>
-              Try the App
-            </h2>
-            <br />
-            <p style={{ opacity: 0.9 }}> Get the best experience through the app.
-            </p>
-            <br />
-            <Button variant='link'
-              style={{
-                backgroundColor: "none",
-                fontSize: "18px",
-                backgroundColor: "white",
-                opacity: 0.9,
-                color: "orange",
-                border: "3px solid white",
-                borderRadius: "15px",
-                fontWeight:'bold',
-                padding: "10px",
-                outline: 'none !important',
-                outlineOffset: 'none !important'
-              }}
-            >
-              Get the app
-            </Button>
+      <div className="subBody">
+        <div>
+
+
+        <div class="SuggestionsHeading">
+          Suggested Recipes
+          <br/>
+          <div class="Suggestions" onClick={getRecipe}>
+            <div id="FavContainer">
+              <div id="FavoritesRows">
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.top.recipe.url} label={item.hits.top.recipe.label} image={item.hits.top.recipe.image} match={item.hits.top.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.second.recipe.url} label={item.hits.second.recipe.label} image={item.hits.second.recipe.image} match={item.hits.second.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
+              </div>
+          </div>
           </div>
         </div>
-        <div
-          style={{
-            backgroundImage: `url(${Grocery2})`,
-            backgroundPositionX: "center",
-            backgroundSize: "145px",
-            height: "30vh",
-            overflow:'none',
-            width: "30%",
-            padding: "50px",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div
-            style={{
-              paddingTop: "110px",
-              paddingLeft: "30px",
-              textAlign: "center",
-              fontWeight: "bold",
-              width: "90%",
-            }}
-          >
-            <h2 style={{ fontWeight: "bold", opacity: 0.9, textAlign: "center" }}>
-              Add your Ingredients
-            </h2>
-            <br />
-            <p style={{ opacity: 0.9 }}> 
-            Refine your recipe search to include the ingredients readily
-            available.</p>
-            <br />
-            <Button variant='link'
-              Link to="/Login"
-              style={{
-                backgroundColor: "none",
-                fontSize: "18px",
-                backgroundColor: "white",
-                color: "orange",
-                border: "3px solid white",
-                borderRadius: "15px",
-                fontWeight: "bold",
-                padding: "10px",
-                outline: 'none !important',
-                outlineOffset: 'none !important'
-              }}
-              onChange={handleShowLogin}
-            >
-              Add to your Pantry
-            </Button>
-          </div>
-        </div>
-        <div
-          style={{
-            backgroundImage: `url(${Grocery3})`,
-            backgroundPositionX: "center",
-            backgroundSize: "160px",
-            height: "30vh",
-            width: "30%",
-            padding: "50px",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div
-            style={{
-              paddingTop: "120px",
-              paddingLeft: "20px",
-              textAlign: "center",
-              fontWeight: "bold",
-              width: "90%",
-            }}
-          >
-            <h2 style={{ fontWeight: "bold", opacity: 0.9, textAlign: "center" }}>
-              Find a Recipe
-            </h2>
-            <br />
-            <p style={{ opacity: 0.9 }}> 
-            Search from thousands of recipes based on the items in your
-            inventory. </p>
-            <br />
-            <Button variant='link'
-              style={{
-                backgroundColor: "none",
-                fontSize: "18px",
-                backgroundColor: "white",
-                color: "orange",
-                borderRadius: "25px",
-                border: "3px solid white",
-                borderRadius: "15px",
-                padding: "10px",
-                fontWeight: "bold",
-                outline: 'none !important',
-                outlineOffset: 'none !important'
-              }}
-            >
-              Search for a Recipe
-            </Button>
-          </div>
+
+
+          <div class = "Icons">
+                <div class = "leftIcon">
+                  <div class = "leftInfo">
+                    <h2>Try the App</h2>
+                    Get the best experience through the app.
+                    <br/>
+                    <button id = "leftButton">Get the app</button>
+                  </div>
+                </div>
+                <div class ="middleIcon">
+                  <div class = "middleInfo">
+                    <h2>Add your Ingredients</h2>
+                    Refine your recipe search to include the ingredients readily available.
+                    <br/>
+                    <button id = "middleButton">Add to your Pantry</button>
+                  </div>
+                </div>
+                <div class = "rightIcon">
+                 <div class = "rightInfo">
+                    <h2>Find a Recipe</h2>
+                    Search from thousands of recipes based on the items in your inventory.
+                    <br/>
+                    <button id = "rightButton">Search for a Recipe</button>
+                 </div>
+                </div>
+              </div>
+              <div class = "WelcomeTo">
+                <div class = "leftsidePNG"></div>
+                <div class = "rightside">
+                  <h1>Welcome to Seppi's Recipe Family!</h1>
+                  <br/>
+                  <br/>
+                  <div class = "rightsideText1">Whether you are a cooking enthusiast or only have enough time to throw together lunch, Seppi's goal is to provide access to new recipes and connect to a community of other like-minded cooks.</div>
+                  <br/>
+                  <br/>
+                  <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
+                  <button id = "submitEmailButton" onClick={handleShowRegister} >Sign Up</button>
+                  <br/>
+                  <br/>
+                  <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
+                </div>
+              </div>
+              <div class = "edamamCredit">
+              </div>
         </div>
       </div>
       <div class="WelcomeTo">
@@ -435,7 +436,7 @@ const LoginPage = () => {
             By clicking “Sign Up” you will be directed to the sign up page to
             complete your registation.
           </div>
-          
+
         </div>
         </div>
         <div>

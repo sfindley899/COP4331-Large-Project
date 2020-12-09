@@ -163,6 +163,88 @@ body {
 }
 
 
+
+
+.Suggestions {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 60%;
+  height: 50vh;
+  margin: 10px auto;
+  position: relative;
+}
+
+.SuggestionsHeading {
+  color: black;
+  min-height: 1000;
+  height: 1000vh;
+  padding: 50px;
+  padding-left: 80px;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+
+.leftPicture {
+  position: center;
+  /* replace with image pulled from search */
+  background-image: url('https://www.edamam.com/web-img/e7b/e7b20984220bc1d611a0f615f12ac66d.jpg');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.leftDescription {
+  padding-top: 260px;
+  padding-left: 30px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
+.middlePicture {
+  /* replace with image pulled from search */
+  background-image: url('./images/mysteryPhoto.png');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.middleDescription {
+  padding-top: 260px;
+  padding-left: 30px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
+.rightPicture {
+  /* replace with image pulled from search */
+  background-image: url('./images/mysteryPhoto.png');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.rightDescription {
+  padding-top: 260px;
+  padding-left: 20px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
 .Icons {
   margin-top: 100px;
   display: flex;
