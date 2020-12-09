@@ -31,17 +31,23 @@ function App() {
   });
 
   return (
+
       <CookiesProvider>
-        <Switch>
+      <div className="App">
+        {/* <Router>      */}
+          <Switch>
             <Route  path="/CardPage"><CardPage/></Route>
             <Route  path="/ForgotPassword"><ForgotPassword/></Route>
             <Route  path="/Register"><Register/></Route>
             <Route  path="/Login"><Login/></Route>
             <Route  path="/SearchResult"><SearchResult/></Route>
             <Route  path="/NotSignedIn"><NotSignedIn/></Route>
-            <LoginPage path="/"/>
-        </Switch>
-    </CookiesProvider>
+          <LoginPage path="/"/>
+
+          </Switch>
+          {/* </Router> */}
+      </div>
+      </CookiesProvider>
   );
 }
 
