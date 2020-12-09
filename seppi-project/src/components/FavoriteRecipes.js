@@ -30,7 +30,7 @@ const FavoriteRecipes = () => {
       return 'http://localhost:5000/' + route;
     }
   }
-
+  
   const handleBackButton = () => {
     setAccountModalPath("");
   }
@@ -225,7 +225,7 @@ const FavoriteRecipes = () => {
             </div>
 
              <div id="FavoritesRows">
-                {favorites !== undefined ? favorites.map((item) => <Recipe match={item.recipe.match} not={item.recipe.not} link={item.recipe.url} label={item.recipe.label} image={item.recipe.image}/>) : <div></div>}
+                {favorites !== undefined ? favorites.map((item) => <Recipe bookmarked={item.bookmarked} match={item.recipe.match} not={item.recipe.not} link={item.recipe.url} label={item.recipe.label} image={item.recipe.image}/>) : <div></div>}
             </div>
         </div>
         <br/>

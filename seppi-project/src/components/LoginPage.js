@@ -13,10 +13,6 @@ import { useCookies } from 'react-cookie';
 import Recipe from './Recipe'
 
 const LoginPage = () => {
-  useEffect(() => {
-    getRecipe();
- }, []);
-
   // User's login status
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [loginResult, setLoginResult] = useState('');

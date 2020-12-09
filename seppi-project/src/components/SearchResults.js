@@ -992,7 +992,7 @@ const SearchResults =() => {
 
       {/* Recipe Result List */}
       <div class="recipe-result-container">
-        {searchData !== undefined ? searchData.map((item) => <Recipe link={item.recipe.url} label={item.recipe.label} image={item.recipe.image} />) : <div></div>}
+        {searchData !== undefined ? searchData.map((item) => <Recipe shareAs={item.recipe.shareAs} bookmarked={item.bookmarked} link={item.recipe.url} label={item.recipe.label} image={item.recipe.image} />) : <div></div>}
       </div>
 
       <Modal show={showAccount} onHide={handleShowAccount}>
