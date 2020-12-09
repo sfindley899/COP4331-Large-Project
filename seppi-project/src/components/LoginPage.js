@@ -156,28 +156,79 @@ const doRegister = async event => {
 };
 
 
-
+/*
 const recipeStuff = {
-  search: "",
-  //Idk what all I'm pulling so far
+  label: "",
+  image: "",
+  ingredients: ""
 };
+*/
 
 const getRecipe = async event => {
   event.preventDefault();
 
-  const response = await fetch(buildPath('Recipe'), {
+  let arr = [];
+
+  const response = await     
+   fetch(buildPath('searchRecipeTop'), {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      search: recipeStuff.search,
-      //IDK what all I'm pulling
+        search: 'chicken',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
     })
+    
   })
 
+  let json = JSON.parse(await response.text());
+  arr.push(json);
+
+  const response1 = await     
+   fetch(buildPath('searchRecipeTop'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        search: 'vegetables',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
+    })
+    
+  })
+
+  json = JSON.parse(await response1.text());
+  arr.push(json);
+
+  const response2 = await     
+   fetch(buildPath('searchRecipeTop'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        search: 'pasta',
+        idToken: cookies.idToken,
+        from: 0,
+        to: 100
+    })
+    
+  })
+
+  json = JSON.parse(await response2.text());
+  arr.push(json);
+
+  //alert(JSON.stringify(arr[2].hits.top));
 };
+
 
 
 
@@ -238,6 +289,7 @@ const getRecipe = async event => {
                 </div>
           </div>
         </div>
+
 
           <div class = "Icons">
                 <div class = "leftIcon">
