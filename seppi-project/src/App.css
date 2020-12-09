@@ -177,9 +177,18 @@ body {
   color: black;
   height: 80vh;
   padding: 50px;
-  padding-left: 80px;
   font-size: 40px;
   font-weight: bold;
+  text-align: center;
+}
+
+.suggestionsLoginText {
+  color: black;
+  height: 80vh;
+  padding: 50px;
+  padding-left: 80px;
+  font-size: 20px;
+  font-weight: bold
 }
 
 .leftPicture {
@@ -362,6 +371,23 @@ body {
   border-radius: 15px;
   background-color: orange;
   padding: 10px;
+}
+
+#loginButtonSuggested {
+  font-size: 30px;
+  color: white;
+  width: 100%;
+  border-radius: 25px;
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: orange;
+  margin-top: 30px;
+  padding: 10px;
+}
+
+#loginViewSuggested {
+  display: block;
+  justify-content: center;
 }
 
 #editAccountButton {
@@ -712,8 +738,6 @@ body {
   flex-wrap: wrap;
   left: 19%;
   top: 15%;
-
-  background: #e7923183;
 }
 .accountModalTitle {
   display: flex;

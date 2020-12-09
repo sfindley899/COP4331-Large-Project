@@ -21,6 +21,7 @@ const firebase = require('firebase/app'),
 require("firebase/auth");
 require("firebase/firestore");
 
+
 // Required for side-effects
 require("firebase/app");
 require("firebase/firestore");
@@ -599,7 +600,84 @@ app.post('/searchRecipeAnon', async (req, res) => {
 app.post('/searchRecipeTop', async (req, res) => {
     if (req.body.idToken == null)
     {
-        return res.status(400).send(JSON.stringify({response : 'No user'}));
+        var apikey = process.env.RECIPE_API_KEY
+        var app_id = process.env.RECIPE_APP_ID
+        var url = 'https://api.edamam.com/search?q=' + req.body.search;
+
+        if (req.body.filters !== undefined && req.body.filters !== null)
+          url += '&' + req.body.filters;
+        var from = 0;
+        var to = 10;
+        if (req.body.from != null)
+        {
+            from = req.body.from;
+        }
+        if (req.body.to != null)
+        {
+            to = req.body.to;
+        }
+        /* or if you want to send page and size of each page. where page 0 is starting.
+        page = req.body.page;
+        size = req.body.size;
+        and then you can do
+        url += '&from=' + page * size;
+        var next = page + 1;
+        url += '&to=' + next * size;
+        */
+        url += '&from=' + from;
+        url += '&to=' + to;
+        url += '&app_id='
+        url += app_id
+        url += "&app_key="
+        url += apikey
+        const https = require('https');
+        var x = "";
+        var recipe = {
+
+        }
+        recipe = https.get(url, (_res) => {
+          _res.on('data', (d) => {
+            x += d;
+          });
+          _res.on("end", function () {
+                // Process the search data and figure out which recipes are bookmarked by the user.
+                let data = JSON.parse(x);
+                var first = 0;
+                var index1 = 0;
+                var index2 = 1;
+                var second = 0;
+                // If data doesn't exist return.
+                if (data === undefined || data.hits === undefined) {
+                  return res.status(400).send({response: 'No searches returned'});
+                }
+                var min = 1;
+                var max = 49;
+                var index1 = Math.floor(
+    Math.random() * (max - min + 1) + min
+  )
+  var index2 = Math.floor(
+Math.random() * (max - min + 1) + min
+)
+                if (index1 == index2)
+                {
+                    index1--;
+                }
+                data.hits[index1].recipe.match = [];
+                data.hits[index1].recipe.not = [];
+                data.hits[index2].recipe.not = [];
+                data.hits[index2].recipe.match = [];
+                recipe = {
+                    top: data.hits[index1],
+                    second: data.hits[index2]
+                }
+                return res.status(200).send({hits: recipe});
+
+            });
+
+        }).on('error', (e) => {
+          console.error(e);
+        });
+        return;
     }
     var decodedToken = await firebaseAdminSdk.auth().verifyIdToken(req.body.idToken);
     if (decodedToken == null)
@@ -666,7 +744,9 @@ app.post('/searchRecipeTop', async (req, res) => {
     and then you can do
     url += '&from=' + page * size;
     var next = page + 1;
-    url += '&to=' + next * size;
+    url += '&to=' + next * size;                var index1 = Math.floor(
+
+  )
     */
     url += '&from=' + from;
     url += '&to=' + to;
@@ -752,6 +832,7 @@ app.post('/searchRecipeTop', async (req, res) => {
     });
     return;
 });
+
 
 app.post('/userInfo', (req, res) => {
       firebase.auth().onAuthStateChanged(function(user) {
