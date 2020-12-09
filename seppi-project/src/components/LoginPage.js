@@ -238,9 +238,6 @@ const getRecipe = async event => {
 
 };
 
-
-
-
   return (
 
     <div class="bg-contain"
