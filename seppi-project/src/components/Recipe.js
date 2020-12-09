@@ -4,7 +4,7 @@ import RecipePreview from './RecipePreview';
 
 const Recipe = (props) => {
 	return (
-		<div class="recipe">
+		<div onClick={(event) => {event.preventDefault(); window.open(props.link)}} class="recipe">
 			<div class="image-container">
 				<img class="recipe-image" src={props.image} />
 			</div>
