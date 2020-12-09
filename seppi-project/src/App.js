@@ -18,6 +18,7 @@ import {
   useRouteMatch,
   useParams
 } from "react-router-dom";
+import UserContext from './context';
 
 function App() {
   const [state, setState] = useState({
@@ -32,6 +33,7 @@ function App() {
   });
 
   return (
+      <UserContext.Provider value={[state, setState]}>
       <CookiesProvider>
       <div className="App">
         {/* <Router>      */}
@@ -48,6 +50,7 @@ function App() {
           {/* </Router> */}
       </div>
       </CookiesProvider>
+      </UserContext.Provider>
   );
 }
 
