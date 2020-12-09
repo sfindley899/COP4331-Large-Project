@@ -6,7 +6,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import CardPage from './components/CardPage';
-import SearchResult from './components/SearchResult';
+import SearchResults from './components/SearchResults';
 import NotSignedIn from './components/NotSignedIn';
 import {
   HashRouter as Router,
@@ -27,7 +27,7 @@ function App() {
    <Route  path="/ForgotPassword"><ForgotPassword/></Route>
    <Route  path="/Register"><Register/></Route>
    <Route  path="/Login"><Login/></Route>
-   <Route  path="/SearchResult"><SearchResult/></Route>
+   <Route  path="/SearchResults"><SearchResults/></Route>
    <Route  path="/NotSignedIn"><NotSignedIn/></Route>
 <LoginPage path="/"/>
   

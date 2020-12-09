@@ -144,6 +144,7 @@ const SearchResult =() => {
     southamerican: false,
     southeastasian: false,
   });
+  //const [filterState, setTag] = React.useState()
 
   document.body.style.height = "100vh";
 
@@ -178,6 +179,12 @@ const SearchResult =() => {
     },
     checked: {},
   })((props) => <Checkbox color="default" {...props} />);
+
+  const OrangeFilterTag = withStyles({
+    checked: {
+      color: orange[600],
+    },
+  })((props) => <Button color="default" {...props} />);
   
   // Filter Folder click handles
   const handleClickMealandCourse = () => {
@@ -200,6 +207,11 @@ const SearchResult =() => {
   const handleChange = (event) => {
     setFilter({ ...filterState, [event.target.name]: event.target.checked });
   };
+
+  //Filter tag checker
+  const toggleTag = (event) => {
+      setFilter({ ...filterState, [event.target.name]: event.target.checked })
+  }
 
   return(
     <div>
@@ -228,7 +240,7 @@ const SearchResult =() => {
       </Navbar>
 
       {/* Filters */}
-      <div class="filter-box">
+      <div class="filter-container">
           <List
           component="nav"
           aria-labelledby="nested-list-subheader"
@@ -275,7 +287,7 @@ const SearchResult =() => {
           <div id="FilterDivider"></div>
           <ListItem button onClick={handleClickDishType}>
             <ListItemText primary="Dish Type" id="FilterFolder"/>
-            {openDishType ? <ExpandLess /> : <ExpandMore />}
+            {openDishType ? <ExpandLess/> : <ExpandMore/>}
           </ListItem>
           <Collapse in={openDishType} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
@@ -769,7 +781,14 @@ const SearchResult =() => {
       </div>
       
       {/* Filter Tags */}
-      
+      <div class="filter-tag-container">
+        {/* I skipped this for now, wanted to work on more crucial features first! */}
+      </div>
+
+      {/* Recipe Result List */}
+      <div class="recipe-result-container">
+        
+      </div>
 
 
     </div>

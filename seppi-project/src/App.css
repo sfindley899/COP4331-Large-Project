@@ -638,7 +638,7 @@ body {
   font-size: 2.25rem !important;
 }
 
-.filter-box {
+.filter-container {
   position: absolute;
   width: 16%;
   left: 31px;
@@ -684,4 +684,28 @@ body {
 
   /* Black / 10 */
   border: 1px solid #e8e8e8;
+}
+
+.filter-tag-container {
+  position: absolute;
+  padding-top: 15;
+  width: 100%;
+  height: 9%;
+  /* height: 91px; */
+  left: 19%;
+  top: 6%;
+
+  background: #b8680071;
+}
+
+.recipe-result-container {
+  position: absolute;
+  display: flex;
+  justify-content: right;
+  width: 100%;
+  height: 100%;
+  left: 19%;
+  top: 15%;
+
+  background: #e7923183;
 }

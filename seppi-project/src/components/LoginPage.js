@@ -174,7 +174,7 @@ const doRegister = async event => {
         </form>
         <br/>
         <br/>
-        <Link className="btn btn-success mt-2" id = "searchFilter" to="/SearchResult">
+        <Link className="btn btn-success mt-2" id = "searchFilter" to="/SearchResults">
           Advanced Search
         </Link>
       </div>
