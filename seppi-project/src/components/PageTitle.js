@@ -4,7 +4,7 @@ function PageTitle()
 {
    return(
      <div id = "title" style={{color: 'white'}}>
-     <h3>Seppi - Grocery List and Recipe Finder</h3>
+     <h3 style={{fontSize:'36px'}}>Seppi - Grocery List and Recipe Finder</h3>
      <br/>
      <h1 id="title">Find a Recipe</h1>
      </div>

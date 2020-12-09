@@ -7,10 +7,7 @@ import {ExpandLess, ExpandMore, CheckBoxOutlineBlank, CheckBox} from '@material-
 import { grey, orange } from '@material-ui/core/colors';
 
 const SearchResult =() => {
-
   const [show, setList] = React.useState(false);
-  const handleCloseList = () => setList(false);
-  const handleShowList = () => setList(true);
 
   // Filter Folder use states
   const [openMealandCourse, setOpenMealandCourse] = React.useState(false);
@@ -147,14 +144,6 @@ const SearchResult =() => {
   //const [filterState, setTag] = React.useState()
 
   document.body.style.height = "100vh";
-
-  const openFavorites = event => {
-    {/*Function to produce object inside Results div depending on if the user is logged in or not*/}
-
-    return(
-      <div></div>
-    );
-  }
 
   // Filter Folder Styles
   const useStyles = makeStyles((theme) => ({
@@ -787,7 +776,7 @@ const SearchResult =() => {
 
       {/* Recipe Result List */}
       <div class="recipe-result-container">
-        
+
       </div>
 
 

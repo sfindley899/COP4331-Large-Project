@@ -2,8 +2,10 @@
 	display: flex;
 	flex-direction: column;
 	max-width: fit-content;
+	width: 300px;
 	justify-content: center;
-	align-items: center;
+	align-items: inherit;
+	/* make-it-look-good: true; */
 }
 
 .recipe:hover {
@@ -17,17 +19,25 @@
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 21px;
-	width: 200px;
+	width: 230px;
 	text-align: center;
 }
 
 .recipe-image {
-	width: 200px;
-	height: 150px;
+	width: 250px;
+	height: 200px;
 	border-radius: 16px;
 }
 
 .image-container {
 	display: block;
 	padding: 20px 20px;
+}
+
+.match-container {
+	color:rgb(189, 189, 189);
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	
 }

@@ -51,7 +51,7 @@ const Login=() => {
         setCookie('name', res.name, {path: '/'});
         setCookie('email', res.email, {path: '/'});
         setCookie('idToken', res.idToken, {path: '/'});
-        window.location.href = '/SearchResult';
+        window.location.href = '/SearchResults';
       }
       else if (status === 400) {
         var x = document.getElementById("loginFooter");

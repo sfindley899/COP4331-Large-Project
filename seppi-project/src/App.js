@@ -9,7 +9,6 @@ import CardPage from './components/CardPage';
 import SearchResults from './components/SearchResults';
 import FavoriteRecipes from './components/FavoriteRecipes';
 import { CookiesProvider } from 'react-cookie';
-import UserContext from './context';
 
 import {
   HashRouter as Router,
@@ -19,6 +18,7 @@ import {
   useRouteMatch,
   useParams
 } from "react-router-dom";
+import UserContext from './context';
 
 function App() {
   const [state, setState] = useState({
