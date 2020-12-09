@@ -150,10 +150,10 @@ const FavoriteRecipes = () => {
       return (
         <div class="accountModalTitle">
           <form onSubmit={changeAccountInfo} className="loginsForm">
-            <input 
+            <input
               type="text"
               placeholder="Display Name"
-              name="inputAccountName" 
+              name="inputAccountName"
               id="inputAccountName"
               className="form-control account-input"
               required
@@ -195,7 +195,7 @@ const FavoriteRecipes = () => {
     //setState(state => ({ ...state, favorites: json.favorites}));
   };
 
-  useEffect(() => {    
+  useEffect(() => {
      fetchFavorites();
   }, []);
 
@@ -205,22 +205,18 @@ const FavoriteRecipes = () => {
         class= "navbar"
         sticky= "top"
         top="0"
-        expand="sm" 
+        expand="sm"
         variant="dark"
       >
         <Navbar.Brand id="seppiButton" onClick={() => window.location.href = '/SearchResults'} class="navbar-brand">Seppi</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Form inline id="SearchBar">
-              <FormControl type="text" font="typeface-roboto" placeholder="Search by recipe, ingredient, dish, ..." class="mr-sm-2" />
-              <Button id="SearchSubmitButton" className="fa fa-search" type="submit"></Button>
-            </Form>
             <Nav className="ml-auto">
               <Nav.Link href="/FavoriteRecipes">Favorites</Nav.Link>
               <Nav.Link onClick={handleShowAccount}>Account</Nav.Link>
             </Nav>
           </Navbar.Collapse>
-        </Navbar> 
+        </Navbar>
         <br/>
         <div id="FavContainer">
             <div id="FavHeader" className="row">
@@ -240,7 +236,7 @@ const FavoriteRecipes = () => {
               {renderAccountModalTitle()}
             </Modal.Title>
 
-          </Modal.Header> 
+          </Modal.Header>
           <Modal.Body>
             {renderAccountModalBody()}
           </Modal.Body>
