@@ -539,6 +539,63 @@ app.post('/searchRecipe', async (req, res) => {
     });
 });
 
+app.post('/searchRecipeAnon', async (req, res) => {
+
+    var apikey = process.env.RECIPE_API_KEY
+    var app_id = process.env.RECIPE_APP_ID
+    var url = 'https://api.edamam.com/search?q=' + req.body.search;
+
+    if (req.body.filters !== undefined && req.body.filters !== null)
+      url += '&' + req.body.filters;
+    var from = 0;
+    var to = 10;
+    if (req.body.from != null)
+    {
+        from = req.body.from;
+    }
+    if (req.body.to != null)
+    {
+        to = req.body.to;
+    }
+    /* or if you want to send page and size of each page. where page 0 is starting.
+    page = req.body.page;
+    size = req.body.size;
+    and then you can do
+    url += '&from=' + page * size;
+    var next = page + 1;
+    url += '&to=' + next * size;
+    */
+    url += '&from=' + from;
+    url += '&to=' + to;
+    url += '&app_id='
+    url += app_id
+    url += "&app_key="
+    url += apikey
+    const https = require('https');
+    var x = "";
+    https.get(url, (_res) => {
+      _res.on('data', (d) => {
+        x += d;
+      });
+      _res.on("end", function () {
+            // Process the search data and figure out which recipes are bookmarked by the user.
+            let data = JSON.parse(x);
+
+            // If data doesn't exist return.
+            if (data === undefined || data.hits === undefined) {
+              return res.status(400).send({response: 'No searches returned'});
+            }
+
+
+            return res.status(200).send({hits: data.hits});
+        });
+
+    }).on('error', (e) => {
+      console.error(e);
+    });
+    return;
+});
+
 app.post('/searchRecipeTop', async (req, res) => {
     if (req.body.idToken == null)
     {
