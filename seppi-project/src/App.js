@@ -9,6 +9,7 @@ import CardPage from './components/CardPage';
 import SearchResult from './components/SearchResult';
 import FavoriteRecipes from './components/FavoriteRecipes';
 import { CookiesProvider } from 'react-cookie';
+import UserContext from './context';
 
 import {
   HashRouter as Router,
@@ -28,10 +29,11 @@ function App() {
     expiring: [],
     list: {response: [], numChecked: 0},
     idToken: '',
+    favorites: []
   });
 
   return (
-
+      <UserContext.Provider value={[state, setState]}>
       <CookiesProvider>
       <div className="App">
         {/* <Router>      */}
@@ -48,6 +50,7 @@ function App() {
           {/* </Router> */}
       </div>
       </CookiesProvider>
+      </UserContext.Provider>
   );
 }
 

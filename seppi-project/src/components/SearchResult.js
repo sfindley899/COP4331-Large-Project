@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import AccountButton from './AccountButton';
 import { useCookies } from 'react-cookie';
+import UserContext from '../context';
 
-const SearchResult =() => {
+const SearchResult = () => {
+  const [state, setState] = useContext(UserContext);
   const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
@@ -55,8 +57,9 @@ const SearchResult =() => {
     }
 
     let json = JSON.parse(await response.text());
+    setState(state => ({ ...state, favorites: json.favorites}));
 
-    setCookie('favorites', json.favorites, {path: '/'});
+    //setCookie('favorites', json.favorites, {path: '/'});
   };
 
   const displayResults = event => {
@@ -67,10 +70,7 @@ const SearchResult =() => {
     document.getElementById("Results").style.display = "none";
   }
 
-  const tempFavButton = async event => {
-    // Fetch favorites list
-    await fetchFavorites();
-
+  const tempFavButton = event => {
     window.location.href = '/FavoriteRecipes';
   }
 
