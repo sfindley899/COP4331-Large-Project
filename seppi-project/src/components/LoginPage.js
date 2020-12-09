@@ -281,30 +281,10 @@ const getRecipe = async event => {
               <Col>
                 <Form.Label htmlFor="inlineFormInput" srOnly></Form.Label>
                 <Form.Control
-                  className="mb-2"
-                  id="inlineFormInput"
-                  placeholder="Search by Recipe, Ingredient, dish ..."
+                  placeholder="Search by recipe, ingredient, dish, ..." class="mr-sm-2"
                 />
               </Col>
-
-              <Button
-                variant="light"
-                to="/Register"
-                type="submit"
-                className="mb-2 background-orange"
-                style={{
-                  marginLeft: "-0.35rem",
-                  background: "orange",
-                  textAlign: "center",
-                  fontWeight: "500",
-                  borderRadius: "1px solid orange",
-                  border: "2px solid orange",
-                  color: "white",
-                }}
-              >
-                Search{" "}
-                <img overflow="hidden" src="../images/search.png" width="20" />
-              </Button>
+              <Button id="SearchSubmitButton" className="fa fa-search" type="submit"></Button>
             </Form.Row>
           </Form>
 
