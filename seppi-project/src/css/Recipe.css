@@ -6,13 +6,18 @@
 	align-items: center;
 }
 
+.recipe:hover {
+	cursor: pointer;
+	background-color: #f9c35e;
+}
+
 .recipe-label {
 	font-family: Roboto;
 	font-style: normal;
 	font-weight: bold;
 	font-size: 18px;
 	line-height: 21px;
-	width: 100px;
+	width: 200px;
 	text-align: center;
 }
 

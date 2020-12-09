@@ -591,6 +591,14 @@ body {
   align-items: center;
 }
 
+#FavoritesRows {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
 #HeartImage {
   background-image: url('./images/orangeheart.png');
   background-size: 120px;

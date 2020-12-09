@@ -236,7 +236,9 @@ const FavoriteRecipes = () => {
               <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
             </div>
 
-            {favorites !== undefined ? favorites.map((item) => <Recipe label={item.recipe.label} image={item.recipe.image}/>) : <div></div>}
+             <div id="FavoritesRows">
+                {favorites !== undefined ? favorites.map((item) => <Recipe label={item.recipe.label} image={item.recipe.image}/>) : <div></div>}
+            </div>
         </div>
         <br/>
 
