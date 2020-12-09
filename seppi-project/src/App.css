@@ -163,7 +163,6 @@ body {
 }
 
 
-=======
 .Suggestions {
   display: flex;
   justify-content: center;
@@ -183,7 +182,6 @@ body {
   font-size: 40px;
   font-weight: bold;
 }
->>>>>>> 0699bcaa818557ed6987f0262a432b3cf371f28e
 
 .leftPicture {
   position: center;
