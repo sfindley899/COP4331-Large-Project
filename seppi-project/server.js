@@ -382,8 +382,6 @@ app.post('/getFavorites', async (req, res) => {
                   }
                   //array1.push(data.hits[i].recipe.ingredients[j].food)
               }
-              console.log(doc.data().recipe.match)
-              console.log(match)
               ratio = ratio / total
               recipe = doc.data().recipe;
               recipe.match = match
@@ -598,7 +596,11 @@ app.post('/searchRecipeAnon', async (req, res) => {
 });
 
 app.post('/searchRecipeTop', async (req, res) => {
-    if (req.body.idToken == null)
+    if (req.body.search == null || req.body.search == undefined || req.body.search == "")
+    {
+        return res.status(400).send(JSON.stringify({response:"No Search Param"}));
+    }
+    if (req.body.idToken == null || req.body.idToken == undefined)
     {
         var apikey = process.env.RECIPE_API_KEY
         var app_id = process.env.RECIPE_APP_ID

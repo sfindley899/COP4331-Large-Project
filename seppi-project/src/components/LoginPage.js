@@ -13,9 +13,7 @@ import { useCookies } from 'react-cookie';
 import Recipe from './Recipe'
 
 const LoginPage = () => {
-  useEffect(() => {
-    getRecipe();
- }, []);
+
 
   // User's login status
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
@@ -171,8 +169,74 @@ const recipeStuff = {
 */
 
 const getRecipe = async event => {
-
+    event.preventDefault();
   let arr = [];
+   var c = document.getElementById('inlineFormInput').value;
+  if (document.getElementById('inlineFormInput') == null || c == "")
+  {
+      const response = await
+       fetch(buildPath('searchRecipeTop'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            search: 'chicken',
+            idToken: cookies.idToken,
+            from: 0,
+            to: 100
+        })
+
+      })
+
+      let json = JSON.parse(await response.text());
+      arr.push(json);
+
+      const response1 = await
+       fetch(buildPath('searchRecipeTop'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            search: 'vegetables',
+            idToken: cookies.idToken,
+            from: 0,
+            to: 100
+        })
+
+      })
+
+      json = JSON.parse(await response1.text());
+      arr.push(json);
+
+      const response2 = await
+       fetch(buildPath('searchRecipeTop'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            search: 'pasta',
+            idToken: cookies.idToken,
+            from: 0,
+            to: 100
+        })
+
+      })
+
+      json = JSON.parse(await response2.text());
+      arr.push(json);
+
+      setSuggestion(arr);
+      return;
+
+      //alert(JSON.stringify(arr[2].hits.top));
+
+  }
 
   //Each response gets two recipes
   const response = await
@@ -183,7 +247,7 @@ const getRecipe = async event => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        search: 'chicken',
+        search: c,
         idToken: cookies.idToken,
         from: 0,
         to: 100
@@ -202,7 +266,7 @@ const getRecipe = async event => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        search: 'vegetables',
+        search: c,
         idToken: cookies.idToken,
         from: 0,
         to: 100
@@ -221,7 +285,7 @@ const getRecipe = async event => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        search: 'pasta',
+        search: c,
         idToken: cookies.idToken,
         from: 0,
         to: 100
@@ -237,6 +301,9 @@ const getRecipe = async event => {
   //alert(JSON.stringify(arr[2].hits.top));
 
 };
+
+
+
 
   return (
 
@@ -273,7 +340,9 @@ const getRecipe = async event => {
         </div>
         <PageTitle />
         <div style={{ top: "10%", position: "relative" }}>
-          <Form id="searchParameter">
+          <Form id="searchParameter" onSubmit = {
+              getRecipe
+          }>
             <Form.Row className="align-items-center">
               <Col>
                 <Form.Label htmlFor="inlineFormInput" srOnly></Form.Label>
@@ -306,7 +375,7 @@ const getRecipe = async event => {
           </Form>
 
           <div class="container">
-           
+
           </div>
         </div>
       </div>
@@ -343,7 +412,7 @@ const getRecipe = async event => {
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
                 </div>
               </div>
-                    
+
         <div>
         <footer
           class="container-fluid text-center text-white"
