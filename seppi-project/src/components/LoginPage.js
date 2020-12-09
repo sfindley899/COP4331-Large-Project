@@ -155,7 +155,7 @@ const doRegister = async event => {
 
 const recipeStuff = {
   search: "",
-  //Idk what all I'm pulling so far    
+  //Idk what all I'm pulling so far
 };
 
 const getRecipe = async event => {
