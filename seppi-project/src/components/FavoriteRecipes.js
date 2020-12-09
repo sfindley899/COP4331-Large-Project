@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import AccountButton from './AccountButton';
 import Recipe from './Recipe';
 import UserContext from '../context';
+import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 
 const FavoriteRecipes = () => {
   const [favorites, setFavorites] = useState([]);
@@ -132,7 +133,7 @@ const FavoriteRecipes = () => {
           />
           <AccountButton
             title="Search Recipes"
-            onClick={() => window.location.href='/SearchResult'}
+            onClick={() => window.location.href='/SearchResults'}
           />
           <AccountButton
             title="Favorite Recipes"
@@ -200,35 +201,26 @@ const FavoriteRecipes = () => {
 
   return(
     <div style={{margin: "0 auto", height: "100vh"}}>
-        <div style={{width: "100%", height: "100px", backgroundColor: "#FA730B"}}>
-          <div className="row" style={{width: "100%"}}>
-            <div style={{width: "25%", height: "100px", color: "white", paddingTop: "5px", fontSize: "60px", fontWeight: "bold"}}>
-              Seppi
-            </div>
-            <div style ={{width: "50%", height: "100px",paddingTop: "25px", textAlign: "center"}}>
-              <form>
-                <input id="resultSearch" type="text" placeholder="Search by recipe, ingredient, dish..." />
-                <span className="searchImage" style={{borderRadius: "1px", width: "4%", backgroundSize: "cover", height: "50px",color: "white", position: "absolute", backgroundColor: "orange", padding: '2px'}}>
-                  <i className="fa fa-search" style={{paddingTop: "8px", fontSize: "30px"}}></i>
-                </span>
-              </form>
-            </div>
-            <div style={{width: "25%", height: "100px",paddingTop: "5px", textAlign: "center"}}>
-              <button id="FavPageButton" onClick={() => console.log("Hello")}>
-                <div onClick={fetchFavorites} id = "FavImage"></div>
-                Favorites
-              </button>
-              <button onClick={handleShowAccount} id="AccountSettings">
-                <div id = "AccountImage"></div>
-                Account
-              </button>
-              <button id="List">
-                <div id="ListImage"></div>
-                Lists
-              </button>
-            </div>
-          </div>
-        </div>
+       <Navbar collapseOnSelect
+        class= "navbar"
+        sticky= "top"
+        top="0"
+        expand="sm" 
+        variant="dark"
+      >
+        <Navbar.Brand href="/home" class="navbar-brand">Seppi</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Form inline id="SearchBar">
+              <FormControl type="text" font="typeface-roboto" placeholder="Search by recipe, ingredient, dish, ..." class="mr-sm-2" />
+              <Button id="SearchSubmitButton" className="fa fa-search" type="submit"></Button>
+            </Form>
+            <Nav className="ml-auto">
+              <Nav.Link href="/FavoriteRecipes">Favorites</Nav.Link>
+              <Nav.Link onClick={handleShowAccount}>Account</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar> 
         <br/>
         <div id="FavContainer">
             <div id="FavHeader" className="row">

@@ -90,7 +90,7 @@ const LoginPage = () => {
 			setLoginResult('Failed to login to account due to internal server error.');
 			return;
     }
-    window.location.href = '/SearchResult';
+    window.location.href = '/SearchResults';
   };
   
 const [regdata, setRegData] = React.useState(UserContext);
