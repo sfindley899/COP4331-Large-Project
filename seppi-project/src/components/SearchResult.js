@@ -7,10 +7,10 @@ import { useCookies } from 'react-cookie';
 
 const SearchResult =() => {
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
-  //const [state, setState] = React.useContext(UserContext);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
   const [accountModalPath, setAccountModalPath] = React.useState('');
+  const [changeAccountInfoResult, setChangeAccountInfoResult] = React.useState('');
   const handleCloseList = () => setList(false);
   const handleShowList = () => setList(true);
   const handleShowAccount = () => setShowAccount(!showAccount);
@@ -82,21 +82,6 @@ const SearchResult =() => {
     }
   };
 
-  const accountState = {
-    displayName: ""
-  };
-
-  const [data, setData] = React.useState(accountState);
-  const [nameText, setNameText] = useState('');
-  const [changeAccountInfoResult, setChangeAccountInfoResult] = React.useState('');
-
-  const handleChange = event => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value
-    });
-  };
-
   const changeAccountInfo = async event => {
     event.preventDefault();
 
@@ -156,6 +141,14 @@ const SearchResult =() => {
           <AccountButton
             title="Change Account Information"
             onClick={() => setAccountModalPath("Change Account Information")}
+          />
+          <AccountButton
+            title="Search Recipes"
+            onClick={() => window.location.href='/SearchResult'}
+          />
+          <AccountButton
+            title="Favorite Recipes"
+            onClick={() => window.location.href='/NotSignedIn'}
           />
           <AccountButton
             title="Sign Out"
