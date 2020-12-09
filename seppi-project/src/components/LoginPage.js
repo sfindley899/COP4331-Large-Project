@@ -170,6 +170,7 @@ const getRecipe = async event => {
 
   let arr = [];
 
+  //Each response gets two recipes
   const response = await     
    fetch(buildPath('searchRecipeTop'), {
     method: 'POST',
