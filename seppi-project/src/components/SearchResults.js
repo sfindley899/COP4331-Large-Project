@@ -145,7 +145,7 @@ const SearchResults =() => {
     if (key === 'wheatfree')
       return 'wheat-free';
 
-    // cuisine type 
+    // cuisine type
     if (key === 'centraleurope')
       return 'Central Europe';
     if (key === 'easterneurope')
@@ -159,7 +159,7 @@ const SearchResults =() => {
     if (key === 'southeastasian')
       return 'South East Asian';
   };
-  
+
   const applyFilters = () => {
 		setFilterText(filterText => '');
 		let firstFoundKey = true;
@@ -173,7 +173,7 @@ const SearchResults =() => {
 				}
 				if (keyToApiParameter(key) === undefined)
 					str += key + '&';
-				else 
+				else
 					str += keyToApiParameter(key) + '&';
 				setFilterText(filterText => filterText + str);
 			}
@@ -189,7 +189,7 @@ const SearchResults =() => {
 				}
 				if (keyToApiParameter(key) === undefined)
 					str += key + '&';
-				else 
+				else
 					str += keyToApiParameter(key) + '&';
 				setFilterText(filterText => filterText + str);
 			}
@@ -205,7 +205,7 @@ const SearchResults =() => {
 				}
 				if (keyToApiParameter(key) === undefined)
 					str += key + '&';
-				else 
+				else
 					str += keyToApiParameter(key) + '&';
 				setFilterText(filterText => filterText + str)
 			}
@@ -221,7 +221,7 @@ const SearchResults =() => {
 				}
 				if (keyToApiParameter(key) === undefined)
 					str += key + '&';
-				else 
+				else
 					str += keyToApiParameter(key) + '&';
 				setFilterText(filterText => filterText + str)
 			}
@@ -237,7 +237,7 @@ const SearchResults =() => {
 				}
 				if (keyToApiParameter(key) === undefined)
 					str += key + '&';
-				else 
+				else
 					str += keyToApiParameter(key) + '&';
 				setFilterText(filterText => filterText + str)
 			}
@@ -274,7 +274,16 @@ const SearchResults =() => {
     }
 
     let json = JSON.parse(await response.text());
-
+    var n = json.hits.length;
+        for (var i = 0; i < n-1; i++)
+            for (var j = 0; j < n-i-1; j++)
+                if (json.hits[j].recipe.ratio <= json.hits[j+1].recipe.ratio)
+                {
+                    // swap arr[j+1] and arr[j]
+                    var temp = json.hits[j];
+                    json.hits[j] = json.hits[j+1];
+                    json.hits[j+1] = temp;
+                }
     setSearchData(json.hits);
   }
 
@@ -362,10 +371,10 @@ const SearchResults =() => {
       return (
         <div class="accountModalTitle">
           <form onSubmit={changeAccountInfo} className="loginsForm">
-            <input 
+            <input
               type="text"
               placeholder="Display Name"
-              name="inputAccountName" 
+              name="inputAccountName"
               id="inputAccountName"
               className="form-control account-input"
               required
@@ -419,7 +428,7 @@ const SearchResults =() => {
       soup: false,
       starter: false,
     },
-    
+
     //Dietary Concerns
     diet: {
       balanced: false,
@@ -462,7 +471,7 @@ const SearchResults =() => {
       vegetarian: false,
       wheatfree: false,
     },
-    
+
     //Ingredients
     chicken: false,
     beef: false,
@@ -503,7 +512,7 @@ const SearchResults =() => {
     sweetpotato: false,
     tomato: false,
     zucchini: false,
-    
+
     //Cuisine
     cuisineType: {
       american: false,
@@ -567,7 +576,7 @@ const SearchResults =() => {
       color: orange[600],
     },
   })((props) => <Button color="default" {...props} />);
-  
+
   // Filter Folder click handles
   const handleClickMealandCourse = () => {
     setOpenMealandCourse(!openMealandCourse);
@@ -606,7 +615,7 @@ const SearchResults =() => {
         class= "navbar"
         sticky= "top"
         top="0"
-        expand="sm" 
+        expand="sm"
         variant="dark"
       >
         <Navbar.Brand id="seppiButton" onClick={() => window.location.href = '/SearchResults'} class="navbar-brand">Seppi</Navbar.Brand>
@@ -624,7 +633,7 @@ const SearchResults =() => {
       </Navbar>
 
       {/* Filters */}
-      
+
       <div class="filter-container">
           <List
           component="nav"
@@ -995,7 +1004,7 @@ const SearchResults =() => {
           <div id="FilterDivider"></div>
         </List>
       </div>
-      
+
       {/* Filter Tags */}
       <div class="filter-tag-container">
         {/* I skipped this for now, wanted to work on more crucial features first! */}
@@ -1003,7 +1012,7 @@ const SearchResults =() => {
 
       {/* Recipe Result List */}
       <div class="recipe-result-container">
-        {searchData !== undefined ? searchData.map((item) => <Recipe link={item.recipe.url} label={item.recipe.label} image={item.recipe.image} />) : <div></div>}
+        {searchData !== undefined ? searchData.map((item) => <Recipe link={item.recipe.url} match={item.recipe.match} not={item.recipe.not} label={item.recipe.label} image={item.recipe.image} />) : <div></div>}
       </div>
 
       <Modal show={showAccount} onHide={handleShowAccount}>
@@ -1012,7 +1021,7 @@ const SearchResults =() => {
             {renderAccountModalTitle()}
           </Modal.Title>
 
-        </Modal.Header> 
+        </Modal.Header>
         <Modal.Body>
           {renderAccountModalBody()}
         </Modal.Body>
