@@ -652,18 +652,23 @@ app.post('/searchRecipeTop', async (req, res) => {
                 }
                 var min = 1;
                 var max = 49;
-
+                var index1 = Math.floor(
+    Math.random() * (max - min + 1) + min
+  )
+  var index2 = Math.floor(
+Math.random() * (max - min + 1) + min
+)
                 if (index1 == index2)
                 {
                     index1--;
                 }
-                data.hits[0].recipe.match = [];
-                data.hits[0].recipe.not = [];
-                data.hits[1].recipe.not = [];
-                data.hits[1].recipe.match = [];
+                data.hits[index1].recipe.match = [];
+                data.hits[index1].recipe.not = [];
+                data.hits[index2].recipe.not = [];
+                data.hits[index2].recipe.match = [];
                 recipe = {
-                    top: data.hits[0],
-                    second: data.hits[1]
+                    top: data.hits[index1],
+                    second: data.hits[index2]
                 }
                 return res.status(200).send({hits: recipe});
 
