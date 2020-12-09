@@ -1,8 +1,9 @@
 import React from 'react';
 import 'typeface-roboto';
 import {Link} from "react-router-dom"
-import {AuthContext, UserContext}from '../context'
+import UserContext from '../context'
 import {useState, useContext} from 'react';
+import {useCookies} from 'react-cookie';
 
 const Register =() => {
    
@@ -16,34 +17,33 @@ const Register =() => {
         }
     }
 
-    const regState = {
-        firstName: "",
-          lastName: "",
-          email: "",
+    const registerState = {
+        name: "",
+        email: "",
         password: "",
-        confirmPassword: ""      
     };
 
-    const [regdata, setRegData] = React.useState(regState);
+    const [regdata, setRegData] = React.useState(UserContext);
     const [signUpResult, setSignUpResult] = useState('');
-    
+    const [data2, setData2] = React.useState(registerState);
+
     const handleRegChange = event => {
-        setRegData({
-          ...regdata,
+        setData2({
+          ...data2,
           [event.target.name]: event.target.value
         });
       };
 
     const doRegister = async event => {
         event.preventDefault();
-        //	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
         // Validate input data
-            if (regdata.password !== regdata.confirmPassword) {
+            if (data2.password !== data2.confirmPassword) {
+                var password = document.getElementById("registerFooter");
+                password.style.display = "block";
                 setSignUpResult('Passwords don\'t match.');
                 return;
         }
-        
+
             const response = await fetch(buildPath('register'), {
                 method: 'POST',
                 headers: {
@@ -51,29 +51,30 @@ const Register =() => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: regdata.name,
-                    email: regdata.email,
-                    password: regdata.password
+                    name: data2.name,
+                    email: data2.email,
+                    password: data2.password
                 })
             })
         .catch((error) => console.error(error));
         
             let status = await response.status;
+            let json = JSON.parse(await response.text());
             if (status === 200) {
-          var x = document.getElementById("registerFooter");
-          x.style.display = "block";
+                var x = document.getElementById("registerFooter");
+                x.style.display = "block";
                 setSignUpResult('Please confirm your email address by clicking the link we sent you.');
                 return;
         }
             else if (status === 400) {
-          var y = document.getElementById("registerFooter");
-          y.style.display = "block";
+                var y = document.getElementById("registerFooter");
+                y.style.display = "block";
                 setSignUpResult('This email is already registered.');
                 return;
             }
             else {
-          var z = document.getElementById("registerFooter");
-          z.style.display = "block";
+                var z = document.getElementById("registerFooter");
+                z.style.display = "block";
                 setSignUpResult('Failed to create account due to internal server error.');
                 return;
             }
@@ -93,18 +94,10 @@ const Register =() => {
                 <form onSubmit={doRegister}>
                 <input type="text" 
                 className="form-control mt-2" 
-                id="firstname" 
-                placeholder="Firstname"
-                name="firstName"
-                value={regdata.firstName}
-                onChange={handleRegChange}
-                required/>
-                <input type="text" 
-                className="form-control mt-2" 
-                id="lastname" 
-                name="lastName"
-                placeholder="Lastname"
-                value={regdata.lastName}
+                id="name" 
+                placeholder="Name"
+                name="name"
+                value={data2.name}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -113,7 +106,7 @@ const Register =() => {
                 id="email" 
                 name="email"
                 placeholder="Email" 
-                value={regdata.email}
+                value={data2.email}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -122,7 +115,7 @@ const Register =() => {
                 id="password" 
                 name="password"
                 placeholder="Enter Password"
-                value={regdata.password}
+                value={data2.password}
                 onChange={handleRegChange}
                 required/>
                 <input 
@@ -131,7 +124,7 @@ const Register =() => {
                 id="PasswordConfirm" 
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                value={regdata.confrirmPassword}
+                value={data2.confrirmPassword}
                 onChange={handleRegChange}
                 required/>
                 <div id = "passwordInfo" className="mt-2">
@@ -145,7 +138,7 @@ const Register =() => {
                 <Link className="btn btn-success mt-2" to="/LoginPage" style={{backgroundColor: "orange", borderColor: "transparent", borderRadius: "15px", width: "30%"}}>
                     Go Home
                 </Link>
-                <div id="registerFooter">
+                <div id="registerFooter" style={{backgroundColor: "white", color: "black"}}>
                     {signUpResult}
                 </div>
             </div>

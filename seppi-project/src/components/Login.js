@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState, useContext} from 'react';
 import {Link} from "react-router-dom"
-import {UserContext}from '../context'
-import {AuthContext, useContext} from 'react';
+import { useCookies } from 'react-cookie';
 
 const Login=() => {
     const app_name = 'seppi'
     // User's login status
-    const [state, setState] = useContext(UserContext);
+    const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
     const [loginResult, setLoginResult] = useState('');
-
 
     const buildPath=(route)=> {
         if (process.env.NODE_ENV === 'production') 
@@ -20,11 +18,13 @@ const Login=() => {
             return 'http://localhost:5000/' + route;
         }
     }
-    const initialState = {
-        email: "",
-        password: "",
-          };
-        const [data, setData] = React.useState(initialState);
+    const loginState = {
+      name: "",
+      email: "",
+      password: "",
+    };
+  
+    const [data, setData] = React.useState(loginState);
     const handleChange = event => {
       setData({
         ...data,
@@ -33,8 +33,6 @@ const Login=() => {
     };
     const doLogin = async event => {
       event.preventDefault();
-    //  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
       const response = await fetch(buildPath('login'), {
         method: 'POST',
         headers: {
@@ -50,7 +48,9 @@ const Login=() => {
       let status = await response.status;
       if (status === 200) {
         var res = JSON.parse(await response.text());
-        setState(state => ({ ...state, name: res.name, email: res.email, idToken: res.idToken }));
+        setCookie('name', res.name, {path: '/'});
+        setCookie('email', res.email, {path: '/'});
+        setCookie('idToken', res.idToken, {path: '/'});
         window.location.href = '/SearchResult';
       }
       else if (status === 400) {
