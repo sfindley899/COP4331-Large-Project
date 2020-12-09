@@ -336,8 +336,8 @@ const getRecipe = async event => {
           <div class="Suggestions" onClick={getRecipe}>
             <div id="FavContainer">
               <div id="FavoritesRows">
-                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.top.recipe.url} label={item.hits.top.recipe.label} image={item.hits.top.recipe.image} /*match={item.hits.top.recipe.match}*//>) : <div></div>}
-                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.second.recipe.url} label={item.hits.second.recipe.label} image={item.hits.second.recipe.image} /*match={item.hits.second.recipe.match}*//>) : <div></div>}
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.top.recipe.url} label={item.hits.top.recipe.label} image={item.hits.top.recipe.image} match={item.hits.top.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.second.recipe.url} label={item.hits.second.recipe.label} image={item.hits.second.recipe.image} match={item.hits.second.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
               </div>
           </div>
           </div>
