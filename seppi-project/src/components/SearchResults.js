@@ -3,7 +3,7 @@ import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import {makeStyles, withStyles, ListSubheader, List, ListItem, ListItemText, Collapse, Checkbox, FormControlLabel, FormGroup, createMuiTheme} from '@material-ui/core'
-import {ExpandLess, ExpandMore, CheckBoxOutlineBlank, CheckBox} from '@material-ui/icons'
+import {ExpandLess, ExpandMore, CheckBoxOutlineBlank, CheckBox, Favorite, FavoriteBorder} from '@material-ui/icons'
 import { grey, orange } from '@material-ui/core/colors';
 import Recipe from './Recipe';
 import AccountButton from './AccountButton';
@@ -561,12 +561,6 @@ const SearchResults =() => {
     },
     checked: {},
   })((props) => <Checkbox color="default" {...props} />);
-
-  const OrangeFilterTag = withStyles({
-    checked: {
-      color: orange[600],
-    },
-  })((props) => <Button color="default" {...props} />);
   
   // Filter Folder click handles
   const handleClickMealandCourse = () => {
@@ -592,11 +586,6 @@ const SearchResults =() => {
     //setFilter({ ...filterState, [event.target.name]: event.target.checked });
     applyFilters();
   };
-
-  //Filter tag checker
-  const toggleTag = (event) => {
-      setFilter({ ...filterState, [event.target.name]: event.target.checked })
-  }
 
   return(
     <div>

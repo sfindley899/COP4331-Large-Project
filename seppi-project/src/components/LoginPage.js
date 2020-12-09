@@ -339,8 +339,9 @@ const getRecipe = async event => {
                   <div class = "rightsideText1">Whether you are a cooking enthusiast or only have enough time to throw together lunch, Seppi's goal is to provide access to new recipes and connect to a community of other like-minded cooks.</div>
                   <br/>
                   <br/>
-                  <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
-                  <button id = "submitEmailButton" onClick={handleShowRegister} >Sign Up</button>
+                  <Button variant="light" className="btn btn-primary" id="signUPOrange" onClick={handleShowRegister}>
+                    Sign Up
+                  </Button>
                   <br/>
                   <br/>
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
