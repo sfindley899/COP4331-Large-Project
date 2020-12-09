@@ -840,7 +840,6 @@ const RecipeSearchScreen = ({ navigation }) => {
 								<TouchableOpacity activeOpacity={0.5} style={styles.filterCancelContainer} onPress={resetFilters}>
 									<Text style={styles.filterCancelText}>RESET</Text>
 								</TouchableOpacity>
-
 								<TouchableOpacity activeOpacity={0.5} style={styles.filterApplyContainer} onPress={applyFilters}>
 									<Text style={styles.filterApplyText}>Apply</Text>
 								</TouchableOpacity>
