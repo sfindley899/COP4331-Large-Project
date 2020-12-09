@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import LoginPage from './components/LoginPage';
@@ -31,6 +31,10 @@ function App() {
     idToken: '',
     favorites: []
   });
+
+  useEffect(() => {
+    document.title = "Seppi - Grocery List and Recipe Finder"
+ }, []);
 
   return (
       <UserContext.Provider value={[state, setState]}>
