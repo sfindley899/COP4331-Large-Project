@@ -12,6 +12,7 @@ import {
 	TouchableHighlight,
 	Image,
 	ScrollView,
+	Linking,
 	Button
 } from 'react-native';
 
@@ -34,6 +35,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [filterVisible, setFilterVisible] = useState(false);
 	const [recipeVisible, setRecipeVisible] = useState(false);
 	const [currentItem, setCurrentItem] = useState({recipe : {}});
+	const [from, setFrom] = useState(0);
+	const [to, setTo] = useState(10);
 
 	// Meal filters
 	const defaultMealFilters = {
@@ -100,6 +103,8 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const [state, setState] = useContext(UserContext);
 
 	const searchRecipe = async () => {
+		console.log(from, to);
+
 		const response = await fetch(buildPath('searchRecipe'), {
 			method: 'POST',
 			headers: {
@@ -109,14 +114,18 @@ const RecipeSearchScreen = ({ navigation }) => {
 			body: JSON.stringify({
 				search: searchText,
 				filters: filterText,
-				idToken: state.idToken
+				idToken: state.idToken,
+				from: from,
+				to: to
 			})
 		})
 		.catch((error) => console.error(error));
 
 		let json = JSON.parse(await response.text());
 
-		setSearchData(json.hits);
+		setSearchData(searchData.concat(json.hits));
+		setFrom(to + 1);
+		setTo(to + 10);
 	};
 
 	function getTags(item) {
@@ -619,7 +628,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 	const addFavorite = async () => {
 		currentItem.bookmarked = true;
 		for (let i = 0; i < searchData.length; ++i) {
-			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+			if (searchData[i].recipe.shareAs === currentItem.recipe.shareAs) {
 				searchData[i].bookmarked = true;
 				setSearchData(state => searchData);
 				break;
@@ -655,7 +664,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 		// Update search data state.
 		currentItem.bookmarked = false;
 		for (let i = 0; i < searchData.length; ++i) {
-			if (searchData[i].recipe.uri === currentItem.recipe.uri) {
+			if (searchData[i].recipe.shareAs === currentItem.recipe.shareAs) {
 				searchData[i].bookmarked = false;
 				setSearchData(state => searchData);
 				break;
@@ -669,7 +678,7 @@ const RecipeSearchScreen = ({ navigation }) => {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				uri: currentItem.recipe.uri,
+				shareAs: currentItem.recipe.shareAs,
 				idToken: state.idToken
 			})
 		}).catch((error) => console.error(error));
@@ -690,6 +699,15 @@ const RecipeSearchScreen = ({ navigation }) => {
 		}
 	};
 
+	const renderTags = (tags) => {
+		return (
+			<View style={styles.tagContainer}>
+				<Image style={styles.tagIcon} source={require('../images/recipe/tag-icon.png')} />
+				<Text style={styles.tagText}>{tags}</Text>
+			</View>
+		);
+	};
+
 	const RecipeOverlay = () => {
 		return (
 				<Modal backdropTransitionOutTiming={0} style={styles.recipeOverlayContainer} isVisible={recipeVisible}>
@@ -701,11 +719,29 @@ const RecipeSearchScreen = ({ navigation }) => {
 						</View>
 
 						<View style={styles.recipeIngredientsContainer}>
-							<Text style={styles.ingredientLine}>Ingredients:</Text>
+							<View style={{flexDirection: 'column', alignItems: 'center'}}>
+								<Text style={styles.ingredientLabel}>Recipe URL</Text>
+								<TouchableOpacity style={styles.openUrlButtonContainer} activeOpacity={0.5} onPress={() => Linking.openURL(currentItem.recipe.url)}>
+									<Text style={styles.filterApplyText}>
+										Open
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+
+						<View style={styles.recipeIngredientsContainer}>
+							<Text style={styles.ingredientLabel}>Ingredients</Text>
 							
 							{(currentItem.recipe.ingredientLines !== undefined) ? 
-							currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{'\u2B24'}{item}</Text>) :
+							currentItem.recipe.ingredientLines.map((item, index) => <Text key={index} style={styles.ingredientLine}>{'\u2B24\t\t\t'}{item}</Text>) :
 							<View></View> }
+						</View>
+
+						<View style={styles.recipeIngredientsContainer}>
+							<Text style={styles.ingredientLabel}>Health & Dietary Information</Text>
+
+							{currentItem !== undefined && currentItem.recipe !== undefined && Object.keys(currentItem.recipe).length !== 0
+								   ? renderTags(getTags(currentItem)) : <View></View>}
 						</View>
 					</ScrollView>
 					
@@ -743,6 +779,9 @@ const RecipeSearchScreen = ({ navigation }) => {
 			>
 				<SearchResult 
 					bookmarked={item.bookmarked}
+					mealType={(item.recipe.mealType === undefined) ? 'unknown' : item.recipe.mealType}
+					cuisineType={(item.recipe.cuisineType === undefined) ? 'unknown' : item.recipe.cuisineType}
+					dishType={(item.recipe.dishType === undefined) ? 'unknown' : item.recipe.dishType}
 					tags={getTags(item)} 
 					ingredients={item.recipe.ingredientLines} 
 					image={item.recipe.image} 
@@ -753,9 +792,18 @@ const RecipeSearchScreen = ({ navigation }) => {
 	};
 
 	const SearchIcons = () => {
+		const handleSearch = () => {
+			setFrom(0);
+			setTo(10);
+			searchData.length = 0;
+			searchRecipe();
+		};
+
 		return (
 			<View style={{flexDirection: 'row'}}>
-				<TouchableOpacity activeOpacity={0.5} onPress={searchRecipe}>
+				<TouchableOpacity activeOpacity={0.5} 
+					onPress={handleSearch}
+				>
 					<Icon 
 						name="arrow-right"
 						size={28}
@@ -872,14 +920,16 @@ const RecipeSearchScreen = ({ navigation }) => {
 						style={{width: '100%', marginBottom: 200}}
 						data={searchData}
 						renderItem={renderSearchResult}
-						keyExtractor={(item) => item.recipe.uri}
+						keyExtractor={(item, index) => item.recipe.shareAs + index}
+						onEndReached={searchRecipe}
+						onEndReachedThreshold={0.5}
 					/> 
 				) : (
 					<FlatList 
 						style={{width: '100%', marginBottom: 200}}
 						data={favoritesData}
 						renderItem={renderSearchResult}
-						keyExtractor={(item) => item.recipe.uri}
+						keyExtractor={(item, index) => item.recipe.shareAs + index}
 					/>
 				)}
 			</SafeAreaView>
@@ -975,6 +1025,16 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 		justifyContent: 'center',
 	},
+	openUrlButtonContainer: {
+		backgroundColor: '#FA730B',
+		elevation: 8,
+		borderRadius: 24,
+		width: 110,
+		height: 40,
+		marginVertical: 10,
+		padding: 12,
+		justifyContent: 'center',
+	},
 	filterApplyText: {
 		color: '#FFFFFF',
 		textAlign: 'center',
@@ -1020,6 +1080,8 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderColor: 'gray',
 		marginBottom: 15,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	recipeLabelImageContainer: {
 		flexDirection: 'column',
@@ -1031,12 +1093,48 @@ const styles = StyleSheet.create({
 		padding: 10,
 		width: '90%',
 	},
+	ingredientLabel: {
+		fontSize: 18,
+		padding: 10,
+		width: '90%',
+		textAlign: 'center',
+		fontWeight: 'bold',
+	},
 	recipeOverlayBottomButtons: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		backgroundColor: '#F3F3F3',
 		borderTopColor: 'gray',
 		borderTopWidth: 2,
+	},
+	urlLine: {
+		fontSize: 16,
+		paddingHorizontal: 10,
+		paddingBottom: 10,
+		width: '90%',
+		textAlign: 'center',
+		color: 'blue',
+	},
+	tagContainer: {
+		flexDirection: 'row',
+		paddingVertical: 10,
+	},
+	tagIcon: {
+		resizeMode: 'contain',
+		justifyContent: 'center',
+		width: 20,
+		height: 20,
+		marginRight: 5,
+		marginTop: 5,
+	},
+	tagText: {
+		textAlignVertical: 'top',
+		width: deviceWidth - 150,
+	},
+	tagLabelText: {
+		textAlignVertical: 'top',
+		width: deviceWidth - 150,
+		fontWeight: 'bold',
 	},
 });
 

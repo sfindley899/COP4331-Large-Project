@@ -8,24 +8,31 @@ const SearchResult = (props) => {
 			return (
 				<View style={styles.favoritedContainer}>
 					<Image source={require('../images/recipe/star-icon.png')} />
-					<Text style={styles.favoritedText}>Favorited</Text>
 				</View>
 			);
 		};
 	};
+
+	const renderMealInfo = () => {
+		return (
+			<View>
+				<Text style={styles.tagText}><Text style={styles.tagLabelText}>Cuisine Type:</Text> {props.cuisineType}</Text>
+				<Text style={styles.tagText}><Text style={styles.tagLabelText}>Meal Type:</Text> {props.mealType}</Text>
+				<Text style={styles.tagText}><Text style={styles.tagLabelText}>Dish Type:</Text> {props.dishType}</Text>
+			</View>
+		);
+	}
 
 	return (
 		<View style={styles.container}>
 			<Image style={styles.image} source={{uri: props.image}} />
 
 			<View style={styles.labelContainer}>
-				<Text style={styles.labelText}>{props.title}</Text>
-				{renderStarImage()}
-
-				<View style={styles.tagContainer}>
-					<Image style={styles.tagIcon} source={require('../images/recipe/tag-icon.png')} />
-					<Text style={styles.tagText}>{props.tags}</Text>
+				<View style={styles.topTextContainer}>
+					<Text style={styles.labelText}>{props.title}</Text>
+					{renderStarImage()}
 				</View>
+				{renderMealInfo()}
 			</View>
 		</View>
 	);
@@ -59,8 +66,13 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'top',
 		width: deviceWidth - 150,
 	},
+	tagLabelText: {
+		textAlignVertical: 'top',
+		width: deviceWidth - 150,
+		fontWeight: 'bold',
+	},
 	labelText: {
-		width: deviceWidth - 100,
+		width: 'auto',
 		fontFamily: 'Roboto',
 		fontSize: 22,
 		lineHeight: 28,
@@ -76,12 +88,22 @@ const styles = StyleSheet.create({
 	},
 	favoritedContainer: {
 		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 7,
+		marginLeft: 5,
 	},	
 	favoritedText: {
 		textAlignVertical: 'top',
 		lineHeight: 24,
 		paddingLeft: 5,
-	}
+		fontWeight: 'bold',
+	},
+	topTextContainer: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		width: '100%',
+	},
 });
 
 export default SearchResult;
