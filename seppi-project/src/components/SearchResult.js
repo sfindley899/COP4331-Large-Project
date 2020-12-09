@@ -44,7 +44,7 @@ const SearchResult =() => {
   }
 
   const tempFavButton = event => {
-    window.location.href = '/NotSignedIn';
+    window.location.href = '/FavoriteRecipes';
   }
 
   const handleBackButton = () => {
@@ -148,7 +148,7 @@ const SearchResult =() => {
           />
           <AccountButton
             title="Favorite Recipes"
-            onClick={() => window.location.href='/NotSignedIn'}
+            onClick={() => window.location.href='/FavoriteRecipes'}
           />
           <AccountButton
             title="Sign Out"

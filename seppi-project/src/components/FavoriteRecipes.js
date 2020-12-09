@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import Modal from 'react-bootstrap/Modal'
 import AccountButton from './AccountButton';
 
-const NotSignedIn =() => {
+const FavoriteRecipes =() => {
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
@@ -127,7 +127,7 @@ const NotSignedIn =() => {
           />
           <AccountButton
             title="Favorite Recipes"
-            onClick={() => window.location.href='/NotSignedIn'}
+            onClick={() => window.location.href='/FavoriteRecipes'}
           />
           <AccountButton
             title="Sign Out"
@@ -225,4 +225,4 @@ const NotSignedIn =() => {
   );
 };
 
-export default NotSignedIn;
+export default FavoriteRecipes;

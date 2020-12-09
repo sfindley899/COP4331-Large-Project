@@ -7,7 +7,7 @@ import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import CardPage from './components/CardPage';
 import SearchResult from './components/SearchResult';
-import NotSignedIn from './components/NotSignedIn';
+import FavoriteRecipes from './components/FavoriteRecipes';
 import { CookiesProvider } from 'react-cookie';
 
 import {
@@ -41,7 +41,7 @@ function App() {
             <Route  path="/Register"><Register/></Route>
             <Route  path="/Login"><Login/></Route>
             <Route  path="/SearchResult"><SearchResult/></Route>
-            <Route  path="/NotSignedIn"><NotSignedIn/></Route>
+            <Route  path="/FavoriteRecipes"><FavoriteRecipes/></Route>
           <LoginPage path="/"/>
 
           </Switch>
