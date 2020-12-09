@@ -76,8 +76,8 @@ body {
   font-weight: bold;
   font-size: 84px;
   line-height: 28px;
-  color: #FFFFFF;
-  text-shadow: 1px 0.5px 0.5px rgba(0,0,0, 0.5);
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #282c34;
 }
 
 #logIN {
@@ -95,8 +95,8 @@ body {
   padding: 10px;
 }
 
-#logIN:hover{
-  background-color:rgba(0,0,0, 0.5);
+#logIN:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 #signUP {
@@ -110,8 +110,20 @@ body {
   transition: 0.3s;
 }
 
-#signUP:hover{
-  border: 3px solid rgba(0,0,0, 0.7);
+#signUPOrange {
+  color: black;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 25px;
+  border: 3px solid orange;
+  background-color: orange;
+  padding: 10px;
+  width: 180px;
+  transition: 0.3s;
+}
+
+#signUP:hover {
+  border: 3px solid rgba(0, 0, 0, 0.7);
 }
 
 #search {
@@ -126,7 +138,7 @@ body {
 #searchParameter {
   margin-top: 200px;
   width: 50%;
-  top:0%;
+  top: 0%;
   position: relative;
   display: inline-block;
   vertical-align: middle;
@@ -159,9 +171,8 @@ body {
   background-position: center;
   background-repeat: repeat;
   background-size: cover;
-  min-height:'768px',
+  min-height: "768px";
 }
-
 
 .Suggestions {
   display: flex;
@@ -189,13 +200,13 @@ body {
   padding: 50px;
   padding-left: 80px;
   font-size: 20px;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .leftPicture {
   position: center;
   /* replace with image pulled from search */
-  background-image: url('https://www.edamam.com/web-img/e7b/e7b20984220bc1d611a0f615f12ac66d.jpg');
+  background-image: url("https://www.edamam.com/web-img/e7b/e7b20984220bc1d611a0f615f12ac66d.jpg");
   background-position-x: center;
   background-size: 240px;
   height: 30vh;
@@ -214,7 +225,7 @@ body {
 
 .middlePicture {
   /* replace with image pulled from search */
-  background-image: url('./images/mysteryPhoto.png');
+  background-image: url("./images/mysteryPhoto.png");
   background-position-x: center;
   background-size: 240px;
   height: 30vh;
@@ -233,7 +244,7 @@ body {
 
 .rightPicture {
   /* replace with image pulled from search */
-  background-image: url('./images/mysteryPhoto.png');
+  background-image: url("./images/mysteryPhoto.png");
   background-position-x: center;
   background-size: 240px;
   height: 30vh;
@@ -259,7 +270,7 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  min-height: 500px
+  min-height: 500px;
 }
 
 .WelcomeTo {
@@ -267,27 +278,27 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  min-height:700px;
-  position:relative;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 21.28%);
+  min-height: 700px;
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 21.28%);
 }
 
 .leftsidePNG {
-  background-image: url('./images/grocery4.png');
+  background-image: url("./images/grocery4.png");
   background-size: 25rem;
-  top:55%;
+  top: 55%;
   display: block;
-  overflow:hidden;
-  bottom:60%;
+  overflow: hidden;
+  bottom: 60%;
   position: relative;
   left: 55%;
   margin-bottom: -8rem;
   margin-right: 10rem;
-  margin-top:175px;
-  margin-left:-8rem;
+  margin-top: 175px;
+  margin-left: -8rem;
   padding-left: 200px;
-  right:55%;
-  left:15%;
+  right: 55%;
+  left: 15%;
   height: 480px;
   width: 40%;
   background-repeat: no-repeat;
@@ -327,9 +338,8 @@ body {
   color: grey;
 }
 
-
 .edamamCredit {
-  background-image: url('./images/edamam.png');
+  background-image: url("./images/edamam.png");
 }
 
 #loginArea {
