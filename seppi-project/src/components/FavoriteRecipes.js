@@ -195,7 +195,6 @@ const FavoriteRecipes = () => {
   };
 
   useEffect(() => {    
-     alert('test');
      fetchFavorites();
   }, []);
 
