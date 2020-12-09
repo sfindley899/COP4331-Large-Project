@@ -51,12 +51,12 @@
 } */
 
 body {
-  background-color: #f8f9f9;
+  background-color: white;
 }
 
 .MainBody {
   background-image: url("./images/home_page.png");
-  background-color: #f8f9f9;
+  background-color: white;
   height: 100vh;
   background-position: center;
   background-repeat: repeat;
