@@ -743,6 +743,7 @@ body {
 }
 .accountModalTitle {
   display: flex;
+  font-weight: bold;
   flex-direction: column;
   justify-content: center;
   align-items: center;

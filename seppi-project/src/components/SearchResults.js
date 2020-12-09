@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
 import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
@@ -13,6 +13,7 @@ import UserContext from '../context';
 const SearchResults =() => {
   const [state, setState] = useContext(UserContext);
   const [filterText, setFilterText] = useState('');
+  const [accountModalStack, setAccountModalStack] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [searchData, setSearchData] = useState([]);
   const [showAccount, setShowAccount] = React.useState(false);
@@ -23,8 +24,18 @@ const SearchResults =() => {
   const handleShowList = () => setList(true);
   const handleShowAccount = () => setShowAccount(!showAccount);
 
+  useEffect(() => {
+
+  }, []);
+
   const handleBackButton = () => {
-    setAccountModalPath("");
+    if (accountModalStack.length === 0) {
+      handleShowAccount();
+      return;
+    }
+
+    accountModalStack.pop();
+    setAccountModalStack(accountModalStack);
   }
 
   const app_name = 'seppi'
@@ -38,7 +49,23 @@ const SearchResults =() => {
   }
 
   const renderAccountModalTitle = () => {
-    if (accountModalPath === "Change Account Information") {
+      let len = accountModalStack.length;
+      if (len === 0) {
+        return (
+          <div class="accountModalTitle">
+            <div class="accountModalTitle">
+              <span id="helloText" class="modal-title-text">
+                Hello, {cookies.name}!
+              </span>
+              <span id="emailText" class="modal-subtitle-text">
+                {cookies.email}
+              </span>
+            </div>
+            <span class="modal-subtitle-text">Navigate To</span>
+          </div>
+        );
+    }
+    else if (accountModalStack[len - 1] === "Change Account Information") {
       return (
         <div class="accountModalTitle">
               <div class="modal-account-top-bar">
@@ -51,18 +78,15 @@ const SearchResults =() => {
         </div>
       );
     }
-    else if (accountModalPath === "") {
+    else if (accountModalStack[len - 1] === "Your Pantry") {
       return (
-        <div class="accountModalTitle">
-          <div class="accountModalTitle">
-            <span id="helloText" class="modal-title-text">
-              Hello, {cookies.name}!
-            </span>
-            <span id="emailText" class="modal-subtitle-text">
-              {cookies.email}
-            </span>
-          </div>
-          <span class="modal-subtitle-text">Navigate To</span>
+        <div class="accountModalTitle">            
+          <div class="modal-account-top-bar">
+                <button onClick={handleBackButton} class="btn">
+                  <img src={require('../images/left-arrow.png')}/>
+                </button>
+              </div>
+              <span class="modal-title-text">Pantry</span>
         </div>
       );
     }
@@ -335,13 +359,22 @@ const SearchResults =() => {
     window.location.href = '/LoginPage';
   };
 
+  const renderPantryBody = () => {
+    return (
+      <div>
+        {}
+      </div>
+    );
+  };
+
   const renderAccountModalBody = () => {
-    if (accountModalPath === "") {
+    let len = accountModalStack.length;
+    if (len === 0) {
       return (
         <div>
           <AccountButton
             title="Change Account Information"
-            onClick={() => setAccountModalPath("Change Account Information")}
+            onClick={() => {accountModalStack.push("Change Account Information"); setAccountModalStack(accountModalStack);}}
           />
           <AccountButton
             title="Search Recipes"
@@ -352,13 +385,24 @@ const SearchResults =() => {
             onClick={() => window.location.href='/FavoriteRecipes'}
           />
           <AccountButton
+            title="Your Pantry"
+            onClick={() => {accountModalStack.push("Your Pantry"); setAccountModalStack(accountModalStack);}}
+          />
+          <AccountButton
             title="Sign Out"
             onClick={signOut}
           />
         </div>
       );
     }
-    else if (accountModalPath === "Change Account Information") {
+    else if (accountModalStack[len - 1] === "Your Pantry") {
+      return (
+        <div>
+          {renderPantryBody()}
+        </div>
+      );
+    }
+    else if (accountModalStack[len - 1] === "Change Account Information") {
       return (
         <div class="accountModalTitle">
           <form onSubmit={changeAccountInfo} className="loginsForm">
@@ -600,6 +644,17 @@ const SearchResults =() => {
 
   return(
     <div>
+      <Modal show={showAccount} onHide={handleShowAccount}>
+        <Modal.Header className="justify-content-center">
+          <Modal.Title>
+            {renderAccountModalTitle()}
+          </Modal.Title>
+
+        </Modal.Header> 
+        <Modal.Body>
+          {renderAccountModalBody()}
+        </Modal.Body>
+      </Modal>
 
       {/* Navigation Bar */}
       <Navbar collapseOnSelect
@@ -1006,17 +1061,7 @@ const SearchResults =() => {
         {searchData !== undefined ? searchData.map((item) => <Recipe link={item.recipe.url} label={item.recipe.label} image={item.recipe.image} />) : <div></div>}
       </div>
 
-      <Modal show={showAccount} onHide={handleShowAccount}>
-        <Modal.Header className="justify-content-center">
-          <Modal.Title>
-            {renderAccountModalTitle()}
-          </Modal.Title>
 
-        </Modal.Header> 
-        <Modal.Body>
-          {renderAccountModalBody()}
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };
