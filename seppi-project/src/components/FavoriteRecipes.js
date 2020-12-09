@@ -4,9 +4,10 @@ import {Link} from "react-router-dom"
 import { useCookies } from 'react-cookie';
 import Modal from 'react-bootstrap/Modal'
 import AccountButton from './AccountButton';
+import Recipe from './Recipe';
 
 const FavoriteRecipes =() => {
-  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+  const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
   const [accountModalPath, setAccountModalPath] = React.useState('');
@@ -110,6 +111,11 @@ const FavoriteRecipes =() => {
       return;
     }
 
+    removeCookie('name');
+    removeCookie('email');
+    removeCookie('idToken');
+    removeCookie('favorites');
+
     window.location.href = '/LoginPage';
   };
 
@@ -178,7 +184,7 @@ const FavoriteRecipes =() => {
             </div>
             <div style={{width: "25%", height: "100px",paddingTop: "5px", textAlign: "center"}}>
               <button id="FavPageButton" onClick={() => console.log("Hello")}>
-                <div id = "FavImage"></div>
+                <div onClick={() => alert(cookies.favorites)} id = "FavImage"></div>
                 Favorites
               </button>
               <button onClick={handleShowAccount} id="AccountSettings">
@@ -193,22 +199,18 @@ const FavoriteRecipes =() => {
           </div>
         </div>
         <br/>
-        <div id="FavHeader" className="row">
-            <div id="HeartImage"></div>
-            <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
+        <div id="FavContainer">
+            <div id="FavHeader" className="row">
+              <div id="HeartImage"></div>
+              <div style={{color: "black", width: "50%", textAlign: "left", fontWeight: "bold", fontSize: "30px"}}>Favorites</div>
+            </div>
+
+            <Recipe 
+              label="Test"
+              image="https://www.edamam.com/web-img/e42/e42f9119813e890af34c259785ae1cfb.jpg"
+            />
         </div>
         <br/>
-        <div id="FavBody">
-            <div id="biggerHeartImage"></div>
-            <h1>You are just a step away from your favorite recipes!</h1>
-            You need to be signed on into Seppi to view your favorites. Keep track of the recipes you love or want to view later.
-            <br/>
-            <br/>
-            <div style={{fontWeight: "bold"}}>
-                <Link to="/Login" style={{color: "#FA730B"}}> Sign in</Link>{" "}
-                to view your Favorites
-            </div>
-        </div>
 
         <Modal show={showAccount} onHide={handleShowAccount}>
           <Modal.Header className="justify-content-center">

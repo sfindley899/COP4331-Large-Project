@@ -584,6 +584,13 @@ body {
   align-items: center;
 }
 
+#FavContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #HeartImage {
   background-image: url('./images/orangeheart.png');
   background-size: 120px;

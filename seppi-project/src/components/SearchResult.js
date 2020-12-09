@@ -6,7 +6,7 @@ import AccountButton from './AccountButton';
 import { useCookies } from 'react-cookie';
 
 const SearchResult =() => {
-  const [cookies, setCookie] = useCookies(['name', 'email', 'idToken']);
+  const [cookies, setCookie, removeCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [show, setList] = React.useState(false);
   const [showAccount, setShowAccount] = React.useState(false);
   const [accountModalPath, setAccountModalPath] = React.useState('');
@@ -35,6 +35,30 @@ const SearchResult =() => {
     );
   }
 
+  const fetchFavorites = async () => {
+    const response = await fetch(buildPath('getFavorites'), {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          idToken: cookies.idToken,
+        })
+    }).catch(error => console.error(error));
+
+    let status = await response.status;
+
+    if (status !== 200) {
+      console.log('Could not fetch favorites.');
+      return;
+    }
+
+    let json = JSON.parse(await response.text());
+
+    setCookie('favorites', json.favorites, {path: '/'});
+  };
+
   const displayResults = event => {
     document.getElementById("Results").style.display = "block";
   }
@@ -43,7 +67,10 @@ const SearchResult =() => {
     document.getElementById("Results").style.display = "none";
   }
 
-  const tempFavButton = event => {
+  const tempFavButton = async event => {
+    // Fetch favorites list
+    await fetchFavorites();
+
     window.location.href = '/FavoriteRecipes';
   }
 
@@ -130,6 +157,11 @@ const SearchResult =() => {
       console.log("Failed to sign out");
       return;
     }
+
+    removeCookie('name');
+    removeCookie('email');
+    removeCookie('idToken');
+    removeCookie('favorites');
 
     window.location.href = '/LoginPage';
   };
