@@ -415,7 +415,7 @@ const SearchResults =() => {
         expand="sm" 
         variant="dark"
       >
-        <Navbar.Brand href="/home" class="navbar-brand">Seppi</Navbar.Brand>
+        <Navbar.Brand id="seppiButton" onClick={() => window.location.href = '/SearchResults'} class="navbar-brand">Seppi</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Form onSubmit={searchRecipe} inline id="SearchBar">

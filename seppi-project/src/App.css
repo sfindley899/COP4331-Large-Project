@@ -737,6 +737,10 @@ c .modal-title-text {
   padding: 30px 30px;
 }
 
+#seppiButton:hover {
+  cursor: pointer;
+}
+
 #helloText {
   text-align: center;
   top: 41px;
