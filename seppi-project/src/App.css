@@ -57,7 +57,7 @@ body {
 
 .MainBody {
   background-image: url('./images/home_page.jpeg');
-  background-color: orange;
+  background-color: #f8f9f9;
   height: 100vh;
   background-position: center;
   background-repeat: repeat;
@@ -445,12 +445,11 @@ p#grayText {
 #loginFooter{
   display: none;
   font-size: 20px;
-  color: white;
+  color: black;
   width: 100%;
   border-radius: 25px;
   border: 3px solid white;
   border-radius: 15px;
-  background-color: orange;
   padding: 10px;
 }
 
@@ -549,12 +548,11 @@ p#grayText {
 #registerFooter{
   display: none;
   font-size: 20px;
-  color: white;
+  color: black;
   width: 100%;
   border-radius: 25px;
   border: 3px solid white;
   border-radius: 15px;
-  background-color: orange;
   padding: 10px;
 }
 
