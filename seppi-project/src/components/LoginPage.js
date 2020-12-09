@@ -151,6 +151,32 @@ const doRegister = async event => {
 		}
 };
 
+
+
+const recipeStuff = {
+  search: "",
+  //Idk what all I'm pulling so far    
+};
+
+const getRecipe = async event => {
+  event.preventDefault();
+
+  const response = await fetch(buildPath('Recipe'), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      search: recipeStuff.search,
+      //IDK what all I'm pulling
+    })
+  })
+
+};
+
+
+
   return (
     <div style={{
       backgroundImage: `linear-gradient(to top, rgba(114, 51, 51, 0) 10%, rgba(0, 100, 0, 2)), url("../images/home_page.jpeg")`, backgroundRepeat: 'no-repeat', width: '100%', height: '650px', backgroundSize: "cover"
