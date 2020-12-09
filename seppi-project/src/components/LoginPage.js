@@ -335,7 +335,7 @@ const getRecipe = async event => {
           <br/>
           <div class="Suggestions" onClick={getRecipe}>
             <div id="FavContainer">
-              <div id="FavoritesRows">
+               <div id="FavoritesRows">
                   {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.top.recipe.url} label={item.hits.top.recipe.label} image={item.hits.top.recipe.image} match={item.hits.top.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
                   {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.second.recipe.url} label={item.hits.second.recipe.label} image={item.hits.second.recipe.image} match={item.hits.second.recipe.match} not={item.hits.top.recipe.not}/>) : <div></div>}
               </div>
@@ -343,33 +343,6 @@ const getRecipe = async event => {
           </div>
         </div>
 
-
-          <div class = "Icons">
-                <div class = "leftIcon">
-                  <div class = "leftInfo">
-                    <h2>Try the App</h2>
-                    Get the best experience through the app.
-                    <br/>
-                    <button id = "leftButton">Get the app</button>
-                  </div>
-                </div>
-                <div class ="middleIcon">
-                  <div class = "middleInfo">
-                    <h2>Add your Ingredients</h2>
-                    Refine your recipe search to include the ingredients readily available.
-                    <br/>
-                    <button id = "middleButton">Add to your Pantry</button>
-                  </div>
-                </div>
-                <div class = "rightIcon">
-                 <div class = "rightInfo">
-                    <h2>Find a Recipe</h2>
-                    Search from thousands of recipes based on the items in your inventory.
-                    <br/>
-                    <button id = "rightButton">Search for a Recipe</button>
-                 </div>
-                </div>
-              </div>
               <div class = "WelcomeTo">
                 <div class = "leftsidePNG"></div>
                 <div class = "rightside">
@@ -386,59 +359,7 @@ const getRecipe = async event => {
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
                 </div>
               </div>
-              <div class = "edamamCredit">
-              </div>
-        </div>
-      </div>
-      <div class="WelcomeTo">
-        <div class="leftsidePNG"></div>
-        <div class="rightside">
-          <h1>Welcome to Seppi's Recipe Family!</h1>
-          <br />
-          <br />
-          <div class="rightsideText1"  class="container-fluid">
-            Whether you are a cooking enthusiast or only have enough time to
-            throw together lunch, Seppi's goal is to provide access to new
-            recipes and connect to a community of other like-minded cooks.
-          </div>
-          <br />
-          <br />
-          <Form>
-            <Form.Row className="align-items-center">
-              <Col>
-                <Form.Label htmlFor="inlineFormInput" srOnly>
-                  Name
-                </Form.Label>
-                <Form.Control
-                  className="mb-2"
-                  id="inlineFormInput"
-                  placeholder="Enter Your Email Address"
-                />
-              </Col>
-
-              <Button
-                variant="light"
-                type="submit" onChange={handleShowRegister}
-                className="mb-2 background-orange"
-                style={{
-                  background: "orange",
-                  color: "white",
-                  borderRadius: "2px solid orange",
-                }}
-              >
-                Sign Up
-              </Button>
-            </Form.Row>
-          </Form>
-          <br />
-          <br />
-          <div class="rightsideText2">
-            By clicking “Sign Up” you will be directed to the sign up page to
-            complete your registation.
-          </div>
-
-        </div>
-        </div>
+                    
         <div>
         <footer
           class="container-fluid text-center text-white"
@@ -461,6 +382,11 @@ const getRecipe = async event => {
           <p>@2020</p>
         </footer>
       </div>
+              <div class = "edamamCredit">
+              </div>
+        </div>
+      </div>
+
 
       {/* Login Modal */}
       <Modal show={show} onHide={handleCloseLogin}>
