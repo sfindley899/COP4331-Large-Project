@@ -195,8 +195,9 @@ const FavoriteRecipes = () => {
   };
 
   useEffect(() => {    
+     alert('test');
      fetchFavorites();
-  });
+  }, []);
 
   return(
     <div style={{margin: "0 auto", height: "100vh"}}>
