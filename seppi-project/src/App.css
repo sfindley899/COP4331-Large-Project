@@ -125,7 +125,7 @@ body {
 
 #searchParameter {
   margin-top: 200px;
-  width: 50%;
+  width: 35%;
   top:0%;
   position: relative;
   display: inline-block;
@@ -154,7 +154,7 @@ body {
 
 .subBody {
   background-color: white;
-  height: 70vh;
+  height: 100vh;
   display: block;
   background-position: center;
   background-repeat: repeat;
