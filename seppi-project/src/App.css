@@ -40,8 +40,8 @@
 .loginForm {
   max-width: 600px;
   width: 100%;
-  margin: 0 auto; 
-  padding: 9% 20px; 
+  margin: 0 auto;
+  padding: 9% 20px;
 }
 
 /* .registerDiv{
@@ -51,12 +51,11 @@
 } */
 
 body {
-  background-color: orange;
-  height: 340vh;
+  background-color: #f8f9f9;
 }
 
 .MainBody {
-  background-image: url('./images/home_page.jpeg');
+  background-image: url("./images/home_page.png");
   background-color: #f8f9f9;
   height: 100vh;
   background-position: center;
@@ -64,7 +63,7 @@ body {
   background-size: cover;
 }
 
-.signIn{
+.signIn {
   width: 96%;
   text-align: right;
   padding: 2%;
@@ -75,10 +74,10 @@ body {
   font-family: Roboto;
   font-style: normal;
   font-weight: bold;
-  font-size: 80px;
+  font-size: 84px;
   line-height: 28px;
   color: #FFFFFF;
-  text-shadow: 1px 2px black;
+  text-shadow: 1px 0.5px 0.5px rgba(0,0,0, 0.5);
 }
 
 #logIN {
@@ -86,21 +85,24 @@ body {
   color: white;
   transition: 0.3s;
   font-size: 20px;
-  font-weight: bold;
-  border: none;
+  border: 3px solid white;
   border-radius: 25px;
+  font-weight: 500;
   margin-right: 10px;
+  border: 3px solid white;
+  padding-left: 20px;
+  padding-right: 20px;
   padding: 10px;
-  text-shadow: 1px 2px black;
 }
 
 #logIN:hover{
-  background-color:black;
+  background-color:rgba(0,0,0, 0.5);
 }
 
 #signUP {
   color: black;
   font-size: 20px;
+  font-weight: 500;
   border-radius: 25px;
   border: 3px solid white;
   background-color: white;
@@ -109,7 +111,7 @@ body {
 }
 
 #signUP:hover{
-  border: 3px solid black;
+  border: 3px solid rgba(0,0,0, 0.7);
 }
 
 #search {
@@ -123,7 +125,11 @@ body {
 
 #searchParameter {
   margin-top: 200px;
-  width: 100%;
+  width: 50%;
+  top:0%;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
   text-align: center;
 }
 
@@ -135,11 +141,11 @@ body {
   border-radius: 15px;
   border: 1px solid transparent;
   background-color: orange;
-  padding: 10px;
+  padding: 0.4rem;
 }
 
 #filterImage {
-  background-image: url('./images/filter.png');
+  background-image: url("./images/filter.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -148,13 +154,28 @@ body {
 
 .subBody {
   background-color: white;
-  height: 220vh;
+  height: 70vh;
+  display: block;
   background-position: center;
   background-repeat: repeat;
   background-size: cover;
+  min-height:'768px',
 }
 
+
 .Suggestions {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 60%;
+  height: 50vh;
+  margin: 10px auto;
+  position: relative;
+}
+
+.SuggestionsHeading {
+  color: black;
   height: 80vh;
   padding: 50px;
   padding-left: 80px;
@@ -162,130 +183,113 @@ body {
   font-weight: bold;
 }
 
+.leftPicture {
+  position: center;
+  /* replace with image pulled from search */
+  background-image: url('https://www.edamam.com/web-img/e7b/e7b20984220bc1d611a0f615f12ac66d.jpg');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.leftDescription {
+  padding-top: 260px;
+  padding-left: 30px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
+.middlePicture {
+  /* replace with image pulled from search */
+  background-image: url('./images/mysteryPhoto.png');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.middleDescription {
+  padding-top: 260px;
+  padding-left: 30px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
+.rightPicture {
+  /* replace with image pulled from search */
+  background-image: url('./images/mysteryPhoto.png');
+  background-position-x: center;
+  background-size: 240px;
+  height: 30vh;
+  width: 30%;
+  padding: 50px;
+  background-repeat: no-repeat;
+}
+
+.rightDescription {
+  padding-top: 260px;
+  padding-left: 20px;
+  text-align: center;
+  width: 90%;
+  font-size: 20px;
+}
+
 .Icons {
+  margin-top: 100px;
   display: flex;
+  position: relative;
+  overflow-y: none;
+  flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  height: 50vh;
-  margin: 10px auto;
-  position: relative;
-}
-
-.leftIcon {
-  position: center;
-  background-image: url('./images/grocery1.png');
-  background-position-x: center;
-  background-size: 110px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.leftInfo {
-  padding-top: 120px;
-  padding-left: 30px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#leftButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.middleIcon {
-  background-image: url('./images/grocery2.png');
-  background-position-x: center;
-  background-size: 145px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.middleInfo {
-  padding-top: 110px;
-  padding-left: 30px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#middleButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.rightIcon {
-  background-image: url('./images/grocery3.png');
-  background-position-x: center;
-  background-size: 160px;
-  height: 30vh;
-  width: 30%;
-  padding: 50px;
-  background-repeat: no-repeat;
-}
-
-.rightInfo {
-  padding-top: 120px;
-  padding-left: 20px;
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-}
-
-#rightButton {
-  background-color: none;
-  font-size: 18px;
-  background-color: white;
-  color: orange;
-  border-radius: 25px;
-  border: 3px solid white;
-  border-radius: 15px;
-  padding: 10px;
+  min-height: 500px
 }
 
 .WelcomeTo {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  height: 80vh;
-  margin: 10px auto;
-  position: relative;
+  min-height:700px;
+  position:relative;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F2 21.28%);
 }
 
 .leftsidePNG {
   background-image: url('./images/grocery4.png');
-  background-position-x: left;
-  background-position-y: center;
-  background-size: 430px;
-  height: 70vh;
+  background-size: 25rem;
+  top:55%;
+  display: block;
+  overflow:hidden;
+  bottom:60%;
+  position: relative;
+  left: 55%;
+  margin-bottom: -8rem;
+  margin-right: 10rem;
+  margin-top:175px;
+  margin-left:-8rem;
+  padding-left: 200px;
+  right:55%;
+  left:15%;
+  height: 480px;
   width: 40%;
-  padding: 50px;
   background-repeat: no-repeat;
 }
 
 .rightside {
-  height: 60vh;
+  height: 60%;
   width: 55%;
   padding: 50px;
   padding-top: 170px;
+  padding-right: 200px;
   text-align: center;
 }
 
@@ -314,16 +318,9 @@ body {
   color: grey;
 }
 
-.bottom {
-  background-color: orange;
-}
 
 .edamamCredit {
   background-image: url('./images/edamam.png');
-  height: 10vh;
-  background-repeat: no-repeat;
-  background-position-x: 95%;
-  background-position-y: bottom;
 }
 
 #loginArea {
@@ -380,7 +377,7 @@ body {
   padding: 10px;
 }
 
-#loginFooter{
+#loginFooter {
   display: none;
   font-size: 20px;
   color: black;
@@ -465,7 +462,7 @@ body {
   font-size: 25px;
 }
 
-#passwordInfo{
+#passwordInfo {
   text-align: center;
   width: 100%;
   font-size: 15px;
@@ -483,7 +480,7 @@ body {
   padding: 10px;
 }
 
-#registerFooter{
+#registerFooter {
   display: none;
   font-size: 20px;
   color: black;
@@ -512,7 +509,7 @@ body {
 }
 
 #FavImage {
-  background-image: url('./images/heart.png');
+  background-image: url("./images/heart.png");
   background-position-x: center;
   background-size: 100px;
   height: 70px;
@@ -527,7 +524,7 @@ body {
 }
 
 #AccountImage {
-  background-image: url('./images/user.png');
+  background-image: url("./images/user.png");
   background-position-x: center;
   background-size: 50px;
   height: 55px;
@@ -542,7 +539,7 @@ body {
 }
 
 #ListImage {
-  background-image: url('./images/list.png');
+  background-image: url("./images/list.png");
   background-position-x: center;
   background-size: 60px;
   height: 50px;
@@ -600,7 +597,7 @@ body {
 }
 
 #HeartImage {
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 120px;
   background-repeat: no-repeat;
   width: 50%;
@@ -609,8 +606,7 @@ body {
 }
 
 #biggerHeartImage {
-
-  background-image: url('./images/orangeheart.png');
+  background-image: url("./images/orangeheart.png");
   background-size: 250px;
   background-repeat: no-repeat;
   height: 150px;
@@ -621,7 +617,7 @@ body {
 #FavBody {
   width: 100%;
   height: 68.2%;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   font-weight: normal;
   font-size: 20px;
 }
@@ -630,14 +626,104 @@ body {
   text-align: center;
 }
 
+.navbar {
+  background-color: #fa730b;
+  height: 100;
+}
+
+#SearchSubmitButton {
+  background-color: #f9a00d;
+  border: #f9a00d;
+}
+
+#SearchBar {
+  justify-content: center;
+  width: 100%;
+}
+
+.SearchForm {
+  width: 200px !important;
+  font: Roboto !important;
+}
+
+.navbar-container {
+  position: sticky;
+  top: 0;
+  min-height: 100%;
+  overflow: auto;
+}
+
+.navbar-brand {
+  padding: 0 15px;
+  font-weight: bold;
+  font: Roboto;
+  font-size: 2.25rem !important;
+}
+
+.filter-container {
+  position: absolute;
+  width: 16%;
+  left: 31px;
+  top: 110px;
+}
+
+#FilterTitle {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 32px;
+
+  /* or 246% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: rgba(55, 63, 65, 0.85);
+}
+
+#FilterFolder {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 32px;
+
+  /* identical to box height, or 320% */
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  color: #fa730b;
+}
+
+#FilterDivider {
+  position: absolute;
+  height: 0px;
+  left: 0px;
+  right: 0px;
+  /* top: 492px; */
+
+  /* Black / 10 */
+  border: 1px solid #e8e8e8;
+}
+
+.recipe-result-container {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  left: 19%;
+  top: 15%;
+
+  background: #e7923183;
+}
 .accountModalTitle {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-c
-.modal-title-text {
+c .modal-title-text {
   text-align: center;
   top: 41px;
   font-family: Roboto;
@@ -646,6 +732,10 @@ c
   font-size: 36px;
   line-height: 42px;
   padding: 30px 30px;
+}
+
+#seppiButton:hover {
+  cursor: pointer;
 }
 
 #helloText {

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
     "@react-native-firebase/auth": "^10.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^11.2.2",
@@ -51,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.1.2"
   }
 }
