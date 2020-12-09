@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PageTitle from './PageTitle';
 import 'typeface-roboto';
 import Modal from 'react-bootstrap/Modal'
@@ -6,8 +6,12 @@ import { Link } from 'react-router-dom'
 import UserContext from '../context'
 import {useState} from 'react';
 import { useCookies } from 'react-cookie';
+import Recipe from './Recipe'
 
 const LoginPage = () => {
+  useEffect(() => {    
+    getRecipe();
+ }, []);
 
   // User's login status
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
@@ -22,6 +26,8 @@ const LoginPage = () => {
   const [showreg, setShowRegister] = React.useState(false);
   const handleCloseRegister = () => setShowRegister(false);
   const handleShowRegister = () => setShowRegister(true);
+
+  const [suggestions, setSuggestion] = useState([]);
 
   // doLogin function 
   const app_name = 'seppi'
@@ -166,7 +172,6 @@ const recipeStuff = {
 */
 
 const getRecipe = async event => {
-  event.preventDefault();
 
   let arr = [];
 
@@ -228,7 +233,10 @@ const getRecipe = async event => {
   json = JSON.parse(await response2.text());
   arr.push(json);
 
+  setSuggestion(arr);
+
   //alert(JSON.stringify(arr[2].hits.top));
+  
 };
 
 
@@ -269,26 +277,13 @@ const getRecipe = async event => {
           Suggested Recipes
           <br/>
           <br/>
-          <div class="Suggestions">
-                <div class = "leftPicture">
-                  <div class = "leftDescription">
-                    <h2>Spring Chicken Recipe</h2>
-                    <p id="grayText">You have the ingredients: Chicken, Onion</p>
-                    <p id="grayText">You are missing the ingredients: Basil, Pasta</p>
-                  </div> 
-                </div>
-                <div class = "middlePicture">
-                  <div class = "middleDescription">
-                    <h2>Test Title</h2>
-                    <p id="grayText">Don't eat my cat</p>
-                  </div> 
-                </div>
-                <div class = "rightPicture">
-                  <div class = "rightDescription">
-                    <h2>Test Title</h2>
-                    <p id="grayText">Test Description Right</p>
-                  </div> 
-                </div>
+          <div class="Suggestions" onClick={getRecipe}>
+            <div id="FavContainer">
+              <div id="FavoritesRows">
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.top.recipe.url} label={item.hits.top.recipe.label} image={item.hits.top.recipe.image} match={item.hits.top.recipe.match}/>) : <div></div>}
+                  {suggestions !== undefined ? suggestions.map((item) => <Recipe link={item.hits.second.recipe.url} label={item.hits.second.recipe.label} image={item.hits.second.recipe.image} match={item.hits.second.recipe.match}/>) : <div></div>}
+              </div>
+          </div>
           </div>
         </div>
 

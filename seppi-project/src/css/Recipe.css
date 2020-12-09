@@ -4,6 +4,7 @@
 	max-width: fit-content;
 	justify-content: center;
 	align-items: center;
+	background-color: peru;
 }
 
 .recipe:hover {
@@ -30,4 +31,11 @@
 .image-container {
 	display: block;
 	padding: 20px 20px;
+}
+
+.match-container {
+	color:rgb(189, 189, 189);
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
 }
