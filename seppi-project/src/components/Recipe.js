@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/Recipe.css';
+import RecipePreview from './RecipePreview';
 
 const Recipe = (props) => {
 	return (
