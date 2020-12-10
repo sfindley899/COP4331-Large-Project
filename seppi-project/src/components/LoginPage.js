@@ -13,8 +13,7 @@ import { useCookies } from 'react-cookie';
 import Recipe from './Recipe'
 
 const LoginPage = () => {
-
-
+  
   // User's login status
   const [cookies, setCookie] = useCookies(['name', 'email', 'idToken', 'favorites']);
   const [loginResult, setLoginResult] = useState('');
@@ -347,30 +346,10 @@ const getRecipe = async event => {
               <Col>
                 <Form.Label htmlFor="inlineFormInput" srOnly></Form.Label>
                 <Form.Control
-                  className="mb-2"
-                  id="inlineFormInput"
-                  placeholder="Search by Recipe, Ingredient, dish ..."
+                  placeholder="Search by recipe, ingredient, dish, ..." class="mr-sm-2"
                 />
               </Col>
-
-              <Button
-                variant="light"
-                to="/Register"
-                type="submit"
-                className="mb-2 background-orange"
-                style={{
-                  marginLeft: "-0.35rem",
-                  background: "orange",
-                  textAlign: "center",
-                  fontWeight: "500",
-                  borderRadius: "1px solid orange",
-                  border: "2px solid orange",
-                  color: "white",
-                }}
-              >
-                Search{" "}
-                <img overflow="hidden" src="../images/search.png" width="20" />
-              </Button>
+              <Button id="SearchSubmitButton" className="fa fa-search" type="submit"></Button>
             </Form.Row>
           </Form>
 
@@ -405,8 +384,9 @@ const getRecipe = async event => {
                   <div class = "rightsideText1">Whether you are a cooking enthusiast or only have enough time to throw together lunch, Seppi's goal is to provide access to new recipes and connect to a community of other like-minded cooks.</div>
                   <br/>
                   <br/>
-                  <input id = "submitEmail" type="text" placeholder = "Enter you email address"></input>
-                  <button id = "submitEmailButton" onClick={handleShowRegister} >Sign Up</button>
+                  <Button variant="light" className="btn btn-primary" id="signUPOrange" onClick={handleShowRegister}>
+                    Sign Up
+                  </Button>
                   <br/>
                   <br/>
                   <div class = "rightsideText2">By clicking “Sign Up” you will be directed to the sign up page to complete your registation.</div>
